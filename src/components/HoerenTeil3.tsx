@@ -1,0 +1,134 @@
+import { useState } from "react";
+import { module1HoerenTeil3 } from "../data/module1/hoerenTeil3";
+
+type Answer = "richtig" | "falsch" | null;
+
+export default function HoerenTeil3() {
+  const data = module1HoerenTeil3;
+  const [answers, setAnswers] = useState<Answer[]>(
+    Array(data.questions.length).fill(null)
+  );
+  const [submitted, setSubmitted] = useState(false);
+
+  const handleAnswer = (index: number, value: "richtig" | "falsch") => {
+    if (submitted) return;
+    const newAnswers = [...answers];
+    newAnswers[index] = value;
+    setAnswers(newAnswers);
+  };
+
+  const handleSubmit = () => setSubmitted(true);
+  const handleReset = () => {
+    setAnswers(Array(data.questions.length).fill(null));
+    setSubmitted(false);
+  };
+
+  const score = submitted
+    ? answers.filter((a, i) => a === data.questions[i].correct).length
+    : null;
+
+  return (
+    <div className="max-w-4xl mx-auto p-6">
+      <p className="text-gray-700 mb-4">{data.instruction}</p>
+      <p className="text-gray-600 italic mb-4">{data.context}</p>
+
+      {/* Audio */}
+      <div className="mb-4">
+        <p className="text-xs font-medium text-gray-500 mb-1">Einleitung anhören:</p>
+        <audio controls className="w-full h-9 mb-2">
+          <source src="/horen/teil3-introducion.mp3" type="audio/mpeg" />
+        </audio>
+      </div>
+      <div className="mb-6">
+        <p className="text-xs font-medium text-gray-500 mb-1">Gespräch anhören:</p>
+        <audio controls className="w-full h-9">
+          <source src="/horen/teil3-text.mp3" type="audio/mpeg" />
+        </audio>
+      </div>
+
+      <div className="space-y-3">
+        {data.questions.map((q, index) => {
+          const userAnswer = answers[index];
+          const isCorrect = submitted && userAnswer === q.correct;
+          const isWrong =
+            submitted && userAnswer !== null && userAnswer !== q.correct;
+
+          return (
+            <div
+              key={q.id}
+              className={`p-4 rounded-lg border flex items-center justify-between gap-4 ${
+                submitted
+                  ? isCorrect
+                    ? "border-green-400 bg-green-50"
+                    : isWrong
+                    ? "border-red-400 bg-red-50"
+                    : "border-yellow-400 bg-yellow-50"
+                  : "border-gray-200 bg-white"
+              }`}
+            >
+              <p className="text-sm flex-1">
+                <span className="font-bold mr-2">{q.id}</span>
+                {q.statement}
+              </p>
+              <div className="flex gap-2 shrink-0">
+                <button
+                  onClick={() => handleAnswer(index, "richtig")}
+                  className={`px-3 py-1 rounded text-sm font-medium cursor-pointer ${
+                    userAnswer === "richtig"
+                      ? "bg-blue-600 text-white"
+                      : "bg-gray-100 text-gray-700 hover:bg-gray-200"
+                  }`}
+                  disabled={submitted}
+                >
+                  Richtig
+                </button>
+                <button
+                  onClick={() => handleAnswer(index, "falsch")}
+                  className={`px-3 py-1 rounded text-sm font-medium cursor-pointer ${
+                    userAnswer === "falsch"
+                      ? "bg-blue-600 text-white"
+                      : "bg-gray-100 text-gray-700 hover:bg-gray-200"
+                  }`}
+                  disabled={submitted}
+                >
+                  Falsch
+                </button>
+              </div>
+              {submitted && isWrong && (
+                <span className="text-xs text-red-600 shrink-0">
+                  ✗ ({q.correct})
+                </span>
+              )}
+              {submitted && isCorrect && (
+                <span className="text-xs text-green-600 shrink-0">✓</span>
+              )}
+            </div>
+          );
+        })}
+      </div>
+
+      <div className="mt-8 flex items-center gap-4">
+        {!submitted ? (
+          <button
+            onClick={handleSubmit}
+            className="bg-blue-600 text-white px-6 py-3 rounded-lg font-semibold hover:bg-blue-700 cursor-pointer"
+          >
+            Auswerten
+          </button>
+        ) : (
+          <>
+            <div className="bg-white border border-gray-200 rounded-lg px-4 py-3 font-semibold">
+              Ergebnis: {score} / {data.questions.length}
+            </div>
+            <button
+              onClick={handleReset}
+              className="bg-gray-600 text-white px-6 py-3 rounded-lg font-semibold hover:bg-gray-700 cursor-pointer"
+            >
+              Nochmal versuchen
+            </button>
+          </>
+        )}
+      </div>
+    </div>
+  );
+}
