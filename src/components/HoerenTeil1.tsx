@@ -53,7 +53,7 @@ export default function HoerenTeil1() {
       {/* Introduction audio */}
       <div className="mb-4">
         <p className="text-xs font-medium text-gray-500 mb-1">Einleitung anhören:</p>
-        <audio controls className="w-full h-9">
+        <audio controls controlsList="nodownload" className="w-full h-9">
           <source src="/horen/teil1-introduction.mp3" type="audio/mpeg" />
         </audio>
       </div>
@@ -61,7 +61,7 @@ export default function HoerenTeil1() {
       {/* Example */}
       <div className="mb-6 p-4 bg-gray-50 rounded-lg border border-gray-200">
         <p className="text-sm text-gray-500 font-semibold mb-2">Beispiel</p>
-        <audio controls className="w-full h-8 mb-2">
+        <audio controls controlsList="nodownload" className="w-full h-8 mb-2">
           <source src="/horen/teil1-beispiel.mp3" type="audio/mpeg" />
         </audio>
         <p className="text-sm mb-1">
@@ -106,7 +106,7 @@ export default function HoerenTeil1() {
               <h4 className="font-bold text-sm text-gray-500 mb-2">
                 Text {text.id}
               </h4>
-              <audio controls className="w-full h-8 mb-3">
+              <audio controls controlsList="nodownload" className="w-full h-8 mb-3">
                 <source src={`/horen/model1-tail1-text${text.id}.mp3`} type="audio/mpeg" />
               </audio>
 
