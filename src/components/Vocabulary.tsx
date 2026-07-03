@@ -1,62 +1,14 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import {
   translateWord,
   generateExample,
   isApiKeyConfigured,
   type TranslationLanguage,
 } from "../services/ai";
+import { useVocabulary } from "../context/VocabularyContext";
 
-export interface VocabItem {
-  id: string;
-  word: string;
-  translation: string;
-  context?: string;
-  addedAt: number;
-}
-
-const STORAGE_KEY = "b1-vocabulary";
-
-function loadVocab(): VocabItem[] {
-  try {
-    const saved = localStorage.getItem(STORAGE_KEY);
-    return saved ? JSON.parse(saved) : [];
-  } catch {
-    return [];
-  }
-}
-
-function saveVocab(items: VocabItem[]) {
-  localStorage.setItem(STORAGE_KEY, JSON.stringify(items));
-}
-
-export function useVocabulary() {
-  const [vocab, setVocab] = useState<VocabItem[]>(loadVocab);
-
-  useEffect(() => {
-    saveVocab(vocab);
-  }, [vocab]);
-
-  const addWord = (word: string, translation: string, context?: string) => {
-    const newItem: VocabItem = {
-      id: Date.now().toString(),
-      word: word.trim(),
-      translation: translation.trim(),
-      context: context?.trim(),
-      addedAt: Date.now(),
-    };
-    setVocab((prev) => [newItem, ...prev]);
-  };
-
-  const removeWord = (id: string) => {
-    setVocab((prev) => prev.filter((item) => item.id !== id));
-  };
-
-  const clearAll = () => {
-    setVocab([]);
-  };
-
-  return { vocab, addWord, removeWord, clearAll };
-}
+export type { VocabItem } from "../context/VocabularyContext";
+export { useVocabulary } from "../context/VocabularyContext";
 
 interface VocabularyPanelProps {
   isOpen: boolean;

@@ -2,6 +2,8 @@ import { useState } from "react";
 import Module1 from "./components/Module1";
 import Timer from "./components/Timer";
 import VocabularyPanel from "./components/Vocabulary";
+import TextHighlighter from "./components/TextHighlighter";
+import { VocabularyProvider } from "./context/VocabularyContext";
 
 function App() {
   const [openModules, setOpenModules] = useState<Record<string, boolean>>({});
@@ -12,6 +14,7 @@ function App() {
   };
 
   return (
+    <VocabularyProvider>
     <div className="min-h-screen bg-gray-50 pt-16 pb-8">
       {/* Fixed top bar - responsive */}
       <div className="fixed top-0 left-0 right-0 z-40 bg-white/90 backdrop-blur-sm border-b border-gray-200 px-3 py-2">
@@ -29,6 +32,9 @@ function App() {
           <Timer />
         </div>
       </div>
+
+      {/* Text Highlighter - right-click to color selected text */}
+      <TextHighlighter />
 
       {/* Vocabulary Panel */}
       <VocabularyPanel isOpen={vocabOpen} onClose={() => setVocabOpen(false)} />
@@ -92,6 +98,7 @@ function App() {
         </div>
       </div>
     </div>
+    </VocabularyProvider>
   );
 }
 
