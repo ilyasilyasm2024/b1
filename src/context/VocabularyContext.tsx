@@ -1,4 +1,7 @@
-import { createContext, useContext, useState, useEffect, type ReactNode } from "react";
+import { createContext, useContext, useState, useEffect, useCallback, type ReactNode } from "react";
+import { vocabularyService } from "../services/vocabulary";
+import { useAuth } from "./AuthContext";
+import { useToast } from "../components/Toast";
 
 export interface VocabItem {
   id: string;
@@ -8,58 +11,101 @@ export interface VocabItem {
   addedAt: number;
 }
 
-const STORAGE_KEY = "b1-vocabulary";
-
-function loadVocab(): VocabItem[] {
-  try {
-    const saved = localStorage.getItem(STORAGE_KEY);
-    return saved ? JSON.parse(saved) : [];
-  } catch {
-    return [];
-  }
-}
-
-function saveVocab(items: VocabItem[]) {
-  localStorage.setItem(STORAGE_KEY, JSON.stringify(items));
-}
-
 interface VocabularyContextType {
   vocab: VocabItem[];
-  addWord: (word: string, translation: string, context?: string) => void;
-  removeWord: (id: string) => void;
+  addWord: (word: string, translation: string, context?: string) => Promise<void>;
+  removeWord: (id: string) => Promise<void>;
   clearAll: () => void;
+  isLoading: boolean;
 }
 
 const VocabularyContext = createContext<VocabularyContextType | null>(null);
 
 export function VocabularyProvider({ children }: { children: ReactNode }) {
-  const [vocab, setVocab] = useState<VocabItem[]>(loadVocab);
+  const [vocab, setVocab] = useState<VocabItem[]>([]);
+  const [isLoading, setIsLoading] = useState(false);
+  const { user, token } = useAuth();
+  const { showToast } = useToast();
+
+  // Fetch vocab from backend when user is logged in
+  const fetchVocab = useCallback(async () => {
+    if (!user || !token) {
+      setVocab([]);
+      return;
+    }
+    setIsLoading(true);
+    const res = await vocabularyService.getAll();
+    if (res.data) {
+      const items: VocabItem[] = res.data.map((v) => ({
+        id: v._id,
+        word: v.deutsch,
+        translation: v.arabic,
+        context: v.beispiel || undefined,
+        addedAt: new Date(v.createdAt).getTime(),
+      }));
+      setVocab(items.sort((a, b) => b.addedAt - a.addedAt));
+    }
+    setIsLoading(false);
+  }, [user, token]);
 
   useEffect(() => {
-    saveVocab(vocab);
-  }, [vocab]);
+    fetchVocab();
+  }, [fetchVocab]);
 
-  const addWord = (word: string, translation: string, context?: string) => {
-    const newItem: VocabItem = {
-      id: Date.now().toString(),
-      word: word.trim(),
-      translation: translation.trim(),
-      context: context?.trim(),
-      addedAt: Date.now(),
-    };
-    setVocab((prev) => [newItem, ...prev]);
+  const addWord = async (word: string, translation: string, context?: string) => {
+    if (!user || !token) {
+      showToast("Bitte melde dich an oder registriere dich, um Vokabeln zu speichern.", "error");
+      return;
+    }
+
+    const res = await vocabularyService.add({
+      deutsch: word.trim(),
+      arabic: translation.trim(),
+      beispiel: context?.trim() || "",
+    });
+
+    if (res.data) {
+      const newItem: VocabItem = {
+        id: res.data._id,
+        word: res.data.deutsch,
+        translation: res.data.arabic,
+        context: res.data.beispiel || undefined,
+        addedAt: new Date(res.data.createdAt).getTime(),
+      };
+      setVocab((prev) => [newItem, ...prev]);
+      showToast("Vokabel gespeichert", "success");
+    } else if (res.status === 401) {
+      showToast("Bitte melde dich an oder registriere dich, um Vokabeln zu speichern.", "error");
+    } else {
+      showToast(res.error || "Fehler beim Speichern", "error");
+    }
   };
 
-  const removeWord = (id: string) => {
-    setVocab((prev) => prev.filter((item) => item.id !== id));
+  const removeWord = async (id: string) => {
+    if (!user || !token) {
+      showToast("Bitte melde dich an, um Vokabeln zu verwalten.", "error");
+      return;
+    }
+
+    const res = await vocabularyService.delete(id);
+
+    if (res.data) {
+      setVocab((prev) => prev.filter((item) => item.id !== id));
+      showToast("Vokabel gelöscht", "success");
+    } else if (res.status === 401) {
+      showToast("Bitte melde dich an, um Vokabeln zu verwalten.", "error");
+    } else {
+      showToast(res.error || "Fehler beim Löschen", "error");
+    }
   };
 
   const clearAll = () => {
+    // For now, clear local state only (bulk delete not in backend)
     setVocab([]);
   };
 
   return (
-    <VocabularyContext.Provider value={{ vocab, addWord, removeWord, clearAll }}>
+    <VocabularyContext.Provider value={{ vocab, addWord, removeWord, clearAll, isLoading }}>
       {children}
     </VocabularyContext.Provider>
   );

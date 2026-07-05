@@ -1,38 +1,48 @@
-import { useState } from "react";
+import { useEffect } from "react";
 import { module1HoerenTeil1 } from "../data/module1/hoerenTeil1";
+import { useProgress } from "../context/ProgressContext";
+import { useAnswers } from "../context/AnswersContext";
 
 type RFAnswer = "richtig" | "falsch" | null;
 type MCAnswer = "a" | "b" | "c" | null;
 
+const RF_SECTION = "m1-hoeren-teil1-rf";
+const MC_SECTION = "m1-hoeren-teil1-mc";
+
 export default function HoerenTeil1() {
   const data = module1HoerenTeil1;
-  const [rfAnswers, setRfAnswers] = useState<RFAnswer[]>(
-    Array(data.texts.length).fill(null)
-  );
-  const [mcAnswers, setMcAnswers] = useState<MCAnswer[]>(
-    Array(data.texts.length).fill(null)
-  );
-  const [submitted, setSubmitted] = useState(false);
+  const { updateProgress } = useProgress();
+  const { getAnswers, setAnswers, isSubmitted, setSubmitted } = useAnswers();
+
+  const rfAnswers: RFAnswer[] = (getAnswers<RFAnswer>(RF_SECTION) ?? Array(data.texts.length).fill(null)) as RFAnswer[];
+  const mcAnswers: MCAnswer[] = (getAnswers<MCAnswer>(MC_SECTION) ?? Array(data.texts.length).fill(null)) as MCAnswer[];
+  const submitted = isSubmitted("m1-hoeren-teil1");
+
+  useEffect(() => {
+    const totalQ = data.texts.length * 2;
+    const answered = rfAnswers.filter((a) => a !== null).length + mcAnswers.filter((a) => a !== null).length;
+    updateProgress("m1-hoeren-teil1", answered, totalQ);
+  }, [rfAnswers, mcAnswers, data.texts.length, updateProgress]);
 
   const handleRF = (index: number, value: "richtig" | "falsch") => {
     if (submitted) return;
     const newAnswers = [...rfAnswers];
     newAnswers[index] = value;
-    setRfAnswers(newAnswers);
+    setAnswers(RF_SECTION, newAnswers);
   };
 
   const handleMC = (index: number, value: "a" | "b" | "c") => {
     if (submitted) return;
     const newAnswers = [...mcAnswers];
     newAnswers[index] = value;
-    setMcAnswers(newAnswers);
+    setAnswers(MC_SECTION, newAnswers);
   };
 
-  const handleSubmit = () => setSubmitted(true);
+  const handleSubmit = () => setSubmitted("m1-hoeren-teil1", true);
   const handleReset = () => {
-    setRfAnswers(Array(data.texts.length).fill(null));
-    setMcAnswers(Array(data.texts.length).fill(null));
-    setSubmitted(false);
+    setAnswers(RF_SECTION, Array(data.texts.length).fill(null));
+    setAnswers(MC_SECTION, Array(data.texts.length).fill(null));
+    setSubmitted("m1-hoeren-teil1", false);
   };
 
   const score = submitted

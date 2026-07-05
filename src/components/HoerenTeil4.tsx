@@ -1,26 +1,35 @@
-import { useState } from "react";
+import { useEffect } from "react";
 import { module1HoerenTeil4 } from "../data/module1/hoerenTeil4";
+import { useProgress } from "../context/ProgressContext";
+import { useAnswers } from "../context/AnswersContext";
 
 type Answer = "moderatorin" | "berger" | "weser" | null;
+const SECTION_ID = "m1-hoeren-teil4";
 
 export default function HoerenTeil4() {
   const data = module1HoerenTeil4;
-  const [answers, setAnswers] = useState<Answer[]>(
-    Array(data.questions.length).fill(null)
-  );
-  const [submitted, setSubmitted] = useState(false);
+  const { updateProgress } = useProgress();
+  const { getAnswers, setAnswers, isSubmitted, setSubmitted } = useAnswers();
+
+  const answers: Answer[] = (getAnswers<Answer>(SECTION_ID) ?? Array(data.questions.length).fill(null)) as Answer[];
+  const submitted = isSubmitted(SECTION_ID);
+
+  useEffect(() => {
+    const answered = answers.filter((a) => a !== null).length;
+    updateProgress(SECTION_ID, answered, data.questions.length);
+  }, [answers, data.questions.length, updateProgress]);
 
   const handleAnswer = (index: number, value: Answer) => {
     if (submitted) return;
     const newAnswers = [...answers];
     newAnswers[index] = value;
-    setAnswers(newAnswers);
+    setAnswers(SECTION_ID, newAnswers);
   };
 
-  const handleSubmit = () => setSubmitted(true);
+  const handleSubmit = () => setSubmitted(SECTION_ID, true);
   const handleReset = () => {
-    setAnswers(Array(data.questions.length).fill(null));
-    setSubmitted(false);
+    setAnswers(SECTION_ID, Array(data.questions.length).fill(null));
+    setSubmitted(SECTION_ID, false);
   };
 
   const score = submitted

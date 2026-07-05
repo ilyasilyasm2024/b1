@@ -1,0 +1,17 @@
+{
+  "name": "B1 Prüfungsvorbereitung",
+  "short_name": "B1 Übungen",
+  "description": "Kostenlose interaktive B1 Modelltests für das Zertifikat Deutsch",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#f9fafb",
+  "theme_color": "#111827",
+  "lang": "de",
+  "icons": [
+    {
+      "src": "/favicon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml"
+    }
+  ]
+}

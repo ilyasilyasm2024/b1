@@ -1,16 +1,37 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { module1Schreiben } from "../data/module1/schreiben";
+import { useProgress } from "../context/ProgressContext";
+import { useAnswers } from "../context/AnswersContext";
+
+const SECTION_ID = "m1-schreiben";
 
 export default function Schreiben() {
   const data = module1Schreiben;
-  const [texts, setTexts] = useState<string[]>(
-    Array(data.aufgaben.length).fill("")
-  );
+  const { updateProgress } = useProgress();
+  const { getTexts, setTexts: setGlobalTexts, getDone, setDone: setGlobalDone } = useAnswers();
+
+  const texts = getTexts(SECTION_ID) ?? Array(data.aufgaben.length).fill("");
+  const done = getDone(SECTION_ID) ?? Array(data.aufgaben.length).fill(false);
+
+  useEffect(() => {
+    const answered = done.filter(Boolean).length;
+    updateProgress(SECTION_ID, answered, data.aufgaben.length);
+  }, [done, data.aufgaben.length, updateProgress]);
 
   const handleChange = (index: number, value: string) => {
     const newTexts = [...texts];
     newTexts[index] = value;
-    setTexts(newTexts);
+    setGlobalTexts(SECTION_ID, newTexts);
+  };
+
+  const toggleDone = (index: number) => {
+    // Only allow marking done if word count is met (or already done to undo)
+    if (!done[index] && wordCount(texts[index]) < data.aufgaben[index].wordCount) {
+      return;
+    }
+    const newDone = [...done];
+    newDone[index] = !newDone[index];
+    setGlobalDone(SECTION_ID, newDone);
   };
 
   const wordCount = (text: string) =>
@@ -22,10 +43,17 @@ export default function Schreiben() {
         {data.aufgaben.map((aufgabe, index) => (
           <div
             key={aufgabe.id}
-            className="border border-gray-200 rounded-lg p-6 bg-white"
+            className={`border rounded-lg p-6 bg-white transition-colors ${
+              done[index] ? "border-emerald-300 bg-emerald-50/30" : "border-gray-200"
+            }`}
           >
             <div className="flex items-center justify-between mb-4">
-              <h3 className="text-lg font-bold">{aufgabe.title}</h3>
+              <div className="flex items-center gap-2">
+                <h3 className="text-lg font-bold">{aufgabe.title}</h3>
+                {done[index] && (
+                  <span className="text-emerald-600 text-sm font-medium">✓ Erledigt</span>
+                )}
+              </div>
               <span className="text-sm text-gray-500">
                 Arbeitszeit: {aufgabe.time}
               </span>
@@ -60,7 +88,7 @@ export default function Schreiben() {
               placeholder={`Schreiben Sie hier Ihren Text (circa ${aufgabe.wordCount} Wörter)...`}
             />
 
-            <div className="flex items-center justify-between mt-2">
+            <div className="flex items-center justify-between mt-3">
               <span
                 className={`text-xs ${
                   wordCount(texts[index]) >= aufgabe.wordCount
@@ -70,11 +98,18 @@ export default function Schreiben() {
               >
                 Wörter: {wordCount(texts[index])} / {aufgabe.wordCount}
               </span>
-              {wordCount(texts[index]) >= aufgabe.wordCount && (
-                <span className="text-xs text-green-600 font-medium">
-                  ✓ Mindestanzahl erreicht
-                </span>
-              )}
+
+              <button
+                onClick={() => toggleDone(index)}
+                disabled={!done[index] && wordCount(texts[index]) < aufgabe.wordCount}
+                className={`px-4 py-1.5 rounded-lg text-xs font-medium cursor-pointer transition-colors disabled:opacity-40 disabled:cursor-not-allowed ${
+                  done[index]
+                    ? "bg-emerald-100 text-emerald-700 hover:bg-emerald-200"
+                    : "bg-gray-900 text-white hover:bg-gray-800"
+                }`}
+              >
+                {done[index] ? "✓ Erledigt" : "Als erledigt markieren"}
+              </button>
             </div>
           </div>
         ))}

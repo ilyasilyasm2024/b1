@@ -1,29 +1,37 @@
-import { useState } from "react";
+import { useEffect } from "react";
 import {
   module1LesenTeil2A,
   module1LesenTeil2B,
   type LesenTeil2Data,
 } from "../data/module1/lesenTeil2";
+import { useProgress } from "../context/ProgressContext";
+import { useAnswers } from "../context/AnswersContext";
 
 type Answer = "a" | "b" | "c" | null;
 
-function LesenTeil2Section({ data }: { data: LesenTeil2Data }) {
-  const [answers, setAnswers] = useState<Answer[]>(
-    Array(data.questions.length).fill(null)
-  );
-  const [submitted, setSubmitted] = useState(false);
+function LesenTeil2Section({ data, sectionId }: { data: LesenTeil2Data; sectionId: string }) {
+  const { updateProgress } = useProgress();
+  const { getAnswers, setAnswers, isSubmitted, setSubmitted } = useAnswers();
+
+  const answers: Answer[] = (getAnswers<Answer>(sectionId) ?? Array(data.questions.length).fill(null)) as Answer[];
+  const submitted = isSubmitted(sectionId);
+
+  useEffect(() => {
+    const answered = answers.filter((a) => a !== null).length;
+    updateProgress(sectionId, answered, data.questions.length);
+  }, [answers, data.questions.length, sectionId, updateProgress]);
 
   const handleAnswer = (index: number, value: "a" | "b" | "c") => {
     if (submitted) return;
     const newAnswers = [...answers];
     newAnswers[index] = value;
-    setAnswers(newAnswers);
+    setAnswers(sectionId, newAnswers);
   };
 
-  const handleSubmit = () => setSubmitted(true);
+  const handleSubmit = () => setSubmitted(sectionId, true);
   const handleReset = () => {
-    setAnswers(Array(data.questions.length).fill(null));
-    setSubmitted(false);
+    setAnswers(sectionId, Array(data.questions.length).fill(null));
+    setSubmitted(sectionId, false);
   };
 
   const score = submitted
@@ -181,7 +189,7 @@ export default function LesenTeil2() {
         Wählen Sie bei jeder Aufgabe die richtige Lösung a, b oder c.
       </p>
 
-      <LesenTeil2Section data={module1LesenTeil2A} />
+      <LesenTeil2Section data={module1LesenTeil2A} sectionId="m1-lesen-teil2a" />
 
       <hr className="my-8 border-gray-300" />
 
@@ -190,7 +198,7 @@ export default function LesenTeil2() {
         Wählen Sie bei jeder Aufgabe die richtige Lösung a, b oder c.
       </p>
 
-      <LesenTeil2Section data={module1LesenTeil2B} />
+      <LesenTeil2Section data={module1LesenTeil2B} sectionId="m1-lesen-teil2b" />
     </div>
   );
 }

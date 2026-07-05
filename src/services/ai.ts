@@ -48,6 +48,31 @@ export async function generateExample(word: string): Promise<string> {
   return callGroq(prompt);
 }
 
+export async function verifyGermanWord(word: string): Promise<{ isGerman: boolean; suggestion?: string }> {
+  const prompt = `Ist "${word}" ein deutsches Wort oder ein deutscher Ausdruck? Antworte NUR im folgenden Format:
+- Wenn es Deutsch ist: "JA"
+- Wenn es NICHT Deutsch ist: "NEIN: [das Wort auf Deutsch]"
+Beispiele:
+- "Haus" → "JA"
+- "house" → "NEIN: Haus"
+- "computer" → "JA" (weil es auch im Deutschen verwendet wird)
+- "beautiful" → "NEIN: schön"`;
+
+  const result = await callGroq(prompt);
+  const trimmed = result.trim().toUpperCase();
+
+  if (trimmed.startsWith("JA")) {
+    return { isGerman: true };
+  }
+
+  // Extract suggestion after "NEIN:"
+  const match = result.match(/NEIN:\s*(.+)/i);
+  return {
+    isGerman: false,
+    suggestion: match?.[1]?.trim() || undefined,
+  };
+}
+
 export function isApiKeyConfigured(): boolean {
   return GROQ_API_KEY.length > 10;
 }

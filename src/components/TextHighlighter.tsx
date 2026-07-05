@@ -1,6 +1,7 @@
 import { useState, useEffect, useRef } from "react";
 import { translateWord, generateExample, isApiKeyConfigured } from "../services/ai";
 import { useVocabulary } from "../context/VocabularyContext";
+import { useAnswers } from "../context/AnswersContext";
 
 const HIGHLIGHT_COLORS = [
   { name: "Gelb", value: "#fef08a" },
@@ -9,6 +10,28 @@ const HIGHLIGHT_COLORS = [
   { name: "Rosa", value: "#fbcfe8" },
   { name: "Orange", value: "#fed7aa" },
 ];
+
+const HIGHLIGHTS_STORAGE_KEY = "b1-highlights";
+
+interface HighlightEntry {
+  text: string;
+  color: string;
+}
+
+function loadHighlights(): HighlightEntry[] {
+  try {
+    const saved = localStorage.getItem(HIGHLIGHTS_STORAGE_KEY);
+    return saved ? JSON.parse(saved) : [];
+  } catch {
+    return [];
+  }
+}
+
+function saveHighlights(entries: HighlightEntry[]) {
+  try {
+    localStorage.setItem(HIGHLIGHTS_STORAGE_KEY, JSON.stringify(entries));
+  } catch {}
+}
 
 interface PopupPosition {
   x: number;
@@ -27,6 +50,7 @@ export default function TextHighlighter() {
   const [aiLoading, setAiLoading] = useState<"translate" | "example" | null>(null);
   const popupRef = useRef<HTMLDivElement>(null);
   const { addWord } = useVocabulary();
+  const { triggerSync } = useAnswers();
 
   useEffect(() => {
     const handleContextMenu = (e: MouseEvent) => {
@@ -82,11 +106,13 @@ export default function TextHighlighter() {
       return;
     }
 
+    const selectedText = selection.toString().trim();
     const range = selection.getRangeAt(0);
     const span = document.createElement("span");
     span.style.backgroundColor = color;
     span.style.borderRadius = "2px";
     span.style.padding = "0 1px";
+    span.setAttribute("data-highlight", "true");
 
     try {
       range.surroundContents(span);
@@ -94,6 +120,14 @@ export default function TextHighlighter() {
       const fragment = range.extractContents();
       span.appendChild(fragment);
       range.insertNode(span);
+    }
+
+    // Save to localStorage
+    if (selectedText) {
+      const highlights = loadHighlights();
+      highlights.push({ text: selectedText, color });
+      saveHighlights(highlights);
+      triggerSync();
     }
 
     selection.removeAllRanges();
@@ -112,13 +146,89 @@ export default function TextHighlighter() {
     const parentEl = container.nodeType === 3 ? container.parentElement : (container as HTMLElement);
 
     if (parentEl && parentEl.tagName === "SPAN" && parentEl.style.backgroundColor) {
-      const text = document.createTextNode(parentEl.textContent || "");
+      const removedText = parentEl.textContent || "";
+      const text = document.createTextNode(removedText);
       parentEl.parentNode?.replaceChild(text, parentEl);
+
+      // Remove from localStorage
+      const highlights = loadHighlights();
+      const idx = highlights.findIndex((h) => h.text === removedText);
+      if (idx !== -1) {
+        highlights.splice(idx, 1);
+        saveHighlights(highlights);
+        triggerSync();
+      }
     }
 
     selection.removeAllRanges();
     setShowPopup(false);
   };
+
+  // Restore highlights from localStorage whenever DOM updates (sections open/close)
+  useEffect(() => {
+    const restoreHighlights = () => {
+      const highlights = loadHighlights();
+      if (highlights.length === 0) return;
+
+      const walker = document.createTreeWalker(document.body, NodeFilter.SHOW_TEXT);
+      const textNodes: Text[] = [];
+      let node: Node | null;
+      while ((node = walker.nextNode())) {
+        textNodes.push(node as Text);
+      }
+
+      for (const entry of highlights) {
+        // Check if this highlight is already applied
+        const existing = document.querySelectorAll('span[data-highlight="true"]');
+        let alreadyApplied = false;
+        existing.forEach((el) => {
+          if (el.textContent === entry.text && (el as HTMLElement).style.backgroundColor === entry.color) {
+            alreadyApplied = true;
+          }
+        });
+        if (alreadyApplied) continue;
+
+        for (const textNode of textNodes) {
+          if (textNode.parentElement?.getAttribute("data-highlight") === "true") continue;
+
+          const content = textNode.textContent || "";
+          const idx = content.indexOf(entry.text);
+          if (idx === -1) continue;
+
+          const range = document.createRange();
+          range.setStart(textNode, idx);
+          range.setEnd(textNode, idx + entry.text.length);
+
+          const span = document.createElement("span");
+          span.style.backgroundColor = entry.color;
+          span.style.borderRadius = "2px";
+          span.style.padding = "0 1px";
+          span.setAttribute("data-highlight", "true");
+
+          try {
+            range.surroundContents(span);
+          } catch {
+            // Skip if can't wrap cleanly
+          }
+          break;
+        }
+      }
+    };
+
+    // Run on initial load
+    const timer = setTimeout(restoreHighlights, 300);
+
+    // Observe DOM changes to re-apply highlights when sections open
+    const observer = new MutationObserver(() => {
+      setTimeout(restoreHighlights, 100);
+    });
+    observer.observe(document.body, { childList: true, subtree: true });
+
+    return () => {
+      clearTimeout(timer);
+      observer.disconnect();
+    };
+  }, []);
 
   const openVocabModal = () => {
     const selection = window.getSelection();

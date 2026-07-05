@@ -1,11 +1,15 @@
 import { useState } from "react";
+import { Link } from "react-router-dom";
 import {
   translateWord,
   generateExample,
+  verifyGermanWord,
   isApiKeyConfigured,
   type TranslationLanguage,
 } from "../services/ai";
 import { useVocabulary } from "../context/VocabularyContext";
+import { useAuth } from "../context/AuthContext";
+import ConfirmModal from "./ConfirmModal";
 
 export type { VocabItem } from "../context/VocabularyContext";
 export { useVocabulary } from "../context/VocabularyContext";
@@ -17,21 +21,91 @@ interface VocabularyPanelProps {
 
 export default function VocabularyPanel({ isOpen, onClose }: VocabularyPanelProps) {
   const { vocab, addWord, removeWord, clearAll } = useVocabulary();
+  const { user } = useAuth();
   const [newWord, setNewWord] = useState("");
   const [newTranslation, setNewTranslation] = useState("");
   const [newContext, setNewContext] = useState("");
   const [searchTerm, setSearchTerm] = useState("");
   const [showForm, setShowForm] = useState(false);
+  const [showAuthPrompt, setShowAuthPrompt] = useState(false);
   const [translationLang, setTranslationLang] = useState<TranslationLanguage>("arabic");
   const [aiLoading, setAiLoading] = useState<"translate" | "example" | null>(null);
+  const [confirmAdd, setConfirmAdd] = useState(false);
+  const [confirmDeleteId, setConfirmDeleteId] = useState<string | null>(null);
+  const [confirmDeleteWord, setConfirmDeleteWord] = useState("");
+  const [wordWarning, setWordWarning] = useState("");
+  const [wordSuggestion, setWordSuggestion] = useState("");
+  const [isVerifying, setIsVerifying] = useState(false);
 
-  const handleAdd = () => {
-    if (newWord && newTranslation) {
-      addWord(newWord, newTranslation, newContext || undefined);
-      setNewWord("");
-      setNewTranslation("");
-      setNewContext("");
-      setShowForm(false);
+  const handleNewClick = () => {
+    if (!user) {
+      setShowAuthPrompt(true);
+      return;
+    }
+    setShowForm(!showForm);
+    setShowAuthPrompt(false);
+  };
+
+  const handleAdd = async () => {
+    if (!newWord || !newTranslation) return;
+
+    setWordWarning("");
+    setWordSuggestion("");
+
+    // Verify the word is German using AI (if API key available)
+    if (isApiKeyConfigured()) {
+      setIsVerifying(true);
+      try {
+        const result = await verifyGermanWord(newWord);
+        if (!result.isGerman) {
+          setWordWarning(`„${newWord}" scheint kein deutsches Wort zu sein.`);
+          setWordSuggestion(result.suggestion || "");
+          setIsVerifying(false);
+          return;
+        }
+      } catch {
+        // If verification fails, let the user proceed
+      }
+      setIsVerifying(false);
+    }
+
+    setConfirmAdd(true);
+  };
+
+  const handleAddAnyway = () => {
+    // User wants to add despite the warning
+    setWordWarning("");
+    setWordSuggestion("");
+    setConfirmAdd(true);
+  };
+
+  const handleUseSuggestion = () => {
+    if (wordSuggestion) {
+      setNewWord(wordSuggestion);
+    }
+    setWordWarning("");
+    setWordSuggestion("");
+  };
+
+  const confirmAddWord = async () => {
+    setConfirmAdd(false);
+    await addWord(newWord, newTranslation, newContext || undefined);
+    setNewWord("");
+    setNewTranslation("");
+    setNewContext("");
+    setShowForm(false);
+  };
+
+  const handleDeleteClick = (id: string, word: string) => {
+    setConfirmDeleteId(id);
+    setConfirmDeleteWord(word);
+  };
+
+  const confirmDelete = async () => {
+    if (confirmDeleteId) {
+      await removeWord(confirmDeleteId);
+      setConfirmDeleteId(null);
+      setConfirmDeleteWord("");
     }
   };
 
@@ -101,15 +175,56 @@ export default function VocabularyPanel({ isOpen, onClose }: VocabularyPanelProp
               className="flex-1 border border-gray-300 rounded-lg px-3 py-1.5 text-sm focus:outline-none focus:ring-2 focus:ring-blue-200"
             />
             <button
-              onClick={() => setShowForm(!showForm)}
+              onClick={handleNewClick}
               className="bg-black text-white px-3 py-1.5 rounded-lg text-sm font-medium cursor-pointer hover:bg-gray-800"
             >
               + Neu
             </button>
           </div>
 
-          {/* Add form */}
-          {showForm && (
+          {/* Auth prompt for unauthenticated users */}
+          {showAuthPrompt && !user && (
+            <div className="bg-amber-50 border border-amber-200 rounded-lg p-4 space-y-3">
+              <div className="flex items-start gap-2">
+                <svg className="w-5 h-5 text-amber-500 shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.964-.833-2.732 0L3.268 16.5c-.77.833.192 2.5 1.732 2.5z" />
+                </svg>
+                <div>
+                  <p className="text-sm font-medium text-amber-800">
+                    Anmeldung erforderlich
+                  </p>
+                  <p className="text-xs text-amber-700 mt-1">
+                    Um Vokabeln zu speichern, musst du dich anmelden oder ein Konto erstellen.
+                  </p>
+                </div>
+              </div>
+              <div className="flex gap-2">
+                <Link
+                  to="/login"
+                  onClick={onClose}
+                  className="flex-1 bg-gray-900 text-white text-center py-2 rounded-lg text-xs font-medium hover:bg-gray-800 transition-colors"
+                >
+                  Anmelden
+                </Link>
+                <Link
+                  to="/signup"
+                  onClick={onClose}
+                  className="flex-1 bg-white border border-gray-300 text-gray-700 text-center py-2 rounded-lg text-xs font-medium hover:bg-gray-50 transition-colors"
+                >
+                  Registrieren
+                </Link>
+              </div>
+              <button
+                onClick={() => setShowAuthPrompt(false)}
+                className="text-xs text-gray-500 hover:text-gray-700 cursor-pointer"
+              >
+                Schließen
+              </button>
+            </div>
+          )}
+
+          {/* Add form (only for logged-in users) */}
+          {showForm && user && (
             <div className="bg-gray-50 rounded-lg p-3 space-y-2">
               <input
                 type="text"
@@ -182,18 +297,51 @@ export default function VocabularyPanel({ isOpen, onClose }: VocabularyPanelProp
               <div className="flex gap-2">
                 <button
                   onClick={handleAdd}
-                  disabled={!newWord || !newTranslation}
+                  disabled={!newWord || !newTranslation || isVerifying}
                   className="bg-emerald-600 text-white px-4 py-1.5 rounded text-xs font-medium cursor-pointer hover:bg-emerald-700 disabled:opacity-50 disabled:cursor-not-allowed"
                 >
-                  Speichern
+                  {isVerifying ? "Prüfe..." : "Speichern"}
                 </button>
                 <button
-                  onClick={() => setShowForm(false)}
+                  onClick={() => { setShowForm(false); setWordWarning(""); setWordSuggestion(""); }}
                   className="text-gray-500 px-4 py-1.5 rounded text-xs font-medium cursor-pointer hover:bg-gray-200"
                 >
                   Abbrechen
                 </button>
               </div>
+
+              {/* Word verification warning */}
+              {wordWarning && (
+                <div className="bg-orange-50 border border-orange-200 rounded-lg p-3 space-y-2">
+                  <div className="flex items-start gap-2">
+                    <svg className="w-4 h-4 text-orange-500 shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.964-.833-2.732 0L3.268 16.5c-.77.833.192 2.5 1.732 2.5z" />
+                    </svg>
+                    <p className="text-xs text-orange-800">{wordWarning}</p>
+                  </div>
+                  {wordSuggestion && (
+                    <p className="text-xs text-orange-700">
+                      Meintest du: <strong>„{wordSuggestion}"</strong>?
+                    </p>
+                  )}
+                  <div className="flex gap-2">
+                    {wordSuggestion && (
+                      <button
+                        onClick={handleUseSuggestion}
+                        className="bg-orange-600 text-white px-3 py-1 rounded text-[10px] font-medium cursor-pointer hover:bg-orange-700"
+                      >
+                        Vorschlag übernehmen
+                      </button>
+                    )}
+                    <button
+                      onClick={handleAddAnyway}
+                      className="bg-gray-200 text-gray-700 px-3 py-1 rounded text-[10px] font-medium cursor-pointer hover:bg-gray-300"
+                    >
+                      Trotzdem speichern
+                    </button>
+                  </div>
+                </div>
+              )}
             </div>
           )}
         </div>
@@ -263,7 +411,7 @@ export default function VocabularyPanel({ isOpen, onClose }: VocabularyPanelProp
                       )}
                     </div>
                     <button
-                      onClick={() => removeWord(item.id)}
+                      onClick={() => handleDeleteClick(item.id, item.word)}
                       className="opacity-0 group-hover:opacity-100 p-1 hover:bg-red-50 rounded cursor-pointer transition-opacity"
                       title="Löschen"
                     >
@@ -280,83 +428,114 @@ export default function VocabularyPanel({ isOpen, onClose }: VocabularyPanelProp
 
         {/* Footer */}
         <div className="px-5 py-3 border-t border-gray-200 space-y-2">
-          {/* Export / Import buttons */}
-          <div className="flex gap-2">
-            <button
-              onClick={() => {
-                import("xlsx").then((XLSX) => {
-                  const data = vocab.map((item) => ({
-                    Wort: item.word,
-                    Übersetzung: item.translation,
-                    Kontext: item.context || "",
-                  }));
-                  const ws = XLSX.utils.json_to_sheet(data);
-                  const wb = XLSX.utils.book_new();
-                  XLSX.utils.book_append_sheet(wb, ws, "Vokabeln");
-                  XLSX.writeFile(wb, `b1-vokabeln-${new Date().toISOString().slice(0, 10)}.xlsx`);
-                });
-              }}
-              disabled={vocab.length === 0}
-              className="flex-1 flex items-center justify-center gap-1.5 border border-gray-300 rounded-lg px-3 py-1.5 text-xs font-medium text-gray-700 cursor-pointer hover:bg-gray-50 disabled:opacity-40 disabled:cursor-not-allowed"
-            >
-              <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
-              </svg>
-              Export (.xlsx)
-            </button>
-            <label className="flex-1 flex items-center justify-center gap-1.5 border border-gray-300 rounded-lg px-3 py-1.5 text-xs font-medium text-gray-700 cursor-pointer hover:bg-gray-50">
-              <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12" />
-              </svg>
-              Import (.xlsx)
-              <input
-                type="file"
-                accept=".xlsx,.xls"
-                className="hidden"
-                onChange={(e) => {
-                  const file = e.target.files?.[0];
-                  if (!file) return;
-                  const reader = new FileReader();
-                  reader.onload = (ev) => {
+          {user ? (
+            <>
+              {/* Export / Import buttons */}
+              <div className="flex gap-2">
+                <button
+                  onClick={() => {
                     import("xlsx").then((XLSX) => {
-                      try {
-                        const data = new Uint8Array(ev.target?.result as ArrayBuffer);
-                        const wb = XLSX.read(data, { type: "array" });
-                        const ws = wb.Sheets[wb.SheetNames[0]];
-                        const rows = XLSX.utils.sheet_to_json<{ Wort?: string; Übersetzung?: string; Kontext?: string }>(ws);
-                        rows.forEach((row) => {
-                          if (row.Wort && row.Übersetzung) {
-                            addWord(row.Wort, row.Übersetzung, row.Kontext);
+                      const data = vocab.map((item) => ({
+                        Wort: item.word,
+                        Übersetzung: item.translation,
+                        Kontext: item.context || "",
+                      }));
+                      const ws = XLSX.utils.json_to_sheet(data);
+                      const wb = XLSX.utils.book_new();
+                      XLSX.utils.book_append_sheet(wb, ws, "Vokabeln");
+                      XLSX.writeFile(wb, `b1-vokabeln-${new Date().toISOString().slice(0, 10)}.xlsx`);
+                    });
+                  }}
+                  disabled={vocab.length === 0}
+                  className="flex-1 flex items-center justify-center gap-1.5 border border-gray-300 rounded-lg px-3 py-1.5 text-xs font-medium text-gray-700 cursor-pointer hover:bg-gray-50 disabled:opacity-40 disabled:cursor-not-allowed"
+                >
+                  <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
+                  </svg>
+                  Export (.xlsx)
+                </button>
+                <label className="flex-1 flex items-center justify-center gap-1.5 border border-gray-300 rounded-lg px-3 py-1.5 text-xs font-medium text-gray-700 cursor-pointer hover:bg-gray-50">
+                  <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12" />
+                  </svg>
+                  Import (.xlsx)
+                  <input
+                    type="file"
+                    accept=".xlsx,.xls"
+                    className="hidden"
+                    onChange={(e) => {
+                      const file = e.target.files?.[0];
+                      if (!file) return;
+                      const reader = new FileReader();
+                      reader.onload = (ev) => {
+                        import("xlsx").then(async (XLSX) => {
+                          try {
+                            const data = new Uint8Array(ev.target?.result as ArrayBuffer);
+                            const wb = XLSX.read(data, { type: "array" });
+                            const ws = wb.Sheets[wb.SheetNames[0]];
+                            const rows = XLSX.utils.sheet_to_json<{ Wort?: string; Übersetzung?: string; Kontext?: string }>(ws);
+                            for (const row of rows) {
+                              if (row.Wort && row.Übersetzung) {
+                                await addWord(row.Wort, row.Übersetzung, row.Kontext);
+                              }
+                            }
+                          } catch {
+                            alert("Fehler beim Importieren der Datei.");
                           }
                         });
-                      } catch {
-                        alert("Fehler beim Importieren der Datei.");
-                      }
-                    });
-                  };
-                  reader.readAsArrayBuffer(file);
-                  e.target.value = "";
-                }}
-              />
-            </label>
-          </div>
+                      };
+                      reader.readAsArrayBuffer(file);
+                      e.target.value = "";
+                    }}
+                  />
+                </label>
+              </div>
 
-          {/* Clear all + info */}
-          <div className="flex justify-between items-center">
-            <span className="text-[10px] text-gray-400">
-              Gespeichert im Browser (localStorage)
-            </span>
-            {vocab.length > 0 && (
-              <button
-                onClick={clearAll}
-                className="text-[10px] text-red-500 hover:text-red-700 cursor-pointer font-medium"
-              >
-                Alle löschen
-              </button>
-            )}
-          </div>
+              {/* Clear all + info */}
+              <div className="flex justify-between items-center">
+                <span className="text-[10px] text-gray-400">
+                  Synchronisiert mit deinem Konto
+                </span>
+                {vocab.length > 0 && (
+                  <button
+                    onClick={clearAll}
+                    className="text-[10px] text-red-500 hover:text-red-700 cursor-pointer font-medium"
+                  >
+                    Alle löschen
+                  </button>
+                )}
+              </div>
+            </>
+          ) : (
+            <p className="text-xs text-gray-400 text-center py-1">
+              Melde dich an, um Vokabeln zu speichern, exportieren und importieren.
+            </p>
+          )}
         </div>
       </div>
+
+      {/* Confirmation Modal: Add */}
+      <ConfirmModal
+        isOpen={confirmAdd}
+        title="Vokabel hinzufügen"
+        message={`Möchtest du „${newWord}" wirklich speichern?`}
+        confirmText="Speichern"
+        cancelText="Abbrechen"
+        onConfirm={confirmAddWord}
+        onCancel={() => setConfirmAdd(false)}
+      />
+
+      {/* Confirmation Modal: Delete */}
+      <ConfirmModal
+        isOpen={!!confirmDeleteId}
+        title="Vokabel löschen"
+        message={`Möchtest du „${confirmDeleteWord}" wirklich löschen? Diese Aktion kann nicht rückgängig gemacht werden.`}
+        confirmText="Löschen"
+        cancelText="Abbrechen"
+        variant="danger"
+        onConfirm={confirmDelete}
+        onCancel={() => { setConfirmDeleteId(null); setConfirmDeleteWord(""); }}
+      />
     </div>
   );
 }

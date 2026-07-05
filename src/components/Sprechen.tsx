@@ -1,15 +1,45 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { module1Sprechen } from "../data/module1/sprechen";
+import { useProgress } from "../context/ProgressContext";
+import { useAnswers } from "../context/AnswersContext";
+
+type TabKey = "teil1" | "teil2a" | "teil2b" | "teil3";
+const SECTION_ID = "m1-sprechen";
 
 export default function Sprechen() {
   const data = module1Sprechen;
-  const [activeTab, setActiveTab] = useState<"teil1" | "teil2a" | "teil2b" | "teil3">("teil1");
+  const { updateProgress } = useProgress();
+  const { getDone, setDone: setGlobalDone } = useAnswers();
+  const [activeTab, setActiveTab] = useState<TabKey>("teil1");
 
-  const tabs = [
-    { key: "teil1" as const, label: "Teil 1" },
-    { key: "teil2a" as const, label: "Teil 2 (A)" },
-    { key: "teil2b" as const, label: "Teil 2 (B)" },
-    { key: "teil3" as const, label: "Teil 3" },
+  const doneArr = getDone(SECTION_ID) ?? [false, false, false, false];
+  const done: Record<TabKey, boolean> = {
+    teil1: doneArr[0],
+    teil2a: doneArr[1],
+    teil2b: doneArr[2],
+    teil3: doneArr[3],
+  };
+
+  const totalParts = 4;
+
+  useEffect(() => {
+    const answered = Object.values(done).filter(Boolean).length;
+    updateProgress(SECTION_ID, answered, totalParts);
+  }, [done, updateProgress]);
+
+  const toggleDone = (key: TabKey) => {
+    const keys: TabKey[] = ["teil1", "teil2a", "teil2b", "teil3"];
+    const newArr = [...doneArr];
+    const idx = keys.indexOf(key);
+    newArr[idx] = !newArr[idx];
+    setGlobalDone(SECTION_ID, newArr);
+  };
+
+  const tabs: { key: TabKey; label: string }[] = [
+    { key: "teil1", label: "Teil 1" },
+    { key: "teil2a", label: "Teil 2 (A)" },
+    { key: "teil2b", label: "Teil 2 (B)" },
+    { key: "teil3", label: "Teil 3" },
   ];
 
   return (
@@ -20,20 +50,25 @@ export default function Sprechen() {
           <button
             key={tab.key}
             onClick={() => setActiveTab(tab.key)}
-            className={`px-4 py-2 rounded-md text-sm font-medium cursor-pointer transition-colors ${
+            className={`relative px-4 py-2 rounded-md text-sm font-medium cursor-pointer transition-colors ${
               activeTab === tab.key
                 ? "bg-white text-gray-900 shadow-sm"
                 : "text-gray-600 hover:text-gray-900"
             }`}
           >
             {tab.label}
+            {done[tab.key] && (
+              <span className="absolute -top-1 -right-1 w-4 h-4 bg-emerald-500 text-white rounded-full text-[9px] flex items-center justify-center">
+                ✓
+              </span>
+            )}
           </button>
         ))}
       </div>
 
       {/* Teil 1 */}
       {activeTab === "teil1" && (
-        <div className="border border-gray-200 rounded-lg p-6 bg-white">
+        <div className={`border rounded-lg p-6 bg-white transition-colors ${done.teil1 ? "border-emerald-300 bg-emerald-50/30" : "border-gray-200"}`}>
           <h3 className="text-lg font-bold mb-4">{data.teil1.title}</h3>
           <p className="text-gray-700 mb-6">{data.teil1.instruction}</p>
 
@@ -55,12 +90,25 @@ export default function Sprechen() {
               Vorschläge und reagieren Sie auf die Vorschläge des anderen.
             </p>
           </div>
+
+          <div className="mt-6 flex justify-end">
+            <button
+              onClick={() => toggleDone("teil1")}
+              className={`px-4 py-2 rounded-lg text-xs font-medium cursor-pointer transition-colors ${
+                done.teil1
+                  ? "bg-emerald-100 text-emerald-700 hover:bg-emerald-200"
+                  : "bg-gray-900 text-white hover:bg-gray-800"
+              }`}
+            >
+              {done.teil1 ? "✓ Erledigt" : "Als erledigt markieren"}
+            </button>
+          </div>
         </div>
       )}
 
       {/* Teil 2A */}
       {activeTab === "teil2a" && (
-        <div className="border border-gray-200 rounded-lg p-6 bg-white">
+        <div className={`border rounded-lg p-6 bg-white transition-colors ${done.teil2a ? "border-emerald-300 bg-emerald-50/30" : "border-gray-200"}`}>
           <h3 className="text-lg font-bold mb-4">{data.teil2A.title}</h3>
           <p className="text-gray-700 mb-6">{data.teil2A.instruction}</p>
 
@@ -81,12 +129,25 @@ export default function Sprechen() {
               </div>
             ))}
           </div>
+
+          <div className="mt-6 flex justify-end">
+            <button
+              onClick={() => toggleDone("teil2a")}
+              className={`px-4 py-2 rounded-lg text-xs font-medium cursor-pointer transition-colors ${
+                done.teil2a
+                  ? "bg-emerald-100 text-emerald-700 hover:bg-emerald-200"
+                  : "bg-gray-900 text-white hover:bg-gray-800"
+              }`}
+            >
+              {done.teil2a ? "✓ Erledigt" : "Als erledigt markieren"}
+            </button>
+          </div>
         </div>
       )}
 
       {/* Teil 2B */}
       {activeTab === "teil2b" && (
-        <div className="border border-gray-200 rounded-lg p-6 bg-white">
+        <div className={`border rounded-lg p-6 bg-white transition-colors ${done.teil2b ? "border-emerald-300 bg-emerald-50/30" : "border-gray-200"}`}>
           <h3 className="text-lg font-bold mb-4">{data.teil2B.title}</h3>
           <p className="text-gray-700 mb-6">{data.teil2B.instruction}</p>
 
@@ -107,12 +168,25 @@ export default function Sprechen() {
               </div>
             ))}
           </div>
+
+          <div className="mt-6 flex justify-end">
+            <button
+              onClick={() => toggleDone("teil2b")}
+              className={`px-4 py-2 rounded-lg text-xs font-medium cursor-pointer transition-colors ${
+                done.teil2b
+                  ? "bg-emerald-100 text-emerald-700 hover:bg-emerald-200"
+                  : "bg-gray-900 text-white hover:bg-gray-800"
+              }`}
+            >
+              {done.teil2b ? "✓ Erledigt" : "Als erledigt markieren"}
+            </button>
+          </div>
         </div>
       )}
 
       {/* Teil 3 */}
       {activeTab === "teil3" && (
-        <div className="border border-gray-200 rounded-lg p-6 bg-white">
+        <div className={`border rounded-lg p-6 bg-white transition-colors ${done.teil3 ? "border-emerald-300 bg-emerald-50/30" : "border-gray-200"}`}>
           <h3 className="text-lg font-bold mb-4">{data.teil3.title}</h3>
           <p className="text-gray-700 mb-6">{data.teil3.instruction}</p>
 
@@ -132,6 +206,19 @@ export default function Sprechen() {
               💡 Tipp: Üben Sie diesen Teil mit einem Lernpartner. Geben Sie
               Feedback zur Präsentation und stellen Sie Fragen.
             </p>
+          </div>
+
+          <div className="mt-6 flex justify-end">
+            <button
+              onClick={() => toggleDone("teil3")}
+              className={`px-4 py-2 rounded-lg text-xs font-medium cursor-pointer transition-colors ${
+                done.teil3
+                  ? "bg-emerald-100 text-emerald-700 hover:bg-emerald-200"
+                  : "bg-gray-900 text-white hover:bg-gray-800"
+              }`}
+            >
+              {done.teil3 ? "✓ Erledigt" : "Als erledigt markieren"}
+            </button>
           </div>
         </div>
       )}
