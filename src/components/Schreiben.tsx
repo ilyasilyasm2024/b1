@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useEffect } from "react";
 import { module1Schreiben } from "../data/module1/schreiben";
 import { useProgress } from "../context/ProgressContext";
 import { useAnswers } from "../context/AnswersContext";
