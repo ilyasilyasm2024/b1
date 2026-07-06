@@ -113,6 +113,7 @@ export default function Signup() {
                   onChange={(e) => updateField("firstName", e.target.value)}
                   required
                   minLength={2}
+                  maxLength={50}
                   className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-gray-900 focus:border-transparent text-sm"
                   placeholder="Max"
                 />
@@ -128,6 +129,7 @@ export default function Signup() {
                   onChange={(e) => updateField("lastName", e.target.value)}
                   required
                   minLength={2}
+                  maxLength={50}
                   className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-gray-900 focus:border-transparent text-sm"
                   placeholder="Mustermann"
                 />
@@ -163,6 +165,7 @@ export default function Signup() {
                 value={form.email}
                 onChange={(e) => updateField("email", e.target.value)}
                 required
+                maxLength={128}
                 className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-gray-900 focus:border-transparent text-sm"
                 placeholder="max@beispiel.de"
               />
@@ -180,6 +183,7 @@ export default function Signup() {
                   onChange={(e) => updateField("password", e.target.value)}
                   required
                   minLength={6}
+                  maxLength={128}
                   className="w-full px-3 py-2 pr-10 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-gray-900 focus:border-transparent text-sm"
                   placeholder="••••••••"
                 />
@@ -216,6 +220,7 @@ export default function Signup() {
                   onChange={(e) => updateField("confirmPassword", e.target.value)}
                   required
                   minLength={6}
+                  maxLength={128}
                   className="w-full px-3 py-2 pr-10 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-gray-900 focus:border-transparent text-sm"
                   placeholder="••••••••"
                 />

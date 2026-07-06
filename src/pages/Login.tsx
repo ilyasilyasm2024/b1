@@ -107,6 +107,7 @@ export default function Login() {
                 onChange={(e) => setIdentifier(e.target.value)}
                 required
                 minLength={3}
+                maxLength={128}
                 className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-gray-900 focus:border-transparent text-sm"
                 placeholder="dein@email.de oder benutzername"
               />
@@ -123,6 +124,7 @@ export default function Login() {
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
                   required
+                  maxLength={128}
                   className="w-full px-3 py-2 pr-10 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-gray-900 focus:border-transparent text-sm"
                   placeholder="••••••••"
                 />

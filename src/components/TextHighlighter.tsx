@@ -374,6 +374,7 @@ export default function TextHighlighter() {
                   type="text"
                   value={vocabWord}
                   onChange={(e) => setVocabWord(e.target.value)}
+                  maxLength={150}
                   className="flex-1 border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-200"
                 />
                 <button
@@ -402,6 +403,7 @@ export default function TextHighlighter() {
                   value={vocabTranslation}
                   onChange={(e) => setVocabTranslation(e.target.value)}
                   placeholder="Übersetzung eingeben oder AI nutzen"
+                  maxLength={150}
                   className="flex-1 border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-200"
                 />
                 <button
@@ -432,6 +434,7 @@ export default function TextHighlighter() {
                   value={vocabExample}
                   onChange={(e) => setVocabExample(e.target.value)}
                   placeholder="Beispielsatz oder AI generieren"
+                  maxLength={150}
                   className="flex-1 border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-200"
                 />
                 <button

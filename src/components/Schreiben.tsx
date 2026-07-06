@@ -84,6 +84,7 @@ export default function Schreiben() {
             <textarea
               value={texts[index]}
               onChange={(e) => handleChange(index, e.target.value)}
+              maxLength={500}
               className="w-full border border-gray-300 rounded-lg p-4 min-h-[150px] text-sm resize-y focus:outline-none focus:ring-2 focus:ring-blue-300"
               placeholder={`Schreiben Sie hier Ihren Text (circa ${aufgabe.wordCount} Wörter)...`}
             />

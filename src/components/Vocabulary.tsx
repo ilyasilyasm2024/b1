@@ -231,6 +231,7 @@ export default function VocabularyPanel({ isOpen, onClose }: VocabularyPanelProp
                 value={newWord}
                 onChange={(e) => setNewWord(e.target.value)}
                 placeholder="Wort (Deutsch)"
+                maxLength={150}
                 className="w-full border border-gray-300 rounded px-3 py-1.5 text-sm focus:outline-none focus:ring-2 focus:ring-blue-200"
               />
 
@@ -241,6 +242,7 @@ export default function VocabularyPanel({ isOpen, onClose }: VocabularyPanelProp
                   value={newTranslation}
                   onChange={(e) => setNewTranslation(e.target.value)}
                   placeholder="Übersetzung"
+                  maxLength={150}
                   className="flex-1 border border-gray-300 rounded px-3 py-1.5 text-sm focus:outline-none focus:ring-2 focus:ring-blue-200"
                 />
                 <select
@@ -272,6 +274,7 @@ export default function VocabularyPanel({ isOpen, onClose }: VocabularyPanelProp
                   value={newContext}
                   onChange={(e) => setNewContext(e.target.value)}
                   placeholder="Kontext / Beispielsatz (optional)"
+                  maxLength={150}
                   className="flex-1 border border-gray-300 rounded px-3 py-1.5 text-sm focus:outline-none focus:ring-2 focus:ring-blue-200"
                 />
                 <button
