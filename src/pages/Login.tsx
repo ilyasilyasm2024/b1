@@ -74,14 +74,19 @@ export default function Login() {
             <div className="mb-4 p-3 rounded-lg bg-red-50 border border-red-200 text-red-700 text-sm">
               <p>{error}</p>
               {needsVerification && (
-                <button
-                  type="button"
-                  onClick={handleResendVerification}
-                  disabled={isResending}
-                  className="mt-2 text-xs font-medium text-red-800 underline hover:text-red-900 cursor-pointer disabled:opacity-50"
-                >
-                  {isResending ? "Wird gesendet..." : "Bestätigungs-E-Mail erneut senden"}
-                </button>
+                <>
+                  <p className="mt-2 text-[10px] text-red-600">
+                    📧 Tip: Please also check your spam folder!
+                  </p>
+                  <button
+                    type="button"
+                    onClick={handleResendVerification}
+                    disabled={isResending}
+                    className="mt-1 text-xs font-medium text-red-800 underline hover:text-red-900 cursor-pointer disabled:opacity-50"
+                  >
+                    {isResending ? "Wird gesendet..." : "Bestätigungs-E-Mail erneut senden"}
+                  </button>
+                </>
               )}
             </div>
           )}

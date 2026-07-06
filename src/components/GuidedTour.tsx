@@ -9,9 +9,9 @@ const steps = [
     placement: "center" as const,
     content: (
       <div className="text-center">
-        <h2 className="text-lg font-bold mb-2">Willkommen bei B1 Prüfungsvorbereitung! 🎓</h2>
+        <h2 className="text-lg font-bold mb-2">Welcome to B1 Exam Prep! 🎓</h2>
         <p className="text-sm text-gray-600">
-          Wir zeigen dir kurz, wie du die App nutzen kannst.
+          Let us show you how to get the most out of this app.
         </p>
       </div>
     ),
@@ -20,9 +20,9 @@ const steps = [
     target: '[data-tour="vocab-btn"]',
     content: (
       <div>
-        <h3 className="font-bold mb-1">📚 Vokabeln</h3>
+        <h3 className="font-bold mb-1">📚 Vocabulary</h3>
         <p className="text-sm text-gray-600">
-          Hier kannst du neue Wörter speichern, mit KI übersetzen und Beispielsätze generieren.
+          Save new words, translate with AI, and generate example sentences.
         </p>
       </div>
     ),
@@ -33,7 +33,7 @@ const steps = [
       <div>
         <h3 className="font-bold mb-1">⏱ Timer</h3>
         <p className="text-sm text-gray-600">
-          Nutze den Timer, um die Arbeitszeit wie in der echten Prüfung zu simulieren.
+          Use the timer to simulate real exam conditions.
         </p>
       </div>
     ),
@@ -42,9 +42,9 @@ const steps = [
     target: '[data-tour="auth-section"]',
     content: (
       <div>
-        <h3 className="font-bold mb-1">👤 Konto</h3>
+        <h3 className="font-bold mb-1">👤 Account</h3>
         <p className="text-sm text-gray-600">
-          Melde dich an, um deinen Fortschritt zu speichern und Vokabeln in der Cloud zu sichern.
+          Sign in to save your progress and sync vocabulary to the cloud.
         </p>
       </div>
     ),
@@ -53,9 +53,9 @@ const steps = [
     target: '[data-tour="module-1"]',
     content: (
       <div>
-        <h3 className="font-bold mb-1">📝 Modelltests</h3>
+        <h3 className="font-bold mb-1">📝 Model Tests</h3>
         <p className="text-sm text-gray-600">
-          Klicke auf einen Modelltest, um mit dem Üben zu beginnen. Der Ring zeigt deinen Fortschritt.
+          Click a model test to start practicing. The ring shows your progress.
         </p>
       </div>
     ),
@@ -65,9 +65,9 @@ const steps = [
     placement: "center" as const,
     content: (
       <div className="text-center">
-        <h3 className="font-bold mb-2">💡 Tipp: Text markieren</h3>
+        <h3 className="font-bold mb-2">💡 Tip: Highlight Text</h3>
         <p className="text-sm text-gray-600">
-          Markiere Text in den Übungen mit der rechten Maustaste, um ihn farbig hervorzuheben, vorlesen zu lassen oder als Vokabel zu speichern.
+          Right-click on text in exercises to highlight it, listen to it, or save it as vocabulary.
         </p>
       </div>
     ),
@@ -77,9 +77,9 @@ const steps = [
     placement: "center" as const,
     content: (
       <div className="text-center">
-        <h2 className="text-lg font-bold mb-2">Bereit? Los geht's! 🚀</h2>
+        <h2 className="text-lg font-bold mb-2">Ready? Let's go! 🚀</h2>
         <p className="text-sm text-gray-600">
-          Viel Erfolg bei deiner B1-Prüfungsvorbereitung!
+          Good luck with your B1 exam preparation!
         </p>
       </div>
     ),
@@ -118,11 +118,11 @@ export default function GuidedTour() {
         continuous
         onEvent={handleEvent}
         locale={{
-          back: "Zurück",
-          close: "Schließen",
-          last: "Fertig",
-          next: "Weiter",
-          skip: "Überspringen",
+          back: "Back",
+          close: "Close",
+          last: "Done",
+          next: "Next",
+          skip: "Skip",
         }}
       />
 

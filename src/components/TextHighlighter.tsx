@@ -53,7 +53,14 @@ export default function TextHighlighter() {
   const { triggerSync } = useAnswers();
 
   useEffect(() => {
+    const isInsideJoyride = (target: EventTarget | null): boolean => {
+      const el = target as HTMLElement | null;
+      if (!el) return false;
+      return !!el.closest('[data-testid^="joyride"], .react-joyride, .__react-joyride, [class*="joyride"]');
+    };
+
     const handleContextMenu = (e: MouseEvent) => {
+      if (isInsideJoyride(e.target)) return;
       const selection = window.getSelection();
       if (selection && !selection.isCollapsed && selection.toString().trim()) {
         e.preventDefault();
@@ -63,9 +70,12 @@ export default function TextHighlighter() {
     };
 
     const handleSelectionChange = () => {
-      // For mobile: show popup after text selection via long-press
       const selection = window.getSelection();
       if (selection && !selection.isCollapsed && selection.toString().trim()) {
+        // Check if selection is inside joyride
+        const anchorEl = selection.anchorNode?.parentElement;
+        if (anchorEl?.closest('[data-testid^="joyride"], .react-joyride, .__react-joyride, [class*="joyride"]')) return;
+
         const range = selection.getRangeAt(0);
         const rect = range.getBoundingClientRect();
         if (rect.width > 0) {
