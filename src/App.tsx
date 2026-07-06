@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { Link } from "react-router-dom";
 import Module1 from "./components/Module1";
 import Timer from "./components/Timer";
@@ -9,25 +9,13 @@ import { useAuth } from "./context/AuthContext";
 import { ToastProvider } from "./components/Toast";
 import { ProgressProvider, useProgress } from "./context/ProgressContext";
 import { AnswersProvider } from "./context/AnswersContext";
-import { api } from "./services/api";
 
 function AppContent() {
   const [openModules, setOpenModules] = useState<Record<string, boolean>>({});
   const [vocabOpen, setVocabOpen] = useState(false);
-  const [dbStatus, setDbStatus] = useState<"checking" | "connected" | "disconnected">("checking");
   const { user, logout } = useAuth();
   const { getModuleProgress } = useProgress();
   const m1Progress = getModuleProgress("m1");
-
-  useEffect(() => {
-    api.get<{ database: string }>("/health").then((res) => {
-      if (res.data?.database === "connected") {
-        setDbStatus("connected");
-      } else {
-        setDbStatus("disconnected");
-      }
-    }).catch(() => setDbStatus("disconnected"));
-  }, []);
 
   const toggleModule = (key: string) => {
     setOpenModules((prev) => ({ ...prev, [key]: !prev[key] }));
@@ -50,14 +38,6 @@ function AppContent() {
           </button>
 
           <Timer />
-
-          {/* DB status indicator */}
-          <div
-            className={`w-2 h-2 rounded-full shrink-0 ${
-              dbStatus === "connected" ? "bg-emerald-500" : dbStatus === "disconnected" ? "bg-red-500" : "bg-yellow-400 animate-pulse"
-            }`}
-            title={dbStatus === "connected" ? "Server verbunden" : dbStatus === "disconnected" ? "Server nicht erreichbar" : "Verbindung wird geprüft..."}
-          />
 
           {/* Auth section */}
           <div className="flex items-center gap-2 shrink-0">
