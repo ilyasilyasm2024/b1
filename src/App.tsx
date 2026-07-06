@@ -10,6 +10,7 @@ import { ToastProvider } from "./components/Toast";
 import { ProgressProvider, useProgress } from "./context/ProgressContext";
 import { AnswersProvider } from "./context/AnswersContext";
 import GuidedTour from "./components/GuidedTour";
+import ComingSoon from "./components/ComingSoon";
 
 function AppContent() {
   const [openModules, setOpenModules] = useState<Record<string, boolean>>({});
@@ -25,6 +26,7 @@ function AppContent() {
   return (
     <div className="min-h-screen bg-gray-50 pt-16 pb-8">
       <GuidedTour />
+      <ComingSoon />
       {/* Fixed top bar */}
       <div className="fixed top-0 left-0 right-0 z-40 bg-white/90 backdrop-blur-sm border-b border-gray-200 px-3 py-2">
         <div className="max-w-4xl mx-auto flex items-center justify-between gap-2">
@@ -98,6 +100,7 @@ function AppContent() {
             </span>
           </h1>
           <p className="text-gray-500 text-sm">Zertifikat B1 neu</p>
+          <p className="text-gray-400 text-[10px] mt-1">v0.0.1-beta · 05.07.2026</p>
         </div>
 
         {/* Modules */}
