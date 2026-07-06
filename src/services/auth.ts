@@ -21,6 +21,7 @@ export interface User {
   lastName: string;
   isConnected: boolean;
   isVerified: boolean;
+  firstTour: boolean;
   imageUrl: string;
   timeSpentInOurApp: number;
 }

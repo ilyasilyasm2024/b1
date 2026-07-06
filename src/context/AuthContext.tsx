@@ -47,6 +47,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     localStorage.removeItem("b1-answers");
     localStorage.removeItem("b1-vocabulary");
     localStorage.removeItem("b1-highlights");
+    localStorage.removeItem("b1-tour-seen");
     setToken(null);
     setUser(null);
   };
