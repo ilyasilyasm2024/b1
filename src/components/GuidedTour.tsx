@@ -1,13 +1,12 @@
 import { useState, useEffect } from "react";
-import { Joyride, STATUS } from "react-joyride";
-import type { Step, CallBackProps } from "react-joyride";
+import { Joyride, STATUS, EVENTS } from "react-joyride";
 import { useAuth } from "../context/AuthContext";
 import { api } from "../services/api";
 
-const steps: Step[] = [
+const steps = [
   {
     target: "body",
-    placement: "center",
+    placement: "center" as const,
     content: (
       <div className="text-center">
         <h2 className="text-lg font-bold mb-2">Willkommen bei B1 Prüfungsvorbereitung! 🎓</h2>
@@ -16,7 +15,6 @@ const steps: Step[] = [
         </p>
       </div>
     ),
-    disableBeacon: true,
   },
   {
     target: '[data-tour="vocab-btn"]',
@@ -64,7 +62,7 @@ const steps: Step[] = [
   },
   {
     target: "body",
-    placement: "center",
+    placement: "center" as const,
     content: (
       <div className="text-center">
         <h3 className="font-bold mb-2">💡 Tipp: Text markieren</h3>
@@ -76,7 +74,7 @@ const steps: Step[] = [
   },
   {
     target: "body",
-    placement: "center",
+    placement: "center" as const,
     content: (
       <div className="text-center">
         <h2 className="text-lg font-bold mb-2">Bereit? Los geht's! 🚀</h2>
@@ -92,7 +90,6 @@ export default function GuidedTour() {
   const [run, setRun] = useState(false);
   const { user } = useAuth();
 
-  // Auto-start tour only for logged-in users who haven't seen it yet
   useEffect(() => {
     if (user && !user.firstTour) {
       const timer = setTimeout(() => setRun(true), 800);
@@ -100,11 +97,9 @@ export default function GuidedTour() {
     }
   }, [user]);
 
-  const handleCallback = (data: CallBackProps) => {
-    const { status } = data;
-    if (status === STATUS.FINISHED || status === STATUS.SKIPPED) {
+  const handleEvent = (data: { type: string; status: string }) => {
+    if (data.type === EVENTS.TOUR_END || data.status === STATUS.FINISHED || data.status === STATUS.SKIPPED) {
       setRun(false);
-      // Mark tour as completed in backend
       if (user) {
         api.post("/users/me/tour-completed", {});
       }
@@ -121,40 +116,13 @@ export default function GuidedTour() {
         steps={steps}
         run={run}
         continuous
-        showSkipButton
-        showProgress
-        callback={handleCallback}
+        onEvent={handleEvent}
         locale={{
           back: "Zurück",
           close: "Schließen",
           last: "Fertig",
           next: "Weiter",
           skip: "Überspringen",
-        }}
-        styles={{
-          options: {
-            primaryColor: "#111827",
-            zIndex: 10000,
-          },
-          tooltip: {
-            borderRadius: "12px",
-            padding: "20px",
-          },
-          buttonNext: {
-            borderRadius: "8px",
-            padding: "8px 16px",
-            fontSize: "13px",
-          },
-          buttonBack: {
-            borderRadius: "8px",
-            padding: "8px 16px",
-            fontSize: "13px",
-            color: "#6b7280",
-          },
-          buttonSkip: {
-            fontSize: "12px",
-            color: "#9ca3af",
-          },
         }}
       />
 
