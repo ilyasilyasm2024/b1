@@ -93,6 +93,9 @@ function AppContent() {
         <div className="text-center mb-8">
           <h1 className="text-3xl font-bold text-gray-900 mb-1">
             B1 Prüfungsvorbereitung
+            <span className="ml-2 inline-block bg-amber-100 text-amber-800 text-[10px] font-semibold px-2 py-0.5 rounded-full align-middle">
+              BETA
+            </span>
           </h1>
           <p className="text-gray-500 text-sm">Zertifikat B1 neu</p>
         </div>
