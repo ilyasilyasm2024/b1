@@ -28,6 +28,7 @@ export default function AudioRecorder({ moduleId, teil }: AudioRecorderProps) {
   const startRecording = async () => {
     if (!user) {
       showToast("Please sign in to record.", "error");
+      console.log(isPaused)
       return;
     }
 
