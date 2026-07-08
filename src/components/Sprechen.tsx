@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import { module1Sprechen } from "../data/module1/sprechen";
 import { useProgress } from "../context/ProgressContext";
 import { useAnswers } from "../context/AnswersContext";
+import AudioRecorder from "./AudioRecorder";
 
 type TabKey = "teil1" | "teil2a" | "teil2b" | "teil3";
 const SECTION_ID = "m1-sprechen";
@@ -103,6 +104,8 @@ export default function Sprechen() {
               {done.teil1 ? "✓ Erledigt" : "Als erledigt markieren"}
             </button>
           </div>
+
+          <AudioRecorder moduleId="m1" teil="teil1" />
         </div>
       )}
 
@@ -142,6 +145,8 @@ export default function Sprechen() {
               {done.teil2a ? "✓ Erledigt" : "Als erledigt markieren"}
             </button>
           </div>
+
+          <AudioRecorder moduleId="m1" teil="teil2a" />
         </div>
       )}
 
@@ -181,6 +186,8 @@ export default function Sprechen() {
               {done.teil2b ? "✓ Erledigt" : "Als erledigt markieren"}
             </button>
           </div>
+
+          <AudioRecorder moduleId="m1" teil="teil2b" />
         </div>
       )}
 
@@ -220,6 +227,8 @@ export default function Sprechen() {
               {done.teil3 ? "✓ Erledigt" : "Als erledigt markieren"}
             </button>
           </div>
+
+          <AudioRecorder moduleId="m1" teil="teil3" />
         </div>
       )}
     </div>
