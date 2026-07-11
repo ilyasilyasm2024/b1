@@ -2,6 +2,7 @@ import { useState, useEffect, useRef } from "react";
 import { translateWord, generateExample, isApiKeyConfigured } from "../services/ai";
 import { useVocabulary } from "../context/VocabularyContext";
 import { useAnswers } from "../context/AnswersContext";
+import { usePermissions } from "../context/Permissions";
 
 const HIGHLIGHT_COLORS = [
   { name: "Gelb", value: "#fef08a" },
@@ -51,6 +52,7 @@ export default function TextHighlighter() {
   const popupRef = useRef<HTMLDivElement>(null);
   const { addWord } = useVocabulary();
   const { triggerSync } = useAnswers();
+  const { hasFeature } = usePermissions();
 
   useEffect(() => {
     const isInsideJoyride = (target: EventTarget | null): boolean => {
@@ -110,6 +112,11 @@ export default function TextHighlighter() {
   }, []);
 
   const applyHighlight = (color: string) => {
+    if (!hasFeature("textHighlighting")) {
+      alert("Text highlighting requires Silver plan or higher.");
+      setShowPopup(false);
+      return;
+    }
     const selection = window.getSelection();
     if (!selection || selection.isCollapsed) {
       setShowPopup(false);
@@ -274,9 +281,12 @@ export default function TextHighlighter() {
             <button
               key={c.value}
               onClick={() => applyHighlight(c.value)}
-              className="w-6 h-6 rounded-full border border-gray-300 cursor-pointer hover:scale-110 transition-transform"
+              disabled={!hasFeature("textHighlighting")}
+              className={`w-6 h-6 rounded-full border border-gray-300 transition-transform ${
+                hasFeature("textHighlighting") ? "cursor-pointer hover:scale-110" : "opacity-40 cursor-not-allowed"
+              }`}
               style={{ backgroundColor: c.value }}
-              title={c.name}
+              title={hasFeature("textHighlighting") ? c.name : "🔒 Silver plan required"}
             />
           ))}
           {/* Read aloud */}
@@ -450,6 +460,10 @@ export default function TextHighlighter() {
                 <button
                   onClick={async () => {
                     if (!vocabWord || !isApiKeyConfigured()) return;
+                    if (!hasFeature("contextSentences")) {
+                      alert("AI example sentences require Gold plan or higher.");
+                      return;
+                    }
                     setAiLoading("example");
                     try {
                       const result = await generateExample(vocabWord);
@@ -457,11 +471,13 @@ export default function TextHighlighter() {
                     } catch { /* ignore */ }
                     setAiLoading(null);
                   }}
-                  disabled={!vocabWord || aiLoading !== null || !isApiKeyConfigured()}
-                  className="bg-purple-600 text-white px-3 py-2 rounded-lg text-[10px] font-medium cursor-pointer hover:bg-purple-700 disabled:opacity-40 disabled:cursor-not-allowed"
-                  title="Beispiel generieren"
+                  disabled={!vocabWord || aiLoading !== null || !isApiKeyConfigured() || !hasFeature("contextSentences")}
+                  className={`px-3 py-2 rounded-lg text-[10px] font-medium cursor-pointer disabled:opacity-40 disabled:cursor-not-allowed ${
+                    hasFeature("contextSentences") ? "bg-purple-600 text-white hover:bg-purple-700" : "bg-gray-300 text-gray-500"
+                  }`}
+                  title={hasFeature("contextSentences") ? "Beispiel generieren" : "🔒 Gold plan required"}
                 >
-                  {aiLoading === "example" ? "..." : "AI ✍️"}
+                  {aiLoading === "example" ? "..." : hasFeature("contextSentences") ? "AI ✍️" : "🔒 AI"}
                 </button>
               </div>
             </div>

@@ -2,6 +2,7 @@ import { createContext, useContext, useState, useEffect, useCallback, type React
 import { vocabularyService } from "../services/vocabulary";
 import { useAuth } from "./AuthContext";
 import { useToast } from "../components/Toast";
+import { usePermissions } from "./Permissions";
 
 export interface VocabItem {
   id: string;
@@ -52,9 +53,16 @@ export function VocabularyProvider({ children }: { children: ReactNode }) {
     fetchVocab();
   }, [fetchVocab]);
 
+  const { canAddVocabulary } = usePermissions();
+
   const addWord = async (word: string, translation: string, context?: string) => {
     if (!user || !token) {
       showToast("Bitte melde dich an oder registriere dich, um Vokabeln zu speichern.", "error");
+      return;
+    }
+
+    if (!canAddVocabulary(vocab.length)) {
+      showToast("Vocabulary limit reached. Upgrade your plan for more.", "error");
       return;
     }
 

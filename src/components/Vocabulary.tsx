@@ -9,6 +9,8 @@ import {
 } from "../services/ai";
 import { useVocabulary } from "../context/VocabularyContext";
 import { useAuth } from "../context/AuthContext";
+import { usePermissions } from "../context/Permissions";
+import { useAIUsage } from "../context/AIUsageContext";
 import ConfirmModal from "./ConfirmModal";
 
 export type { VocabItem } from "../context/VocabularyContext";
@@ -109,12 +111,20 @@ export default function VocabularyPanel({ isOpen, onClose }: VocabularyPanelProp
     }
   };
 
+  const { hasFeature, limits, canUseAI } = usePermissions();
+  const { todayUsage, increment: incrementAI } = useAIUsage();
+
   const handleAITranslate = async () => {
     if (!newWord) return;
+    if (!canUseAI(todayUsage)) {
+      alert("AI daily limit reached. Upgrade for unlimited AI.");
+      return;
+    }
     setAiLoading("translate");
     try {
       const result = await translateWord(newWord, translationLang);
       setNewTranslation(result);
+      incrementAI();
     } catch {
       alert("Fehler bei der Übersetzung. Bitte API-Key prüfen.");
     }
@@ -123,10 +133,19 @@ export default function VocabularyPanel({ isOpen, onClose }: VocabularyPanelProp
 
   const handleAIExample = async () => {
     if (!newWord) return;
+    if (!hasFeature("contextSentences")) {
+      alert("AI example sentences require Gold plan or higher.");
+      return;
+    }
+    if (!canUseAI(todayUsage)) {
+      alert("AI daily limit reached. Upgrade for unlimited AI.");
+      return;
+    }
     setAiLoading("example");
     try {
       const result = await generateExample(newWord);
       setNewContext(result);
+      incrementAI();
     } catch {
       alert("Fehler beim Generieren. Bitte API-Key prüfen.");
     }
@@ -152,7 +171,9 @@ export default function VocabularyPanel({ isOpen, onClose }: VocabularyPanelProp
         <div className="flex items-center justify-between px-5 py-4 border-b border-gray-200">
           <div>
             <h2 className="text-lg font-bold text-gray-800">Meine Vokabeln</h2>
-            <p className="text-xs text-gray-500">{vocab.length} Wörter gespeichert</p>
+            <p className="text-xs text-gray-500">
+              {vocab.length}{limits.vocabularyCapacity !== -1 ? `/${limits.vocabularyCapacity}` : ""} Wörter gespeichert
+            </p>
           </div>
           <button
             onClick={onClose}
@@ -279,14 +300,18 @@ export default function VocabularyPanel({ isOpen, onClose }: VocabularyPanelProp
                 />
                 <button
                   onClick={handleAIExample}
-                  disabled={!newWord || aiLoading !== null || !isApiKeyConfigured()}
-                  className="bg-purple-600 text-white px-2.5 py-1.5 rounded text-[10px] font-medium cursor-pointer hover:bg-purple-700 disabled:opacity-40 disabled:cursor-not-allowed flex items-center gap-1"
-                  title={!isApiKeyConfigured() ? "API-Key nicht konfiguriert" : "Beispielsatz generieren"}
+                  disabled={!newWord || aiLoading !== null || !isApiKeyConfigured() || !hasFeature("contextSentences")}
+                  className={`px-2.5 py-1.5 rounded text-[10px] font-medium cursor-pointer disabled:opacity-40 disabled:cursor-not-allowed flex items-center gap-1 ${
+                    hasFeature("contextSentences") ? "bg-purple-600 text-white hover:bg-purple-700" : "bg-gray-300 text-gray-500"
+                  }`}
+                  title={!hasFeature("contextSentences") ? "🔒 Gold plan required" : !isApiKeyConfigured() ? "API-Key nicht konfiguriert" : "Beispielsatz generieren"}
                 >
                   {aiLoading === "example" ? (
                     <span className="animate-spin">⟳</span>
-                  ) : (
+                  ) : hasFeature("contextSentences") ? (
                     "Beispiel"
+                  ) : (
+                    "🔒 Beispiel"
                   )}
                 </button>
               </div>
@@ -294,6 +319,16 @@ export default function VocabularyPanel({ isOpen, onClose }: VocabularyPanelProp
               {!isApiKeyConfigured() && (
                 <p className="text-[9px] text-amber-600">
                   ⚠️ AI-Funktionen erfordern einen API-Key in der .env Datei (VITE_GROQ_API_KEY). Bitte den Dev-Server neu starten nach Änderungen.
+                </p>
+              )}
+
+              {limits.aiTranslationsPerDay !== -1 ? (
+                <p className={`text-[9px] ${todayUsage >= limits.aiTranslationsPerDay ? "text-red-500" : "text-gray-400"}`}>
+                  🤖 AI: {todayUsage}/{limits.aiTranslationsPerDay} today
+                </p>
+              ) : (
+                <p className="text-[9px] text-gray-400">
+                  🤖 AI: {todayUsage} used today (unlimited)
                 </p>
               )}
 

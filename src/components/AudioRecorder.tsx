@@ -1,6 +1,7 @@
 import { useState, useRef } from "react";
 import { useAuth } from "../context/AuthContext";
 import { useToast } from "./Toast";
+import { usePermissions } from "../context/Permissions";
 import { uploadAudioToCloudinary, sprechenService, type SprechenRecording } from "../services/sprechen";
 
 interface AudioRecorderProps {
@@ -25,10 +26,22 @@ export default function AudioRecorder({ moduleId, teil }: AudioRecorderProps) {
 
   const MAX_DURATION = 300; // 5 minutes
 
+  const { hasFeature, canRecordSprechen } = usePermissions();
+
   const startRecording = async () => {
     if (!user) {
       showToast("Please sign in to record.", "error");
       console.log(isPaused)
+      return;
+    }
+
+    if (!hasFeature("audioRecording")) {
+      showToast("Audio recording requires Gold plan or higher.", "error");
+      return;
+    }
+
+    if (!canRecordSprechen(recordings.length)) {
+      showToast("Recording limit reached. Upgrade or delete old recordings.", "error");
       return;
     }
 
@@ -147,7 +160,13 @@ export default function AudioRecorder({ moduleId, teil }: AudioRecorderProps) {
 
       {/* Recorder controls */}
       <div className="flex items-center gap-3">
-        {!isRecording ? (
+        {!hasFeature("audioRecording") ? (
+          <div className="flex items-center gap-2 bg-gray-200 text-gray-500 px-4 py-2 rounded-lg text-xs font-medium">
+            <span>🔒</span>
+            <span>Audio Recording</span>
+            <span className="bg-amber-100 text-amber-700 text-[8px] px-1.5 py-0.5 rounded-full font-bold">GOLD</span>
+          </div>
+        ) : !isRecording ? (
           <button
             onClick={startRecording}
             disabled={uploading}

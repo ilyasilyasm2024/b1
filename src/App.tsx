@@ -9,6 +9,8 @@ import { useAuth } from "./context/AuthContext";
 import { ToastProvider } from "./components/Toast";
 import { ProgressProvider, useProgress } from "./context/ProgressContext";
 import { AnswersProvider } from "./context/AnswersContext";
+import { PermissionsProvider, usePermissions } from "./context/Permissions";
+import { AIUsageProvider } from "./context/AIUsageContext";
 import GuidedTour from "./components/GuidedTour";
 import ComingSoon from "./components/ComingSoon";
 
@@ -17,6 +19,7 @@ function AppContent() {
   const [vocabOpen, setVocabOpen] = useState(false);
   const { user, logout } = useAuth();
   const { getModuleProgress } = useProgress();
+  const { canAccessModelTest, plan } = usePermissions();
   const m1Progress = getModuleProgress("m1");
 
   const toggleModule = (key: string) => {
@@ -95,8 +98,16 @@ function AppContent() {
         <div className="text-center mb-8">
           <h1 className="text-3xl font-bold text-gray-900 mb-1">
             B1 Prüfungsvorbereitung
-            <span className="ml-2 inline-block bg-amber-100 text-amber-800 text-[10px] font-semibold px-2 py-0.5 rounded-full align-middle">
-              BETA
+            <span className={`ml-2 inline-block text-[10px] font-semibold px-2 py-0.5 rounded-full align-middle ${
+              plan === "beta" ? "bg-amber-100 text-amber-800" :
+              plan === "free" ? "bg-gray-100 text-gray-600" :
+              plan === "silver" ? "bg-gray-200 text-gray-700" :
+              plan === "gold" ? "bg-yellow-100 text-yellow-800" :
+              plan === "platinum" ? "bg-purple-100 text-purple-800" :
+              plan === "lifetime" ? "bg-emerald-100 text-emerald-800" :
+              "bg-gray-100 text-gray-600"
+            }`}>
+              {plan.toUpperCase()}
             </span>
           </h1>
           <p className="text-gray-500 text-sm">Zertifikat B1 neu</p>
@@ -164,23 +175,32 @@ function AppContent() {
             )}
           </div>
 
-          {/* Placeholder for future modules */}
-          {[2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15].map((num) => (
-            <div
-              key={num}
-              className="rounded-xl border border-gray-200 bg-white overflow-hidden shadow-sm opacity-50"
-            >
-              <div className="flex items-center justify-between px-6 py-4">
-                <div className="flex items-center gap-3">
-                  <span className="bg-gray-400 text-white rounded-full w-7 h-7 flex items-center justify-center text-xs font-bold">
-                    {num}
-                  </span>
-                  <span className="text-sm font-semibold text-gray-500">Modelltest {num}</span>
+          {/* Future modules — gated by plan */}
+          {[2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15].map((num) => {
+            const locked = !canAccessModelTest(num);
+            return (
+              <div
+                key={num}
+                className={`rounded-xl border border-gray-200 bg-white overflow-hidden shadow-sm ${locked ? "opacity-50" : ""}`}
+              >
+                <div className="flex items-center justify-between px-6 py-4">
+                  <div className="flex items-center gap-3">
+                    <span className={`${locked ? "bg-gray-400" : "bg-gray-900"} text-white rounded-full w-7 h-7 flex items-center justify-center text-xs font-bold`}>
+                      {num}
+                    </span>
+                    <span className={`text-sm font-semibold ${locked ? "text-gray-500" : "text-gray-800"}`}>Modelltest {num}</span>
+                  </div>
+                  {locked ? (
+                    <Link to="/pricing" className="text-[10px] text-blue-500 hover:underline">
+                      🔒 Upgrade
+                    </Link>
+                  ) : (
+                    <span className="text-[10px] text-gray-400 italic">Bald verfügbar</span>
+                  )}
                 </div>
-                <span className="text-[10px] text-gray-400 italic">Bald verfügbar</span>
               </div>
-            </div>
-          ))}
+            );
+          })}
         </div>
       </div>
     </div>
@@ -190,13 +210,17 @@ function AppContent() {
 function App() {
   return (
     <ToastProvider>
-      <VocabularyProvider>
-        <AnswersProvider>
-          <ProgressProvider>
-            <AppContent />
-          </ProgressProvider>
-        </AnswersProvider>
-      </VocabularyProvider>
+      <PermissionsProvider>
+        <AIUsageProvider>
+          <VocabularyProvider>
+          <AnswersProvider>
+            <ProgressProvider>
+              <AppContent />
+            </ProgressProvider>
+          </AnswersProvider>
+        </VocabularyProvider>
+        </AIUsageProvider>
+      </PermissionsProvider>
     </ToastProvider>
   );
 }

@@ -1,10 +1,12 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import { module1Schreiben } from "../data/module1/schreiben";
 import { useProgress } from "../context/ProgressContext";
 import { useAnswers } from "../context/AnswersContext";
 import { useAuth } from "../context/AuthContext";
 import { useToast } from "./Toast";
+import { usePermissions } from "../context/Permissions";
 import { schreibenService, type SchreibenVersion } from "../services/schreiben";
+import { suggestNextWords, isApiKeyConfigured } from "../services/ai";
 
 const SECTION_ID = "m1-schreiben";
 
@@ -17,6 +19,8 @@ export default function Schreiben() {
   const [saving, setSaving] = useState<number | null>(null);
   const [versions, setVersions] = useState<Record<number, SchreibenVersion[]>>({});
   const [showVersions, setShowVersions] = useState<number | null>(null);
+  const [suggestions, setSuggestions] = useState<Record<number, string>>({});
+  const suggestTimeoutRef = useRef<Record<number, ReturnType<typeof setTimeout>>>({});
 
   const texts = getTexts(SECTION_ID) ?? Array(data.aufgaben.length).fill("");
   const done = getDone(SECTION_ID) ?? Array(data.aufgaben.length).fill(false);
@@ -26,10 +30,61 @@ export default function Schreiben() {
     updateProgress(SECTION_ID, answered, data.aufgaben.length);
   }, [done, data.aufgaben.length, updateProgress]);
 
+  const { canSaveSchreiben, hasFeature } = usePermissions();
+
   const handleChange = (index: number, value: string) => {
     const newTexts = [...texts];
     newTexts[index] = value;
     setGlobalTexts(SECTION_ID, newTexts);
+
+    // Clear current suggestion when typing
+    setSuggestions((prev) => ({ ...prev, [index]: "" }));
+
+    // Debounce suggestion fetch (1.5s after user stops typing)
+    if (suggestTimeoutRef.current[index]) {
+      clearTimeout(suggestTimeoutRef.current[index]);
+    }
+    if (hasFeature("advancedSuggestions") && isApiKeyConfigured() && value.trim().length >= 1) {
+      suggestTimeoutRef.current[index] = setTimeout(async () => {
+        const aufgabe = data.aufgaben[index];
+        const fullContext = `${aufgabe.instruction}\nPunkte: ${aufgabe.points.join(" / ")}\n${aufgabe.hints ? "Hinweise: " + aufgabe.hints.join(" ") : ""}`;
+        const result = await suggestNextWords(fullContext, value, aufgabe.wordCount);
+        if (result) {
+          setSuggestions((prev) => ({ ...prev, [index]: result }));
+        }
+      }, 1500);
+    }
+  };
+
+  const acceptSuggestion = (index: number) => {
+    const suggestion = suggestions[index];
+    if (!suggestion) return;
+    const newTexts = [...texts];
+    const cleanSuggestion = suggestion.replace(/\\n/g, "\n");
+    // Smart spacing: don't add space if text ends with newline or suggestion starts with newline
+    const currentEnd = texts[index].slice(-1);
+    const separator = currentEnd === "\n" || cleanSuggestion.startsWith("\n") ? "" : " ";
+    newTexts[index] = texts[index] + separator + cleanSuggestion;
+    setGlobalTexts(SECTION_ID, newTexts);
+    setSuggestions((prev) => ({ ...prev, [index]: "" }));
+
+    // Auto-fetch next suggestion after 1 second
+    if (suggestTimeoutRef.current[index]) {
+      clearTimeout(suggestTimeoutRef.current[index]);
+    }
+    suggestTimeoutRef.current[index] = setTimeout(async () => {
+      if (hasFeature("advancedSuggestions") && isApiKeyConfigured()) {
+        const updatedText = newTexts[index];
+        if (updatedText.trim().length >= 1) {
+          const aufgabe = data.aufgaben[index];
+          const fullContext = `${aufgabe.instruction}\nPunkte: ${aufgabe.points.join(" / ")}\n${aufgabe.hints ? "Hinweise: " + aufgabe.hints.join(" ") : ""}`;
+          const result = await suggestNextWords(fullContext, updatedText, aufgabe.wordCount);
+          if (result) {
+            setSuggestions((prev) => ({ ...prev, [index]: result }));
+          }
+        }
+      }
+    }, 1000);
   };
 
   const handleSaveVersion = async (aufgabeIndex: number) => {
@@ -37,16 +92,24 @@ export default function Schreiben() {
       showToast("Please sign in to save versions.", "error");
       return;
     }
+
+    const currentVersions = versions[aufgabeIndex]?.length || 0;
+    if (!canSaveSchreiben(currentVersions)) {
+      showToast("Save limit reached. Upgrade your plan for more.", "error");
+      return;
+    }
     const text = texts[aufgabeIndex];
     if (!text.trim()) return;
 
     const wc = wordCount(text);
-    if (wc < 80) {
-      showToast("Mindestens 80 Wörter erforderlich.", "error");
+    const minWords = data.aufgaben[aufgabeIndex].wordCount;
+    const maxWords = data.aufgaben[aufgabeIndex].wordCount * 3;
+    if (wc < minWords) {
+      showToast(`Mindestens ${minWords} Wörter erforderlich.`, "error");
       return;
     }
-    if (wc > 200) {
-      showToast("Maximal 200 Wörter erlaubt.", "error");
+    if (wc > maxWords) {
+      showToast(`Maximal ${maxWords} Wörter erlaubt.`, "error");
       return;
     }
 
@@ -146,13 +209,31 @@ export default function Schreiben() {
               </div>
             )}
 
-            <textarea
-              value={texts[index]}
-              onChange={(e) => handleChange(index, e.target.value)}
-              maxLength={1000}
-              className="w-full border border-gray-300 rounded-lg p-4 min-h-[150px] text-sm resize-y focus:outline-none focus:ring-2 focus:ring-blue-300"
-              placeholder={`Schreiben Sie hier Ihren Text (circa ${aufgabe.wordCount} Wörter)...`}
-            />
+            <div className="relative">
+              <textarea
+                value={texts[index] + (suggestions[index] ? "" : "")}
+                onChange={(e) => handleChange(index, e.target.value)}
+                onKeyDown={(e) => {
+                  if (e.key === "Tab" && suggestions[index]) {
+                    e.preventDefault();
+                    acceptSuggestion(index);
+                  }
+                }}
+                maxLength={1000}
+                className="w-full border border-gray-300 rounded-lg p-4 min-h-[150px] text-sm resize-y focus:outline-none focus:ring-2 focus:ring-blue-300"
+                placeholder={`Schreiben Sie hier Ihren Text (circa ${aufgabe.wordCount} Wörter)...`}
+              />
+              {/* AI suggestion inline overlay */}
+              {suggestions[index] && (
+                <div className="absolute top-0 left-0 right-0 p-4 pointer-events-none min-h-[150px] text-sm whitespace-pre-wrap break-words">
+                  <span className="invisible">{texts[index]}</span>
+                  <span className="text-gray-400 italic"> {suggestions[index]}</span>
+                  <span className="pointer-events-auto ml-1 bg-gray-200 border border-gray-300 text-[8px] text-gray-500 px-1 py-0.5 rounded font-mono cursor-pointer" onClick={() => acceptSuggestion(index)}>
+                    Tab
+                  </span>
+                </div>
+              )}
+            </div>
 
             <div className="flex items-center justify-between mt-3">
               <span
@@ -167,7 +248,7 @@ export default function Schreiben() {
                 {/* Save version button */}
                 <button
                   onClick={() => handleSaveVersion(index)}
-                  disabled={saving === index || !texts[index].trim() || !user || wordCount(texts[index]) < 80 || wordCount(texts[index]) > 200}
+                  disabled={saving === index || !texts[index].trim() || !user || wordCount(texts[index]) < data.aufgaben[index].wordCount || wordCount(texts[index]) > data.aufgaben[index].wordCount * 3}
                   className="px-3 py-1.5 rounded-lg text-xs font-medium cursor-pointer transition-colors disabled:opacity-40 disabled:cursor-not-allowed bg-blue-600 text-white hover:bg-blue-700"
                 >
                   {saving === index ? "..." : "💾 Save version"}

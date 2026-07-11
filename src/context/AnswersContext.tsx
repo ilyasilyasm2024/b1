@@ -1,5 +1,6 @@
 import { createContext, useContext, useState, useCallback, useEffect, useRef, type ReactNode } from "react";
 import { useAuth } from "./AuthContext";
+import { usePermissions } from "./Permissions";
 import { progressService, type ProgressData } from "../services/progress";
 
 const STORAGE_KEY = "b1-answers";
@@ -95,9 +96,12 @@ export function AnswersProvider({ children }: { children: ReactNode }) {
     saveToStorage({ sections, texts: textsStore, done: doneStore });
   }, [sections, textsStore, doneStore]);
 
+  const { hasFeature } = usePermissions();
+
   // Debounced save to backend (2 seconds after last change)
   useEffect(() => {
     if (!user || !token || !loaded) return;
+    if (!hasFeature("progressSync")) return; // Free plan: no cloud sync
 
     if (saveTimeoutRef.current) {
       clearTimeout(saveTimeoutRef.current);
@@ -161,6 +165,7 @@ export function AnswersProvider({ children }: { children: ReactNode }) {
   // Trigger a backend sync (used by TextHighlighter after highlight changes)
   const triggerSync = useCallback(() => {
     if (!user || !token || !loaded) return;
+    if (!hasFeature("progressSync")) return;
     if (saveTimeoutRef.current) {
       clearTimeout(saveTimeoutRef.current);
     }
