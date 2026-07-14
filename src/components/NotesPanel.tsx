@@ -16,6 +16,8 @@ export default function NotesPanel({ isOpen, onClose }: NotesPanelProps) {
   const [confirmDeleteId, setConfirmDeleteId] = useState<string | null>(null);
   const [selectedIds, setSelectedIds] = useState<Set<string>>(new Set());
   const [confirmBulk, setConfirmBulk] = useState(false);
+  const [tickOpen, setTickOpen] = useState(true);
+  const [textOpen, setTextOpen] = useState(true);
 
   if (!isOpen) return null;
 
@@ -135,9 +137,22 @@ export default function NotesPanel({ isOpen, onClose }: NotesPanelProps) {
               {/* Tick notes: hint + list (the notes themselves float on the page) */}
               {tickNotes.length > 0 && (
                 <div>
-                  <h3 className="text-xs font-bold text-gray-400 uppercase tracking-wide mb-2">
-                    Farbnotizen ({tickNotes.length})
-                  </h3>
+                  <button
+                    onClick={() => setTickOpen((v) => !v)}
+                    className="w-full flex items-center justify-between mb-2 cursor-pointer group"
+                  >
+                    <h3 className="text-xs font-bold text-gray-400 uppercase tracking-wide group-hover:text-gray-600">
+                      Farbnotizen ({tickNotes.length})
+                    </h3>
+                    <svg
+                      className={`w-4 h-4 text-gray-400 transition-transform ${tickOpen ? "rotate-180" : ""}`}
+                      fill="none" stroke="currentColor" viewBox="0 0 24 24"
+                    >
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+                    </svg>
+                  </button>
+                  {tickOpen && (
+                  <>
                   <p className="text-[11px] text-gray-400 mb-2">
                     Diese Notizen schweben über der App. Ziehen Sie sie an eine beliebige Stelle.
                   </p>
@@ -163,6 +178,8 @@ export default function NotesPanel({ isOpen, onClose }: NotesPanelProps) {
                       </div>
                     ))}
                   </div>
+                  </>
+                  )}
                 </div>
               )}
 
@@ -170,15 +187,32 @@ export default function NotesPanel({ isOpen, onClose }: NotesPanelProps) {
               {textNotes.length > 0 && (
                 <div>
                   <div className="flex items-center justify-between mb-2">
-                    <h3 className="text-xs font-bold text-gray-400 uppercase tracking-wide">Textnotizen</h3>
                     <button
-                      onClick={toggleSelectAll}
-                      className="text-[11px] text-gray-500 hover:text-gray-800 cursor-pointer"
+                      onClick={() => setTextOpen((v) => !v)}
+                      className="flex items-center gap-1 cursor-pointer group"
                     >
-                      {allTextSelected ? "Auswahl aufheben" : "Alle auswählen"}
+                      <svg
+                        className={`w-4 h-4 text-gray-400 transition-transform ${textOpen ? "rotate-180" : ""}`}
+                        fill="none" stroke="currentColor" viewBox="0 0 24 24"
+                      >
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+                      </svg>
+                      <h3 className="text-xs font-bold text-gray-400 uppercase tracking-wide group-hover:text-gray-600">
+                        Textnotizen ({textNotes.length})
+                      </h3>
                     </button>
+                    {textOpen && (
+                      <button
+                        onClick={toggleSelectAll}
+                        className="text-[11px] text-gray-500 hover:text-gray-800 cursor-pointer"
+                      >
+                        {allTextSelected ? "Auswahl aufheben" : "Alle auswählen"}
+                      </button>
+                    )}
                   </div>
 
+                  {textOpen && (
+                  <>
                   {/* Bulk action bar */}
                   {selectedIds.size > 0 && (
                     <div className="flex items-center justify-between bg-blue-50 border border-blue-200 rounded-lg px-3 py-2 mb-3">
@@ -224,6 +258,8 @@ export default function NotesPanel({ isOpen, onClose }: NotesPanelProps) {
                       />
                     ))}
                   </div>
+                  </>
+                  )}
                 </div>
               )}
             </div>
