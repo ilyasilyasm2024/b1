@@ -60,9 +60,20 @@ export default function M2HoerenTeil1() {
     <div className="max-w-4xl mx-auto p-6">
       <p className="text-gray-700 mb-6">{data.instruction}</p>
 
+      {/* Introduction audio */}
+      <div className="mb-4">
+        <p className="text-xs font-medium text-gray-500 mb-1">Einleitung anhören:</p>
+        <audio controls controlsList="nodownload" className="w-full h-9">
+          <source src="/horen/module2/m2-t1-introduction.mp3" type="audio/mpeg" />
+        </audio>
+      </div>
+
       {/* Example */}
       <div className="mb-6 p-4 bg-gray-50 rounded-lg border border-gray-200">
         <p className="text-sm text-gray-500 font-semibold mb-2">Beispiel</p>
+        <audio controls controlsList="nodownload" className="w-full h-8 mb-2">
+          <source src="/horen/module2/m2-teil1-beispiel.mp3" type="audio/mpeg" />
+        </audio>
         <p className="text-sm mb-1">
           <span className="font-bold">0a)</span>{" "}
           {data.example.richtigFalsch.statement} →{" "}
@@ -91,7 +102,10 @@ export default function M2HoerenTeil1() {
 
           return (
             <div key={text.id} className="border border-gray-200 rounded-lg p-4 bg-white">
-              <h4 className="font-bold text-sm text-gray-500 mb-3">Text {text.id}</h4>
+              <h4 className="font-bold text-sm text-gray-500 mb-2">Text {text.id}</h4>
+              <audio controls controlsList="nodownload" className="w-full h-8 mb-3">
+                <source src={`/horen/module2/m2-teil1-text${text.id}.mp3`} type="audio/mpeg" />
+              </audio>
 
               {/* Richtig/Falsch */}
               <div className={`p-3 rounded mb-3 ${submitted ? (rfCorrect ? "bg-green-50" : rfWrong ? "bg-red-50" : "bg-yellow-50") : ""}`}>
