@@ -112,12 +112,21 @@ function FloatingNote({
         </div>
       </div>
 
+      {/* Title */}
+      <input
+        type="text"
+        value={note.title}
+        onChange={(e) => onChange(note._id, { title: e.target.value })}
+        placeholder="Titel..."
+        className="w-full bg-transparent text-sm font-bold text-gray-800 placeholder-gray-700/40 focus:outline-none px-2 pt-1.5"
+      />
+
       {/* Editable content */}
       <textarea
         value={note.content}
         onChange={(e) => onChange(note._id, { content: e.target.value })}
         placeholder="Kurze Notiz..."
-        className="w-full bg-transparent text-sm text-gray-800 placeholder-gray-700/40 resize-none focus:outline-none px-2 py-2 min-h-[80px]"
+        className="w-full bg-transparent text-sm text-gray-800 placeholder-gray-700/40 resize-none focus:outline-none px-2 pb-2 pt-1 min-h-[70px]"
       />
     </div>
   );

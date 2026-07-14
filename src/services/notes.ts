@@ -3,12 +3,18 @@ import { api } from "./api";
 export type NoteType = "text" | "tick";
 
 // Backend model: { _id, userId, type, content, color, createdAt, updatedAt }
+export type NoteDir = "ltr" | "rtl";
+
 export interface NoteBackend {
   _id: string;
   userId: string;
   type: NoteType;
+  title: string;
   content: string;
   color: string;
+  dir: NoteDir;
+  collapsed: boolean;
+  links: string[];
   x: number;
   y: number;
   createdAt: string;
@@ -17,16 +23,24 @@ export interface NoteBackend {
 
 export interface CreateNoteData {
   type: NoteType;
+  title?: string;
   content?: string;
   color?: string;
+  dir?: NoteDir;
+  collapsed?: boolean;
+  links?: string[];
   x?: number;
   y?: number;
 }
 
 export interface UpdateNoteData {
   type?: NoteType;
+  title?: string;
   content?: string;
   color?: string;
+  dir?: NoteDir;
+  collapsed?: boolean;
+  links?: string[];
   x?: number;
   y?: number;
 }

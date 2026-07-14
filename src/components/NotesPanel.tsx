@@ -12,7 +12,7 @@ interface NotesPanelProps {
 
 export default function NotesPanel({ isOpen, onClose }: NotesPanelProps) {
   const { user } = useAuth();
-  const { notes, isLoading, error, addNote, updateNote, saveNote, deleteNote, deleteMany } = useNotes();
+  const { notes, isLoading, error, addNote, updateNote, saveNote, deleteNote, deleteMany, toggleLink } = useNotes();
   const [confirmDeleteId, setConfirmDeleteId] = useState<string | null>(null);
   const [selectedIds, setSelectedIds] = useState<Set<string>>(new Set());
   const [confirmBulk, setConfirmBulk] = useState(false);
@@ -149,7 +149,7 @@ export default function NotesPanel({ isOpen, onClose }: NotesPanelProps) {
                         style={{ backgroundColor: note.color }}
                       >
                         <span className="truncate max-w-[160px]">
-                          {note.content.trim() || "(leer)"}
+                          {note.title.trim() || note.content.trim() || "(leer)"}
                         </span>
                         <button
                           onClick={() => setConfirmDeleteId(note._id)}
@@ -201,10 +201,24 @@ export default function NotesPanel({ isOpen, onClose }: NotesPanelProps) {
                     {textNotes.map((note) => (
                       <RichTextNote
                         key={note._id}
+                        title={note.title}
                         value={note.content}
+                        dir={note.dir}
+                        collapsed={note.collapsed}
                         selected={selectedIds.has(note._id)}
+                        linkedNotes={(note.links || [])
+                          .map((lid) => notes.find((n) => n._id === lid))
+                          .filter((n): n is typeof note => !!n)
+                          .map((n) => ({ _id: n._id, title: n.title, color: n.color }))}
+                        availableToLink={notes
+                          .filter((n) => n._id !== note._id && !(note.links || []).includes(n._id))
+                          .map((n) => ({ _id: n._id, title: n.title, color: n.color }))}
                         onToggleSelect={() => toggleSelect(note._id)}
+                        onToggleCollapse={() => updateNote(note._id, { collapsed: !note.collapsed })}
+                        onTitleChange={(title) => updateNote(note._id, { title })}
                         onChange={(html) => updateNote(note._id, { content: html })}
+                        onDirChange={(d) => updateNote(note._id, { dir: d })}
+                        onToggleLink={(otherId) => toggleLink(note._id, otherId)}
                         onSave={() => saveNote(note._id)}
                         onDelete={() => setConfirmDeleteId(note._id)}
                       />

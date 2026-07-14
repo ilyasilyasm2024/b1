@@ -11,6 +11,7 @@ interface NotesContextType {
   saveNote: (id: string) => Promise<void>;
   deleteNote: (id: string) => Promise<void>;
   deleteMany: (ids: string[]) => Promise<void>;
+  toggleLink: (idA: string, idB: string) => void;
   reload: () => Promise<void>;
 }
 
@@ -87,8 +88,12 @@ export function NotesProvider({ children }: { children: ReactNode }) {
       const current = notesRef.current.find((n) => n._id === id);
       if (!current) return;
       await notesService.update(id, {
+        title: current.title,
         content: current.content,
         color: current.color,
+        dir: current.dir,
+        collapsed: current.collapsed,
+        links: current.links,
         x: current.x,
         y: current.y,
       });
@@ -104,17 +109,63 @@ export function NotesProvider({ children }: { children: ReactNode }) {
     const current = notesRef.current.find((n) => n._id === id);
     if (!current) return;
     await notesService.update(id, {
+      title: current.title,
       content: current.content,
       color: current.color,
+      dir: current.dir,
+      collapsed: current.collapsed,
+      links: current.links,
       x: current.x,
       y: current.y,
     });
   }, []);
 
+  // Link/unlink two notes bidirectionally and persist both.
+  const toggleLink = useCallback((idA: string, idB: string) => {
+    if (idA === idB) return;
+    const a = notesRef.current.find((n) => n._id === idA);
+    const b = notesRef.current.find((n) => n._id === idB);
+    if (!a || !b) return;
+
+    const linked = (a.links || []).includes(idB);
+    const newALinks = linked
+      ? (a.links || []).filter((x) => x !== idB)
+      : [...(a.links || []), idB];
+    const newBLinks = linked
+      ? (b.links || []).filter((x) => x !== idA)
+      : [...(b.links || []), idA];
+
+    setNotes((prev) =>
+      prev.map((n) =>
+        n._id === idA ? { ...n, links: newALinks } : n._id === idB ? { ...n, links: newBLinks } : n
+      )
+    );
+
+    notesService.update(idA, { links: newALinks });
+    notesService.update(idB, { links: newBLinks });
+  }, []);
+
+  // Remove an id from any other note's links, persisting the ones that changed.
+  const pruneLinks = (removedIds: string[]) => {
+    const removed = new Set(removedIds);
+    setNotes((prev) =>
+      prev.map((n) => {
+        if (!n.links || n.links.length === 0) return n;
+        const filtered = n.links.filter((l) => !removed.has(l));
+        if (filtered.length !== n.links.length) {
+          notesService.update(n._id, { links: filtered });
+          return { ...n, links: filtered };
+        }
+        return n;
+      })
+    );
+  };
+
   const deleteNote = async (id: string) => {
     const res = await notesService.delete(id);
     if (!res.error) {
       setNotes((prev) => prev.filter((n) => n._id !== id));
+      pruneLinks([id]);
     } else {
       setError(res.error);
     }
@@ -125,12 +176,14 @@ export function NotesProvider({ children }: { children: ReactNode }) {
     const failed = new Set(
       ids.filter((_, i) => results[i].error)
     );
+    const deleted = ids.filter((id) => !failed.has(id));
     setNotes((prev) => prev.filter((n) => failed.has(n._id) || !ids.includes(n._id)));
+    pruneLinks(deleted);
     if (failed.size > 0) setError("Einige Notizen konnten nicht gelöscht werden.");
   };
 
   return (
-    <NotesContext.Provider value={{ notes, isLoading, error, addNote, updateNote, saveNote, deleteNote, deleteMany, reload }}>
+    <NotesContext.Provider value={{ notes, isLoading, error, addNote, updateNote, saveNote, deleteNote, deleteMany, toggleLink, reload }}>
       {children}
     </NotesContext.Provider>
   );
