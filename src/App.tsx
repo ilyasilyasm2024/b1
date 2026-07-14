@@ -7,6 +7,9 @@ import Module4 from "./components/Module4";
 import Module5 from "./components/Module5";
 import Timer from "./components/Timer";
 import VocabularyPanel from "./components/Vocabulary";
+import NotesPanel from "./components/NotesPanel";
+import FloatingNotes from "./components/FloatingNotes";
+import { NotesProvider } from "./context/NotesContext";
 import TextHighlighter from "./components/TextHighlighter";
 import { VocabularyProvider } from "./context/VocabularyContext";
 import { useAuth } from "./context/AuthContext";
@@ -23,6 +26,7 @@ import StreakCalendar from "./components/StreakCalendar";
 function AppContent() {
   const [openModules, setOpenModules] = useState<Record<string, boolean>>({});
   const [vocabOpen, setVocabOpen] = useState(false);
+  const [notesOpen, setNotesOpen] = useState(false);
   const [chatOpen, setChatOpen] = useState(false);
   const { user, logout } = useAuth();
   const { getModuleProgress } = useProgress();
@@ -44,17 +48,32 @@ function AppContent() {
       {/* Fixed top bar */}
       <div className="fixed top-0 left-0 right-0 z-40 bg-white/90 backdrop-blur-sm border-b border-gray-200 px-3 py-2">
         <div className="max-w-4xl mx-auto flex items-center justify-between gap-2">
-          <button
-            onClick={() => setVocabOpen(true)}
-            className="bg-white border border-gray-200 rounded-lg px-2.5 py-1.5 shadow-sm flex items-center gap-1.5 cursor-pointer hover:bg-gray-50 transition-colors shrink-0"
-            title="Meine Vokabeln"
-            data-tour="vocab-btn"
-          >
-            <svg className="w-4 h-4 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
-            </svg>
-            <span className="text-xs font-medium text-gray-700 hidden sm:inline">Vokabeln</span>
-          </button>
+          <div className="flex items-center gap-2 shrink-0">
+            {user && (
+              <button
+                onClick={() => setNotesOpen(true)}
+                className="bg-white border border-gray-200 rounded-lg px-2.5 py-1.5 shadow-sm flex items-center gap-1.5 cursor-pointer hover:bg-gray-50 transition-colors shrink-0"
+                title="Meine Notizen"
+                data-tour="notes-btn"
+              >
+                <svg className="w-4 h-4 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
+                </svg>
+                <span className="text-xs font-medium text-gray-700 hidden sm:inline">Notizen</span>
+              </button>
+            )}
+            <button
+              onClick={() => setVocabOpen(true)}
+              className="bg-white border border-gray-200 rounded-lg px-2.5 py-1.5 shadow-sm flex items-center gap-1.5 cursor-pointer hover:bg-gray-50 transition-colors shrink-0"
+              title="Meine Vokabeln"
+              data-tour="vocab-btn"
+            >
+              <svg className="w-4 h-4 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
+              </svg>
+              <span className="text-xs font-medium text-gray-700 hidden sm:inline">Vokabeln</span>
+            </button>
+          </div>
 
           <div data-tour="timer">
             <Timer />
@@ -106,6 +125,12 @@ function AppContent() {
 
       {/* Vocabulary Panel */}
       <VocabularyPanel isOpen={vocabOpen} onClose={() => setVocabOpen(false)} />
+
+      {/* Notes Panel (left, non-blocking) */}
+      <NotesPanel isOpen={notesOpen} onClose={() => setNotesOpen(false)} />
+
+      {/* Floating draggable color notes over the whole app */}
+      <FloatingNotes />
 
       {/* Global Chat Panel */}
       <GlobalChat isOpen={chatOpen} onClose={() => setChatOpen(false)} />
@@ -386,11 +411,13 @@ function App() {
       <PermissionsProvider>
         <AIUsageProvider>
           <VocabularyProvider>
+          <NotesProvider>
           <AnswersProvider>
             <ProgressProvider>
               <AppContent />
             </ProgressProvider>
           </AnswersProvider>
+        </NotesProvider>
         </VocabularyProvider>
         </AIUsageProvider>
       </PermissionsProvider>
