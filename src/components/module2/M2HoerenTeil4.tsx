@@ -41,6 +41,20 @@ export default function M2HoerenTeil4() {
       <p className="text-gray-700 mb-4">{data.instruction}</p>
       <p className="text-gray-600 italic mb-6">{data.context}</p>
 
+      {/* Audio */}
+      <div className="mb-4">
+        <p className="text-xs font-medium text-gray-500 mb-1">Einleitung anhören:</p>
+        <audio controls controlsList="nodownload" className="w-full h-9 mb-2">
+          <source src="/horen/module2/m2-teil4-introduction.mp3" type="audio/mpeg" />
+        </audio>
+      </div>
+      <div className="mb-6">
+        <p className="text-xs font-medium text-gray-500 mb-1">Diskussion anhören:</p>
+        <audio controls controlsList="nodownload" className="w-full h-9">
+          <source src="/horen/module2/m2-teil4-text.mp3" type="audio/mpeg" />
+        </audio>
+      </div>
+
       {/* Example */}
       <div className="mb-4 p-4 bg-gray-50 rounded-lg border border-gray-200">
         <p className="text-sm text-gray-500 font-semibold mb-2">Beispiel</p>
