@@ -1,1 +1,16 @@
 @import "tailwindcss";
+
+/* Placeholder for the rich-text note editor (contentEditable) */
+.rich-note-editor:empty::before {
+  content: attr(data-placeholder);
+  color: #9ca3af;
+  pointer-events: none;
+}
+.rich-note-editor ul {
+  list-style: disc;
+  padding-left: 1.25rem;
+}
+.rich-note-editor ol {
+  list-style: decimal;
+  padding-left: 1.25rem;
+}

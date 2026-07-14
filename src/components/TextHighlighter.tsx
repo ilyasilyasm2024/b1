@@ -61,8 +61,23 @@ export default function TextHighlighter() {
       return !!el.closest('[data-testid^="joyride"], .react-joyride, .__react-joyride, [class*="joyride"]');
     };
 
+    // The highlighter must not trigger inside the notes area (it has its own editor).
+    const isInsideNotes = (node: Node | EventTarget | null): boolean => {
+      let el: HTMLElement | null = null;
+      if (node instanceof HTMLElement) {
+        el = node;
+      } else if (node && (node as Node).nodeType === 3) {
+        el = (node as Node).parentElement;
+      } else if (node instanceof Node) {
+        el = node as HTMLElement;
+      }
+      if (!el || typeof el.closest !== "function") return false;
+      return !!el.closest("[data-notes-area]");
+    };
+
     const handleContextMenu = (e: MouseEvent) => {
       if (isInsideJoyride(e.target)) return;
+      if (isInsideNotes(e.target)) return;
       const selection = window.getSelection();
       if (selection && !selection.isCollapsed && selection.toString().trim()) {
         e.preventDefault();
@@ -77,6 +92,9 @@ export default function TextHighlighter() {
         // Check if selection is inside joyride
         const anchorEl = selection.anchorNode?.parentElement;
         if (anchorEl?.closest('[data-testid^="joyride"], .react-joyride, .__react-joyride, [class*="joyride"]')) return;
+
+        // Ignore selections inside the notes area (notes have their own editor)
+        if (isInsideNotes(selection.anchorNode)) return;
 
         const range = selection.getRangeAt(0);
         const rect = range.getBoundingClientRect();

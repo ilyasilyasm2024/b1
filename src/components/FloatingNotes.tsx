@@ -14,7 +14,7 @@ export default function FloatingNotes() {
   if (tickNotes.length === 0) return null;
 
   return (
-    <div className="fixed inset-0 z-[60] pointer-events-none">
+    <div data-notes-area className="fixed inset-0 z-[60] pointer-events-none">
       {tickNotes.map((note) => (
         <FloatingNote key={note._id} note={note} onChange={updateNote} onDelete={deleteNote} />
       ))}

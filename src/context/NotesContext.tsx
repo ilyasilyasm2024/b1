@@ -8,7 +8,9 @@ interface NotesContextType {
   error: string;
   addNote: (type: NoteType) => Promise<void>;
   updateNote: (id: string, patch: UpdateNoteData) => void;
+  saveNote: (id: string) => Promise<void>;
   deleteNote: (id: string) => Promise<void>;
+  deleteMany: (ids: string[]) => Promise<void>;
   reload: () => Promise<void>;
 }
 
@@ -93,6 +95,22 @@ export function NotesProvider({ children }: { children: ReactNode }) {
     }, 500);
   }, []);
 
+  // Flush any pending debounce and persist immediately (used by the Save button).
+  const saveNote = useCallback(async (id: string) => {
+    if (saveTimers.current[id]) {
+      clearTimeout(saveTimers.current[id]);
+      delete saveTimers.current[id];
+    }
+    const current = notesRef.current.find((n) => n._id === id);
+    if (!current) return;
+    await notesService.update(id, {
+      content: current.content,
+      color: current.color,
+      x: current.x,
+      y: current.y,
+    });
+  }, []);
+
   const deleteNote = async (id: string) => {
     const res = await notesService.delete(id);
     if (!res.error) {
@@ -102,8 +120,17 @@ export function NotesProvider({ children }: { children: ReactNode }) {
     }
   };
 
+  const deleteMany = async (ids: string[]) => {
+    const results = await Promise.all(ids.map((id) => notesService.delete(id)));
+    const failed = new Set(
+      ids.filter((_, i) => results[i].error)
+    );
+    setNotes((prev) => prev.filter((n) => failed.has(n._id) || !ids.includes(n._id)));
+    if (failed.size > 0) setError("Einige Notizen konnten nicht gelöscht werden.");
+  };
+
   return (
-    <NotesContext.Provider value={{ notes, isLoading, error, addNote, updateNote, deleteNote, reload }}>
+    <NotesContext.Provider value={{ notes, isLoading, error, addNote, updateNote, saveNote, deleteNote, deleteMany, reload }}>
       {children}
     </NotesContext.Provider>
   );

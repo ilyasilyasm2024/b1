@@ -2,6 +2,7 @@ import { useState } from "react";
 import { Link } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
 import { useNotes } from "../context/NotesContext";
+import RichTextNote from "./RichTextNote";
 import ConfirmModal from "./ConfirmModal";
 
 interface NotesPanelProps {
@@ -11,25 +12,56 @@ interface NotesPanelProps {
 
 export default function NotesPanel({ isOpen, onClose }: NotesPanelProps) {
   const { user } = useAuth();
-  const { notes, isLoading, error, addNote, updateNote, deleteNote } = useNotes();
+  const { notes, isLoading, error, addNote, updateNote, saveNote, deleteNote, deleteMany } = useNotes();
   const [confirmDeleteId, setConfirmDeleteId] = useState<string | null>(null);
+  const [selectedIds, setSelectedIds] = useState<Set<string>>(new Set());
+  const [confirmBulk, setConfirmBulk] = useState(false);
 
   if (!isOpen) return null;
 
   const textNotes = notes.filter((n) => n.type === "text");
   const tickNotes = notes.filter((n) => n.type === "tick");
 
+  const toggleSelect = (id: string) => {
+    setSelectedIds((prev) => {
+      const next = new Set(prev);
+      if (next.has(id)) next.delete(id);
+      else next.add(id);
+      return next;
+    });
+  };
+
+  const allTextSelected = textNotes.length > 0 && textNotes.every((n) => selectedIds.has(n._id));
+  const toggleSelectAll = () => {
+    if (allTextSelected) {
+      setSelectedIds(new Set());
+    } else {
+      setSelectedIds(new Set(textNotes.map((n) => n._id)));
+    }
+  };
+
   const confirmDelete = () => {
     if (!confirmDeleteId) return;
     const id = confirmDeleteId;
     setConfirmDeleteId(null);
     deleteNote(id);
+    setSelectedIds((prev) => {
+      const next = new Set(prev);
+      next.delete(id);
+      return next;
+    });
+  };
+
+  const confirmBulkDelete = () => {
+    setConfirmBulk(false);
+    deleteMany([...selectedIds]);
+    setSelectedIds(new Set());
   };
 
   return (
     <>
       {/* Non-blocking left drawer: no backdrop so the test stays usable while taking notes */}
-      <div className="fixed top-0 left-0 bottom-0 z-[55] w-full max-w-sm bg-white shadow-2xl border-r border-gray-200 flex flex-col animate-in">
+      <div data-notes-area className="fixed top-0 left-0 bottom-0 z-[55] w-full max-w-sm bg-white shadow-2xl border-r border-gray-200 flex flex-col animate-in">
         {/* Header */}
         <div className="flex items-center justify-between px-5 py-4 border-b border-gray-200">
           <div>
@@ -137,29 +169,45 @@ export default function NotesPanel({ isOpen, onClose }: NotesPanelProps) {
               {/* Text notes */}
               {textNotes.length > 0 && (
                 <div>
-                  <h3 className="text-xs font-bold text-gray-400 uppercase tracking-wide mb-2">Textnotizen</h3>
+                  <div className="flex items-center justify-between mb-2">
+                    <h3 className="text-xs font-bold text-gray-400 uppercase tracking-wide">Textnotizen</h3>
+                    <button
+                      onClick={toggleSelectAll}
+                      className="text-[11px] text-gray-500 hover:text-gray-800 cursor-pointer"
+                    >
+                      {allTextSelected ? "Auswahl aufheben" : "Alle auswählen"}
+                    </button>
+                  </div>
+
+                  {/* Bulk action bar */}
+                  {selectedIds.size > 0 && (
+                    <div className="flex items-center justify-between bg-blue-50 border border-blue-200 rounded-lg px-3 py-2 mb-3">
+                      <span className="text-xs text-blue-800 font-medium">
+                        {selectedIds.size} ausgewählt
+                      </span>
+                      <button
+                        onClick={() => setConfirmBulk(true)}
+                        className="bg-red-600 text-white px-3 py-1 rounded-md text-xs font-medium hover:bg-red-700 cursor-pointer flex items-center gap-1"
+                      >
+                        <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                        </svg>
+                        {selectedIds.size} löschen
+                      </button>
+                    </div>
+                  )}
+
                   <div className="space-y-3">
                     {textNotes.map((note) => (
-                      <div key={note._id} className="border border-gray-200 rounded-lg p-3 bg-white">
-                        <textarea
-                          value={note.content}
-                          onChange={(e) => updateNote(note._id, { content: e.target.value })}
-                          placeholder="Ihre Notiz zur Prüfung..."
-                          className="w-full text-sm text-gray-800 resize-y focus:outline-none min-h-[96px]"
-                        />
-                        <div className="flex items-center justify-end pt-2 border-t border-gray-100">
-                          <button
-                            onClick={() => setConfirmDeleteId(note._id)}
-                            className="text-gray-400 hover:text-red-600 cursor-pointer flex items-center gap-1 text-xs"
-                            title="Löschen"
-                          >
-                            <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
-                            </svg>
-                            Löschen
-                          </button>
-                        </div>
-                      </div>
+                      <RichTextNote
+                        key={note._id}
+                        value={note.content}
+                        selected={selectedIds.has(note._id)}
+                        onToggleSelect={() => toggleSelect(note._id)}
+                        onChange={(html) => updateNote(note._id, { content: html })}
+                        onSave={() => saveNote(note._id)}
+                        onDelete={() => setConfirmDeleteId(note._id)}
+                      />
                     ))}
                   </div>
                 </div>
@@ -178,6 +226,17 @@ export default function NotesPanel({ isOpen, onClose }: NotesPanelProps) {
         variant="danger"
         onConfirm={confirmDelete}
         onCancel={() => setConfirmDeleteId(null)}
+      />
+
+      <ConfirmModal
+        isOpen={confirmBulk}
+        title="Notizen löschen"
+        message={`Möchten Sie ${selectedIds.size} Notiz${selectedIds.size === 1 ? "" : "en"} wirklich löschen?`}
+        confirmText="Löschen"
+        cancelText="Abbrechen"
+        variant="danger"
+        onConfirm={confirmBulkDelete}
+        onCancel={() => setConfirmBulk(false)}
       />
     </>
   );
