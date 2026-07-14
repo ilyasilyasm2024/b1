@@ -45,13 +45,13 @@ export default function HoerenTeil2() {
       <div className="mb-4">
         <p className="text-xs font-medium text-gray-500 mb-1">Einleitung anhören:</p>
         <audio controls controlsList="nodownload" className="w-full h-9 mb-2">
-          <source src="/horen/teil2-introducion.mp3" type="audio/mpeg" />
+          <source src="/horen/module1/teil2-introducion.mp3" type="audio/mpeg" />
         </audio>
       </div>
       <div className="mb-6">
         <p className="text-xs font-medium text-gray-500 mb-1">Text anhören:</p>
         <audio controls controlsList="nodownload" className="w-full h-9">
-          <source src="/horen/teil2-text.mp3" type="audio/mpeg" />
+          <source src="/horen/module1/teil2-text.mp3" type="audio/mpeg" />
         </audio>
       </div>
 

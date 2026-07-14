@@ -1,27 +1,27 @@
 import { useEffect } from "react";
-import { module1HoerenTeil1 } from "../../data/module1/hoerenTeil1";
+import { module5HoerenTeil1 } from "../../data/module5/hoerenTeil1";
 import { useProgress } from "../../context/ProgressContext";
 import { useAnswers } from "../../context/AnswersContext";
 
 type RFAnswer = "richtig" | "falsch" | null;
 type MCAnswer = "a" | "b" | "c" | null;
 
-const RF_SECTION = "m1-hoeren-teil1-rf";
-const MC_SECTION = "m1-hoeren-teil1-mc";
+const RF_SECTION = "m5-hoeren-teil1-rf";
+const MC_SECTION = "m5-hoeren-teil1-mc";
 
-export default function HoerenTeil1() {
-  const data = module1HoerenTeil1;
+export default function M5HoerenTeil1() {
+  const data = module5HoerenTeil1;
   const { updateProgress } = useProgress();
   const { getAnswers, setAnswers, isSubmitted, setSubmitted } = useAnswers();
 
   const rfAnswers: RFAnswer[] = (getAnswers<RFAnswer>(RF_SECTION) ?? Array(data.texts.length).fill(null)) as RFAnswer[];
   const mcAnswers: MCAnswer[] = (getAnswers<MCAnswer>(MC_SECTION) ?? Array(data.texts.length).fill(null)) as MCAnswer[];
-  const submitted = isSubmitted("m1-hoeren-teil1");
+  const submitted = isSubmitted("m5-hoeren-teil1");
 
   useEffect(() => {
     const totalQ = data.texts.length * 2;
     const answered = rfAnswers.filter((a) => a !== null).length + mcAnswers.filter((a) => a !== null).length;
-    updateProgress("m1-hoeren-teil1", answered, totalQ);
+    updateProgress("m5-hoeren-teil1", answered, totalQ);
   }, [rfAnswers, mcAnswers, data.texts.length, updateProgress]);
 
   const handleRF = (index: number, value: "richtig" | "falsch") => {
@@ -38,11 +38,11 @@ export default function HoerenTeil1() {
     setAnswers(MC_SECTION, newAnswers);
   };
 
-  const handleSubmit = () => setSubmitted("m1-hoeren-teil1", true);
+  const handleSubmit = () => setSubmitted("m5-hoeren-teil1", true);
   const handleReset = () => {
     setAnswers(RF_SECTION, Array(data.texts.length).fill(null));
     setAnswers(MC_SECTION, Array(data.texts.length).fill(null));
-    setSubmitted("m1-hoeren-teil1", false);
+    setSubmitted("m5-hoeren-teil1", false);
   };
 
   const score = submitted
@@ -60,20 +60,9 @@ export default function HoerenTeil1() {
     <div className="max-w-4xl mx-auto p-6">
       <p className="text-gray-700 mb-6">{data.instruction}</p>
 
-      {/* Introduction audio */}
-      <div className="mb-4">
-        <p className="text-xs font-medium text-gray-500 mb-1">Einleitung anhören:</p>
-        <audio controls controlsList="nodownload" className="w-full h-9">
-          <source src="/horen/module1/teil1-introduction.mp3" type="audio/mpeg" />
-        </audio>
-      </div>
-
       {/* Example */}
       <div className="mb-6 p-4 bg-gray-50 rounded-lg border border-gray-200">
         <p className="text-sm text-gray-500 font-semibold mb-2">Beispiel</p>
-        <audio controls controlsList="nodownload" className="w-full h-8 mb-2">
-          <source src="/horen/module1/teil1-beispiel.mp3" type="audio/mpeg" />
-        </audio>
         <p className="text-sm mb-1">
           <span className="font-bold">0a)</span>{" "}
           {data.example.richtigFalsch.statement} →{" "}
@@ -95,56 +84,26 @@ export default function HoerenTeil1() {
         {data.texts.map((text, index) => {
           const rfAnswer = rfAnswers[index];
           const mcAnswer = mcAnswers[index];
-          const rfCorrect =
-            submitted && rfAnswer === text.richtigFalschQuestion.correct;
-          const rfWrong =
-            submitted &&
-            rfAnswer !== null &&
-            rfAnswer !== text.richtigFalschQuestion.correct;
-          const mcCorrect =
-            submitted && mcAnswer === text.multipleChoiceQuestion.correct;
-          const mcWrong =
-            submitted &&
-            mcAnswer !== null &&
-            mcAnswer !== text.multipleChoiceQuestion.correct;
+          const rfCorrect = submitted && rfAnswer === text.richtigFalschQuestion.correct;
+          const rfWrong = submitted && rfAnswer !== null && rfAnswer !== text.richtigFalschQuestion.correct;
+          const mcCorrect = submitted && mcAnswer === text.multipleChoiceQuestion.correct;
+          const mcWrong = submitted && mcAnswer !== null && mcAnswer !== text.multipleChoiceQuestion.correct;
 
           return (
-            <div
-              key={text.id}
-              className="border border-gray-200 rounded-lg p-4 bg-white"
-            >
-              <h4 className="font-bold text-sm text-gray-500 mb-2">
-                Text {text.id}
-              </h4>
-              <audio controls controlsList="nodownload" className="w-full h-8 mb-3">
-                <source src={`/horen/module1/model1-tail1-text${text.id}.mp3`} type="audio/mpeg" />
-              </audio>
+            <div key={text.id} className="border border-gray-200 rounded-lg p-4 bg-white">
+              <h4 className="font-bold text-sm text-gray-500 mb-3">Text {text.id}</h4>
 
               {/* Richtig/Falsch */}
-              <div
-                className={`p-3 rounded mb-3 ${
-                  submitted
-                    ? rfCorrect
-                      ? "bg-green-50"
-                      : rfWrong
-                      ? "bg-red-50"
-                      : "bg-yellow-50"
-                    : ""
-                }`}
-              >
+              <div className={`p-3 rounded mb-3 ${submitted ? (rfCorrect ? "bg-green-50" : rfWrong ? "bg-red-50" : "bg-yellow-50") : ""}`}>
                 <p className="text-sm mb-2">
-                  <span className="font-bold mr-1">
-                    {text.richtigFalschQuestion.id}
-                  </span>
+                  <span className="font-bold mr-1">{text.richtigFalschQuestion.id}</span>
                   {text.richtigFalschQuestion.statement}
                 </p>
                 <div className="flex gap-2">
                   <button
                     onClick={() => handleRF(index, "richtig")}
                     className={`px-3 py-1 rounded text-xs font-medium cursor-pointer ${
-                      rfAnswer === "richtig"
-                        ? "bg-blue-600 text-white"
-                        : "bg-gray-100 text-gray-700 hover:bg-gray-200"
+                      rfAnswer === "richtig" ? "bg-blue-600 text-white" : "bg-gray-100 text-gray-700 hover:bg-gray-200"
                     }`}
                     disabled={submitted}
                   >
@@ -153,18 +112,14 @@ export default function HoerenTeil1() {
                   <button
                     onClick={() => handleRF(index, "falsch")}
                     className={`px-3 py-1 rounded text-xs font-medium cursor-pointer ${
-                      rfAnswer === "falsch"
-                        ? "bg-blue-600 text-white"
-                        : "bg-gray-100 text-gray-700 hover:bg-gray-200"
+                      rfAnswer === "falsch" ? "bg-blue-600 text-white" : "bg-gray-100 text-gray-700 hover:bg-gray-200"
                     }`}
                     disabled={submitted}
                   >
                     Falsch
                   </button>
                   {submitted && rfWrong && (
-                    <span className="text-xs text-red-600 ml-2">
-                      ✗ ({text.richtigFalschQuestion.correct})
-                    </span>
+                    <span className="text-xs text-red-600 ml-2">✗ ({text.richtigFalschQuestion.correct})</span>
                   )}
                   {submitted && rfCorrect && (
                     <span className="text-xs text-green-600 ml-2">✓</span>
@@ -173,21 +128,9 @@ export default function HoerenTeil1() {
               </div>
 
               {/* Multiple Choice */}
-              <div
-                className={`p-3 rounded ${
-                  submitted
-                    ? mcCorrect
-                      ? "bg-green-50"
-                      : mcWrong
-                      ? "bg-red-50"
-                      : "bg-yellow-50"
-                    : ""
-                }`}
-              >
+              <div className={`p-3 rounded ${submitted ? (mcCorrect ? "bg-green-50" : mcWrong ? "bg-red-50" : "bg-yellow-50") : ""}`}>
                 <p className="text-sm mb-2">
-                  <span className="font-bold mr-1">
-                    {text.multipleChoiceQuestion.id}
-                  </span>
+                  <span className="font-bold mr-1">{text.multipleChoiceQuestion.id}</span>
                   {text.multipleChoiceQuestion.statement}
                 </p>
                 <div className="ml-4 space-y-1">
@@ -195,14 +138,12 @@ export default function HoerenTeil1() {
                     <label
                       key={opt}
                       className={`flex items-center gap-2 cursor-pointer text-xs p-1 rounded ${
-                        mcAnswer === opt
-                          ? "bg-blue-100 border border-blue-300"
-                          : "hover:bg-gray-50"
+                        mcAnswer === opt ? "bg-blue-100 border border-blue-300" : "hover:bg-gray-50"
                       }`}
                     >
                       <input
                         type="radio"
-                        name={`mc-h1-${text.id}`}
+                        name={`mc-m5h1-${text.id}`}
                         checked={mcAnswer === opt}
                         onChange={() => handleMC(index, opt)}
                         disabled={submitted}
@@ -211,12 +152,9 @@ export default function HoerenTeil1() {
                       <span>
                         {opt}) {text.multipleChoiceQuestion.options[opt]}
                       </span>
-                      {submitted &&
-                        opt === text.multipleChoiceQuestion.correct && (
-                          <span className="text-green-600 font-bold ml-1">
-                            ✓
-                          </span>
-                        )}
+                      {submitted && opt === text.multipleChoiceQuestion.correct && (
+                        <span className="text-green-600 font-bold ml-1">✓</span>
+                      )}
                     </label>
                   ))}
                 </div>

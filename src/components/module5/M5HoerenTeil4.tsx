@@ -1,13 +1,13 @@
 import { useEffect } from "react";
-import { module1HoerenTeil3 } from "../../data/module1/hoerenTeil3";
+import { module5HoerenTeil4 } from "../../data/module5/hoerenTeil4";
 import { useProgress } from "../../context/ProgressContext";
 import { useAnswers } from "../../context/AnswersContext";
 
-type Answer = "richtig" | "falsch" | null;
-const SECTION_ID = "m1-hoeren-teil3";
+type Answer = "moderatorin" | "karla" | "walter" | null;
+const SECTION_ID = "m5-hoeren-teil4";
 
-export default function HoerenTeil3() {
-  const data = module1HoerenTeil3;
+export default function M5HoerenTeil4() {
+  const data = module5HoerenTeil4;
   const { updateProgress } = useProgress();
   const { getAnswers, setAnswers, isSubmitted, setSubmitted } = useAnswers();
 
@@ -19,7 +19,7 @@ export default function HoerenTeil3() {
     updateProgress(SECTION_ID, answered, data.questions.length);
   }, [answers, data.questions.length, updateProgress]);
 
-  const handleAnswer = (index: number, value: "richtig" | "falsch") => {
+  const handleAnswer = (index: number, value: Answer) => {
     if (submitted) return;
     const newAnswers = [...answers];
     newAnswers[index] = value;
@@ -39,33 +39,43 @@ export default function HoerenTeil3() {
   return (
     <div className="max-w-4xl mx-auto p-6">
       <p className="text-gray-700 mb-4">{data.instruction}</p>
-      <p className="text-gray-600 italic mb-4">{data.context}</p>
+      <p className="text-gray-600 italic mb-6">{data.context}</p>
 
-      {/* Audio */}
-      <div className="mb-4">
-        <p className="text-xs font-medium text-gray-500 mb-1">Einleitung anhören:</p>
-        <audio controls controlsList="nodownload" className="w-full h-9 mb-2">
-          <source src="/horen/module1/teil3-introducion.mp3" type="audio/mpeg" />
-        </audio>
-      </div>
-      <div className="mb-6">
-        <p className="text-xs font-medium text-gray-500 mb-1">Gespräch anhören:</p>
-        <audio controls controlsList="nodownload" className="w-full h-9">
-          <source src="/horen/module1/teil3-text.mp3" type="audio/mpeg" />
-        </audio>
+      {/* Example */}
+      <div className="mb-4 p-4 bg-gray-50 rounded-lg border border-gray-200">
+        <p className="text-sm text-gray-500 font-semibold mb-2">Beispiel</p>
+        <div className="flex items-center justify-between">
+          <p className="text-sm">
+            <span className="font-bold mr-2">0</span>
+            {data.example.statement}
+          </p>
+          <span className="text-sm font-bold text-green-700">
+            {data.speakers.find((s) => s.key === data.example.correct)?.label}
+          </span>
+        </div>
       </div>
 
-      <div className="space-y-3">
+      {/* Table header */}
+      <div className="hidden md:grid grid-cols-[1fr_auto_auto_auto] gap-2 mb-2 px-4">
+        <span></span>
+        {data.speakers.map((s) => (
+          <span key={s.key} className="text-xs font-bold text-center w-20">
+            {s.label}
+          </span>
+        ))}
+      </div>
+
+      {/* Questions */}
+      <div className="space-y-2">
         {data.questions.map((q, index) => {
           const userAnswer = answers[index];
           const isCorrect = submitted && userAnswer === q.correct;
-          const isWrong =
-            submitted && userAnswer !== null && userAnswer !== q.correct;
+          const isWrong = submitted && userAnswer !== null && userAnswer !== q.correct;
 
           return (
             <div
               key={q.id}
-              className={`p-4 rounded-lg border flex items-center justify-between gap-4 ${
+              className={`p-3 rounded-lg border grid grid-cols-1 md:grid-cols-[1fr_auto_auto_auto] gap-2 items-center ${
                 submitted
                   ? isCorrect
                     ? "border-green-400 bg-green-50"
@@ -75,41 +85,28 @@ export default function HoerenTeil3() {
                   : "border-gray-200 bg-white"
               }`}
             >
-              <p className="text-sm flex-1">
+              <p className="text-sm">
                 <span className="font-bold mr-2">{q.id}</span>
                 {q.statement}
               </p>
-              <div className="flex gap-2 shrink-0">
+              {data.speakers.map((s) => (
                 <button
-                  onClick={() => handleAnswer(index, "richtig")}
-                  className={`px-3 py-1 rounded text-sm font-medium cursor-pointer ${
-                    userAnswer === "richtig"
+                  key={s.key}
+                  onClick={() => handleAnswer(index, s.key as Answer)}
+                  className={`w-20 py-1 rounded text-xs font-medium cursor-pointer ${
+                    userAnswer === s.key
                       ? "bg-blue-600 text-white"
                       : "bg-gray-100 text-gray-700 hover:bg-gray-200"
                   }`}
                   disabled={submitted}
                 >
-                  Richtig
+                  {s.label}
                 </button>
-                <button
-                  onClick={() => handleAnswer(index, "falsch")}
-                  className={`px-3 py-1 rounded text-sm font-medium cursor-pointer ${
-                    userAnswer === "falsch"
-                      ? "bg-blue-600 text-white"
-                      : "bg-gray-100 text-gray-700 hover:bg-gray-200"
-                  }`}
-                  disabled={submitted}
-                >
-                  Falsch
-                </button>
-              </div>
+              ))}
               {submitted && isWrong && (
-                <span className="text-xs text-red-600 shrink-0">
-                  ✗ ({q.correct})
+                <span className="text-xs text-red-600 col-span-full">
+                  ✗ Richtig: {data.speakers.find((s) => s.key === q.correct)?.label}
                 </span>
-              )}
-              {submitted && isCorrect && (
-                <span className="text-xs text-green-600 shrink-0">✓</span>
               )}
             </div>
           );

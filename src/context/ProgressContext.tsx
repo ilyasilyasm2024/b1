@@ -6,6 +6,8 @@ const MODULE_TOTALS: Record<string, number> = {
   "m1": 68, // Lesen: 6+6+8+7+4=31, Hören: 10+5+7+8=30, Schreiben: 3, Sprechen: 4
   "m2": 68, // Same structure as m1
   "m3": 68, // Same structure as m1
+  "m4": 67, // Lesen: 6+3+3+7+7+4=30, Hören: 10+5+7+8=30, Schreiben: 3, Sprechen: 4
+  "m5": 67, // Lesen: 6+3+3+7+7+4=30, Hören: 10+5+7+8=30, Schreiben: 3, Sprechen: 4
 };
 
 // Map of section IDs to their question counts for calculating progress from stored answers
@@ -51,6 +53,34 @@ const SECTION_QUESTION_COUNTS: Record<string, number> = {
   "m3-hoeren-teil4": 8,
   "m3-schreiben": 3,
   "m3-sprechen": 4,
+  // Module 4
+  "m4-lesen-teil1": 6,
+  "m4-lesen-teil2a": 3,
+  "m4-lesen-teil2b": 3,
+  "m4-lesen-teil3": 7,
+  "m4-lesen-teil4": 7,
+  "m4-lesen-teil5": 4,
+  "m4-hoeren-teil1-rf": 5,
+  "m4-hoeren-teil1-mc": 5,
+  "m4-hoeren-teil2": 5,
+  "m4-hoeren-teil3": 7,
+  "m4-hoeren-teil4": 8,
+  "m4-schreiben": 3,
+  "m4-sprechen": 4,
+  // Module 5
+  "m5-lesen-teil1": 6,
+  "m5-lesen-teil2a": 3,
+  "m5-lesen-teil2b": 3,
+  "m5-lesen-teil3": 7,
+  "m5-lesen-teil4": 7,
+  "m5-lesen-teil5": 4,
+  "m5-hoeren-teil1-rf": 5,
+  "m5-hoeren-teil1-mc": 5,
+  "m5-hoeren-teil2": 5,
+  "m5-hoeren-teil3": 7,
+  "m5-hoeren-teil4": 8,
+  "m5-schreiben": 3,
+  "m5-sprechen": 4,
 };
 
 interface ProgressContextType {

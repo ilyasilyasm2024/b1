@@ -1,13 +1,13 @@
 import { useEffect } from "react";
-import { module1HoerenTeil3 } from "../../data/module1/hoerenTeil3";
+import { module4HoerenTeil3 } from "../../data/module4/hoerenTeil3";
 import { useProgress } from "../../context/ProgressContext";
 import { useAnswers } from "../../context/AnswersContext";
 
 type Answer = "richtig" | "falsch" | null;
-const SECTION_ID = "m1-hoeren-teil3";
+const SECTION_ID = "m4-hoeren-teil3";
 
-export default function HoerenTeil3() {
-  const data = module1HoerenTeil3;
+export default function M4HoerenTeil3() {
+  const data = module4HoerenTeil3;
   const { updateProgress } = useProgress();
   const { getAnswers, setAnswers, isSubmitted, setSubmitted } = useAnswers();
 
@@ -39,28 +39,13 @@ export default function HoerenTeil3() {
   return (
     <div className="max-w-4xl mx-auto p-6">
       <p className="text-gray-700 mb-4">{data.instruction}</p>
-      <p className="text-gray-600 italic mb-4">{data.context}</p>
-
-      {/* Audio */}
-      <div className="mb-4">
-        <p className="text-xs font-medium text-gray-500 mb-1">Einleitung anhören:</p>
-        <audio controls controlsList="nodownload" className="w-full h-9 mb-2">
-          <source src="/horen/module1/teil3-introducion.mp3" type="audio/mpeg" />
-        </audio>
-      </div>
-      <div className="mb-6">
-        <p className="text-xs font-medium text-gray-500 mb-1">Gespräch anhören:</p>
-        <audio controls controlsList="nodownload" className="w-full h-9">
-          <source src="/horen/module1/teil3-text.mp3" type="audio/mpeg" />
-        </audio>
-      </div>
+      <p className="text-gray-600 italic mb-6">{data.context}</p>
 
       <div className="space-y-3">
         {data.questions.map((q, index) => {
           const userAnswer = answers[index];
           const isCorrect = submitted && userAnswer === q.correct;
-          const isWrong =
-            submitted && userAnswer !== null && userAnswer !== q.correct;
+          const isWrong = submitted && userAnswer !== null && userAnswer !== q.correct;
 
           return (
             <div
@@ -83,9 +68,7 @@ export default function HoerenTeil3() {
                 <button
                   onClick={() => handleAnswer(index, "richtig")}
                   className={`px-3 py-1 rounded text-sm font-medium cursor-pointer ${
-                    userAnswer === "richtig"
-                      ? "bg-blue-600 text-white"
-                      : "bg-gray-100 text-gray-700 hover:bg-gray-200"
+                    userAnswer === "richtig" ? "bg-blue-600 text-white" : "bg-gray-100 text-gray-700 hover:bg-gray-200"
                   }`}
                   disabled={submitted}
                 >
@@ -94,9 +77,7 @@ export default function HoerenTeil3() {
                 <button
                   onClick={() => handleAnswer(index, "falsch")}
                   className={`px-3 py-1 rounded text-sm font-medium cursor-pointer ${
-                    userAnswer === "falsch"
-                      ? "bg-blue-600 text-white"
-                      : "bg-gray-100 text-gray-700 hover:bg-gray-200"
+                    userAnswer === "falsch" ? "bg-blue-600 text-white" : "bg-gray-100 text-gray-700 hover:bg-gray-200"
                   }`}
                   disabled={submitted}
                 >
@@ -104,9 +85,7 @@ export default function HoerenTeil3() {
                 </button>
               </div>
               {submitted && isWrong && (
-                <span className="text-xs text-red-600 shrink-0">
-                  ✗ ({q.correct})
-                </span>
+                <span className="text-xs text-red-600 shrink-0">✗ ({q.correct})</span>
               )}
               {submitted && isCorrect && (
                 <span className="text-xs text-green-600 shrink-0">✓</span>
