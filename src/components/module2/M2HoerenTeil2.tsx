@@ -39,7 +39,18 @@ export default function M2HoerenTeil2() {
   return (
     <div className="max-w-4xl mx-auto p-6">
       <p className="text-gray-700 mb-4">{data.instruction}</p>
+      {/* Audio */}
+      <div className="mb-4">
+        <audio controls controlsList="nodownload" className="w-full h-9 mb-2">
+          <source src="/horen/module2/m2-teil2-introduction.mp3" type="audio/mpeg" />
+        </audio>
+      </div>
       <p className="text-gray-600 italic mb-6">{data.context}</p>
+      <div className="mb-6">
+        <audio controls controlsList="nodownload" className="w-full h-9">
+          <source src="/horen/module2/m2-teil2-text.mp3" type="audio/mpeg" />
+        </audio>
+      </div>
 
       <div className="space-y-4">
         {data.questions.map((q, index) => {
