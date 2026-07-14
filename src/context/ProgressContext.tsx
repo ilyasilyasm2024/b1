@@ -4,6 +4,8 @@ import { useAnswers } from "./AnswersContext";
 // Total questions per module
 const MODULE_TOTALS: Record<string, number> = {
   "m1": 68, // Lesen: 6+6+8+7+4=31, Hören: 10+5+7+8=30, Schreiben: 3, Sprechen: 4
+  "m2": 68, // Same structure as m1
+  "m3": 68, // Same structure as m1
 };
 
 // Map of section IDs to their question counts for calculating progress from stored answers
@@ -21,6 +23,34 @@ const SECTION_QUESTION_COUNTS: Record<string, number> = {
   "m1-hoeren-teil4": 8,
   "m1-schreiben": 3,
   "m1-sprechen": 4,
+  // Module 2
+  "m2-lesen-teil1": 6,
+  "m2-lesen-teil2a": 3,
+  "m2-lesen-teil2b": 3,
+  "m2-lesen-teil3": 7,
+  "m2-lesen-teil4": 7,
+  "m2-lesen-teil5": 4,
+  "m2-hoeren-teil1-rf": 5,
+  "m2-hoeren-teil1-mc": 5,
+  "m2-hoeren-teil2": 5,
+  "m2-hoeren-teil3": 7,
+  "m2-hoeren-teil4": 8,
+  "m2-schreiben": 3,
+  "m2-sprechen": 4,
+  // Module 3
+  "m3-lesen-teil1": 6,
+  "m3-lesen-teil2a": 3,
+  "m3-lesen-teil2b": 3,
+  "m3-lesen-teil3": 7,
+  "m3-lesen-teil4": 7,
+  "m3-lesen-teil5": 4,
+  "m3-hoeren-teil1-rf": 5,
+  "m3-hoeren-teil1-mc": 5,
+  "m3-hoeren-teil2": 5,
+  "m3-hoeren-teil3": 7,
+  "m3-hoeren-teil4": 8,
+  "m3-schreiben": 3,
+  "m3-sprechen": 4,
 };
 
 interface ProgressContextType {

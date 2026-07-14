@@ -492,7 +492,9 @@ export default function VocabularyPanel({ isOpen, onClose }: VocabularyPanelProp
                   </svg>
                   Export (.xlsx)
                 </button>
-                <label className="flex-1 flex items-center justify-center gap-1.5 border border-gray-300 rounded-lg px-3 py-1.5 text-xs font-medium text-gray-700 cursor-pointer hover:bg-gray-50">
+                <label className="flex-1 flex items-center justify-center gap-1.5 border border-gray-300 rounded-lg px-3 py-1.5 text-xs font-medium text-gray-700 cursor-pointer hover:bg-gray-50"
+                  title="Excel-Datei mit Spalten: Wort | Übersetzung | Kontext (optional)"
+                >
                   <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12" />
                   </svg>
@@ -530,6 +532,15 @@ export default function VocabularyPanel({ isOpen, onClose }: VocabularyPanelProp
               </div>
 
               {/* Clear all + info */}
+              {/* Import format guide */}
+              <div className="bg-gray-50 rounded p-2 border border-gray-100">
+                <p className="text-[9px] text-gray-500 font-medium mb-1">📋 Import-Format (.xlsx):</p>
+                <div className="text-[9px] text-gray-400 font-mono">
+                  <span className="text-gray-600">Wort</span> | <span className="text-gray-600">Übersetzung</span> | <span className="text-gray-600">Kontext</span>
+                </div>
+                <p className="text-[8px] text-gray-400 mt-0.5">z.B. "der Schüler | الطالب | Der Schüler lernt Deutsch."</p>
+              </div>
+
               <div className="flex justify-between items-center">
                 <span className="text-[10px] text-gray-400">
                   Synchronisiert mit deinem Konto

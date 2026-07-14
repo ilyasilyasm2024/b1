@@ -1,69 +1,18 @@
-import { useState } from "react";
+interface ComingSoonProps {
+  onOpenChat: () => void;
+}
 
-const features = [
-  {
-    icon: "💬",
-    title: "Global Chat",
-    description: "Chatte mit anderen B1-Lernenden",
-  },
-  {
-    icon: "🎙️",
-    title: "Sprechen Recorder",
-    description: "Nimm dein Sprechen auf und verfolge deinen Fortschritt",
-  },
-  {
-    icon: "✍️",
-    title: "AI Schreiben-Korrektur",
-    description: "Lass deine Texte von KI korrigieren und verbessern",
-  },
-  {
-    icon: "👥",
-    title: "Sprechen mit Freunden",
-    description: "Wähle einen Freund für die Sprechen-Vorbereitung",
-  },
-];
-
-export default function ComingSoon() {
-  const [isOpen, setIsOpen] = useState(false);
-
+export default function ComingSoon({ onOpenChat }: ComingSoonProps) {
   return (
     <div className="fixed bottom-5 left-5 z-50">
-      {/* Expanded panel */}
-      {isOpen && (
-        <div className="mb-3 bg-white border border-gray-200 rounded-xl shadow-xl w-72 overflow-hidden animate-in">
-          <div className="px-4 py-3 bg-gray-900 text-white">
-            <h3 className="text-sm font-bold">Bald verfügbar 🚀</h3>
-            <p className="text-[10px] text-gray-300 mt-0.5">Neue Features in Entwicklung</p>
-          </div>
-          <div className="p-2 space-y-1 max-h-64 overflow-y-auto">
-            {features.map((feature) => (
-              <div
-                key={feature.title}
-                className="flex items-start gap-3 p-2.5 rounded-lg hover:bg-gray-50 transition-colors"
-              >
-                <span className="text-lg shrink-0">{feature.icon}</span>
-                <div>
-                  <p className="text-xs font-semibold text-gray-800">{feature.title}</p>
-                  <p className="text-[10px] text-gray-500 mt-0.5">{feature.description}</p>
-                </div>
-                <span className="ml-auto shrink-0 bg-amber-100 text-amber-700 text-[8px] font-bold px-1.5 py-0.5 rounded-full">
-                  SOON
-                </span>
-              </div>
-            ))}
-          </div>
-        </div>
-      )}
-
-      {/* Toggle button */}
       <button
-        onClick={() => setIsOpen(!isOpen)}
-        className="w-10 h-10 bg-white border border-gray-200 rounded-full shadow-lg flex items-center justify-center cursor-pointer hover:bg-gray-50 transition-all"
-        title="Kommende Features"
+        onClick={onOpenChat}
+        className="w-12 h-12 bg-gray-900 text-white rounded-full shadow-lg flex items-center justify-center cursor-pointer hover:bg-gray-700 hover:scale-105 transition-all"
+        title="Global Chat"
       >
-        <span className={`text-sm transition-transform duration-200 ${isOpen ? "rotate-180" : ""}`}>
-          {isOpen ? "✕" : "🔮"}
-        </span>
+        <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" />
+        </svg>
       </button>
     </div>
   );

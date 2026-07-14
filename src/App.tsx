@@ -1,6 +1,8 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
 import Module1 from "./components/Module1";
+import Module2 from "./components/Module2";
+import Module3 from "./components/Module3";
 import Timer from "./components/Timer";
 import VocabularyPanel from "./components/Vocabulary";
 import TextHighlighter from "./components/TextHighlighter";
@@ -13,14 +15,19 @@ import { PermissionsProvider, usePermissions } from "./context/Permissions";
 import { AIUsageProvider } from "./context/AIUsageContext";
 import GuidedTour from "./components/GuidedTour";
 import ComingSoon from "./components/ComingSoon";
+import GlobalChat from "./components/GlobalChat";
+import StreakCalendar from "./components/StreakCalendar";
 
 function AppContent() {
   const [openModules, setOpenModules] = useState<Record<string, boolean>>({});
   const [vocabOpen, setVocabOpen] = useState(false);
+  const [chatOpen, setChatOpen] = useState(false);
   const { user, logout } = useAuth();
   const { getModuleProgress } = useProgress();
   const { canAccessModelTest, plan } = usePermissions();
   const m1Progress = getModuleProgress("m1");
+  const m2Progress = getModuleProgress("m2");
+  const m3Progress = getModuleProgress("m3");
 
   const toggleModule = (key: string) => {
     setOpenModules((prev) => ({ ...prev, [key]: !prev[key] }));
@@ -29,7 +36,7 @@ function AppContent() {
   return (
     <div className="min-h-screen bg-gray-50 pt-16 pb-8">
       <GuidedTour />
-      <ComingSoon />
+      <ComingSoon onOpenChat={() => setChatOpen(true)} />
       {/* Fixed top bar */}
       <div className="fixed top-0 left-0 right-0 z-40 bg-white/90 backdrop-blur-sm border-b border-gray-200 px-3 py-2">
         <div className="max-w-4xl mx-auto flex items-center justify-between gap-2">
@@ -56,6 +63,9 @@ function AppContent() {
                 <span className="text-xs text-gray-500 hidden sm:inline">
                   Hallo, {user.firstName}
                 </span>
+                {user.streak > 0 && (
+                  <StreakCalendar />
+                )}
                 <button
                   onClick={logout}
                   className="bg-white border border-gray-200 rounded-lg px-2.5 py-1.5 shadow-sm flex items-center gap-1.5 cursor-pointer hover:bg-gray-50 transition-colors"
@@ -92,6 +102,9 @@ function AppContent() {
 
       {/* Vocabulary Panel */}
       <VocabularyPanel isOpen={vocabOpen} onClose={() => setVocabOpen(false)} />
+
+      {/* Global Chat Panel */}
+      <GlobalChat isOpen={chatOpen} onClose={() => setChatOpen(false)} />
 
       <div className="max-w-4xl mx-auto px-4">
         {/* Header */}
@@ -175,8 +188,86 @@ function AppContent() {
             )}
           </div>
 
+          {/* Module 2 */}
+          <div className="rounded-xl border border-gray-200 bg-white overflow-hidden shadow-sm" data-tour="module-2">
+            <button
+              onClick={() => toggleModule("m2")}
+              className="w-full px-6 py-4 cursor-pointer hover:bg-gray-50 transition-colors"
+            >
+              <div className="flex items-center justify-between">
+                <div className="flex items-center gap-3">
+                  <div className="relative w-10 h-10 shrink-0">
+                    <svg className="w-10 h-10 -rotate-90" viewBox="0 0 40 40">
+                      <circle cx="20" cy="20" r="17" fill="none" stroke="#e5e7eb" strokeWidth="3" />
+                      <circle cx="20" cy="20" r="17" fill="none" stroke="#3b82f6" strokeWidth="3" strokeLinecap="round"
+                        strokeDasharray={`${2 * Math.PI * 17}`}
+                        strokeDashoffset={`${2 * Math.PI * 17 * (1 - m2Progress.percent / 100)}`}
+                        className="transition-all duration-700 ease-out"
+                      />
+                    </svg>
+                    <span className="absolute inset-0 flex items-center justify-center text-xs font-bold text-gray-900">2</span>
+                  </div>
+                  <div className="text-left">
+                    <span className="text-sm font-semibold text-gray-800 block">Modelltest 2</span>
+                    <span className="text-[10px] text-gray-400">{m2Progress.answered}/{m2Progress.total} Fragen</span>
+                  </div>
+                </div>
+                <svg
+                  className={`w-4 h-4 text-gray-400 transition-transform duration-200 ${openModules["m2"] ? "rotate-180" : ""}`}
+                  fill="none" stroke="currentColor" viewBox="0 0 24 24"
+                >
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+                </svg>
+              </div>
+            </button>
+            {openModules["m2"] && (
+              <div className="border-t border-gray-100 px-4 py-4">
+                <Module2 />
+              </div>
+            )}
+          </div>
+
+          {/* Module 3 */}
+          <div className="rounded-xl border border-gray-200 bg-white overflow-hidden shadow-sm">
+            <button
+              onClick={() => toggleModule("m3")}
+              className="w-full px-6 py-4 cursor-pointer hover:bg-gray-50 transition-colors"
+            >
+              <div className="flex items-center justify-between">
+                <div className="flex items-center gap-3">
+                  <div className="relative w-10 h-10 shrink-0">
+                    <svg className="w-10 h-10 -rotate-90" viewBox="0 0 40 40">
+                      <circle cx="20" cy="20" r="17" fill="none" stroke="#e5e7eb" strokeWidth="3" />
+                      <circle cx="20" cy="20" r="17" fill="none" stroke="#3b82f6" strokeWidth="3" strokeLinecap="round"
+                        strokeDasharray={`${2 * Math.PI * 17}`}
+                        strokeDashoffset={`${2 * Math.PI * 17 * (1 - m3Progress.percent / 100)}`}
+                        className="transition-all duration-700 ease-out"
+                      />
+                    </svg>
+                    <span className="absolute inset-0 flex items-center justify-center text-xs font-bold text-gray-900">3</span>
+                  </div>
+                  <div className="text-left">
+                    <span className="text-sm font-semibold text-gray-800 block">Modelltest 3</span>
+                    <span className="text-[10px] text-gray-400">{m3Progress.answered}/{m3Progress.total} Fragen</span>
+                  </div>
+                </div>
+                <svg
+                  className={`w-4 h-4 text-gray-400 transition-transform duration-200 ${openModules["m3"] ? "rotate-180" : ""}`}
+                  fill="none" stroke="currentColor" viewBox="0 0 24 24"
+                >
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+                </svg>
+              </div>
+            </button>
+            {openModules["m3"] && (
+              <div className="border-t border-gray-100 px-4 py-4">
+                <Module3 />
+              </div>
+            )}
+          </div>
+
           {/* Future modules — gated by plan */}
-          {[2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15].map((num) => {
+          {[4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15].map((num) => {
             const locked = !canAccessModelTest(num);
             return (
               <div

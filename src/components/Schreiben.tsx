@@ -44,7 +44,7 @@ export default function Schreiben() {
     if (suggestTimeoutRef.current[index]) {
       clearTimeout(suggestTimeoutRef.current[index]);
     }
-    if (hasFeature("advancedSuggestions") && isApiKeyConfigured() && value.trim().length >= 1) {
+    if (user && hasFeature("advancedSuggestions") && isApiKeyConfigured() && value.trim().length >= 1) {
       suggestTimeoutRef.current[index] = setTimeout(async () => {
         const aufgabe = data.aufgaben[index];
         const fullContext = `${aufgabe.instruction}\nPunkte: ${aufgabe.points.join(" / ")}\n${aufgabe.hints ? "Hinweise: " + aufgabe.hints.join(" ") : ""}`;
@@ -73,7 +73,7 @@ export default function Schreiben() {
       clearTimeout(suggestTimeoutRef.current[index]);
     }
     suggestTimeoutRef.current[index] = setTimeout(async () => {
-      if (hasFeature("advancedSuggestions") && isApiKeyConfigured()) {
+      if (user && hasFeature("advancedSuggestions") && isApiKeyConfigured()) {
         const updatedText = newTexts[index];
         if (updatedText.trim().length >= 1) {
           const aufgabe = data.aufgaben[index];
