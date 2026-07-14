@@ -1,7 +1,7 @@
 import { useEffect } from "react";
-import { module1LesenTeil4 } from "../data/module1/lesenTeil4";
-import { useProgress } from "../context/ProgressContext";
-import { useAnswers } from "../context/AnswersContext";
+import { module1LesenTeil4 } from "../../data/module1/lesenTeil4";
+import { useProgress } from "../../context/ProgressContext";
+import { useAnswers } from "../../context/AnswersContext";
 
 type Answer = "ja" | "nein" | null;
 const SECTION_ID = "m1-lesen-teil4";

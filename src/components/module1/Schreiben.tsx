@@ -1,12 +1,12 @@
 import { useEffect, useState, useRef } from "react";
-import { module1Schreiben } from "../data/module1/schreiben";
-import { useProgress } from "../context/ProgressContext";
-import { useAnswers } from "../context/AnswersContext";
-import { useAuth } from "../context/AuthContext";
-import { useToast } from "./Toast";
-import { usePermissions } from "../context/Permissions";
-import { schreibenService, type SchreibenVersion } from "../services/schreiben";
-import { suggestNextWords, isApiKeyConfigured } from "../services/ai";
+import { module1Schreiben } from "../../data/module1/schreiben";
+import { useProgress } from "../../context/ProgressContext";
+import { useAnswers } from "../../context/AnswersContext";
+import { useAuth } from "../../context/AuthContext";
+import { useToast } from "../Toast";
+import { usePermissions } from "../../context/Permissions";
+import { schreibenService, type SchreibenVersion } from "../../services/schreiben";
+import { suggestNextWords, isApiKeyConfigured } from "../../services/ai";
 
 const SECTION_ID = "m1-schreiben";
 

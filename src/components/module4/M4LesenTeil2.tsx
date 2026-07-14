@@ -1,11 +1,11 @@
 import { useEffect } from "react";
 import {
-  module1LesenTeil2A,
-  module1LesenTeil2B,
+  module4LesenTeil2A,
+  module4LesenTeil2B,
   type LesenTeil2Data,
-} from "../data/module1/lesenTeil2";
-import { useProgress } from "../context/ProgressContext";
-import { useAnswers } from "../context/AnswersContext";
+} from "../../data/module4/lesenTeil2";
+import { useProgress } from "../../context/ProgressContext";
+import { useAnswers } from "../../context/AnswersContext";
 
 type Answer = "a" | "b" | "c" | null;
 
@@ -40,45 +40,33 @@ function LesenTeil2Section({ data, sectionId }: { data: LesenTeil2Data; sectionI
 
   return (
     <div className="mb-8">
-
-      {/* Newspaper-style text box */}
       <div className="border border-gray-400 bg-white mb-5 shadow-sm">
-        {/* Title area */}
         <div className="px-5 pt-4 pb-1 border-b border-gray-200">
           <h3 className="text-2xl font-black leading-tight tracking-tight">{data.title}</h3>
         </div>
-
-        {/* Body text in two columns */}
         <div className="px-5 py-3 columns-2 gap-5 text-[11px] text-gray-900 leading-[1.6] text-justify hyphens-auto">
           {data.text}
         </div>
-
-        {/* Source */}
         <div className="px-5 pb-2 text-right border-t border-gray-100">
           <p className="text-[10px] italic text-gray-500">aus einer deutschen Zeitung</p>
         </div>
       </div>
 
-      {/* Example - same horizontal layout as questions */}
       <div className="mb-4 pb-3 border-b border-gray-300">
         <p className="text-[10px] font-bold text-gray-500 mb-2">Beispiel</p>
         <div className="grid grid-cols-[1fr_1fr] gap-4">
-          {/* Left: number + statement */}
           <div className="flex items-start gap-2">
             <span className="inline-flex items-center justify-center w-5 h-5 bg-black text-white text-[10px] rounded-sm font-bold shrink-0 mt-0.5">
               {data.example.id}
             </span>
             <span className="text-xs font-bold">{data.example.statement}</span>
           </div>
-          {/* Right: options */}
           <div className="space-y-0.5">
             {(["a", "b", "c"] as const).map((opt) => (
               <p
                 key={opt}
                 className={`text-xs ${
-                  opt === data.example.correct
-                    ? "font-bold underline"
-                    : "text-gray-600"
+                  opt === data.example.correct ? "font-bold underline" : "text-gray-600"
                 }`}
               >
                 {opt}) {data.example.options[opt]}
@@ -88,7 +76,6 @@ function LesenTeil2Section({ data, sectionId }: { data: LesenTeil2Data; sectionI
         </div>
       </div>
 
-      {/* Questions - statement left, options right on same line like in the book */}
       <div className="space-y-4">
         {data.questions.map((q, index) => {
           const userAnswer = answers[index];
@@ -108,24 +95,18 @@ function LesenTeil2Section({ data, sectionId }: { data: LesenTeil2Data; sectionI
                   : ""
               }`}
             >
-              {/* Left: question number + statement */}
               <div className="flex items-start gap-2">
                 <span className="inline-flex items-center justify-center w-5 h-5 bg-black text-white text-[10px] rounded-sm font-bold shrink-0 mt-0.5">
                   {q.id}
                 </span>
                 <span className="text-xs font-bold">{q.statement}</span>
               </div>
-
-              {/* Right: options on the same row */}
               <div className="space-y-1">
                 {(["a", "b", "c"] as const).map((opt) => (
-                  <label
-                    key={opt}
-                    className="flex items-center gap-1.5 text-xs cursor-pointer"
-                  >
+                  <label key={opt} className="flex items-center gap-1.5 text-xs cursor-pointer">
                     <input
                       type="radio"
-                      name={`q-${data.part}-${q.id}`}
+                      name={`q-${sectionId}-${q.id}`}
                       checked={userAnswer === opt}
                       onChange={() => handleAnswer(index, opt)}
                       disabled={submitted}
@@ -135,15 +116,14 @@ function LesenTeil2Section({ data, sectionId }: { data: LesenTeil2Data; sectionI
                       {opt}) {q.options[opt]}
                     </span>
                     {submitted && opt === q.correct && (
-                      <span className="text-green-600 font-bold ml-1">✓</span>
+                      <span className="text-green-600 font-bold ml-1">&#10003;</span>
                     )}
                   </label>
                 ))}
               </div>
-
               {submitted && isWrong && (
                 <span className="text-red-600 text-[10px] col-span-2">
-                  ✗ Richtige Antwort: {q.correct})
+                  &#10007; Richtige Antwort: {q.correct})
                 </span>
               )}
             </div>
@@ -177,7 +157,7 @@ function LesenTeil2Section({ data, sectionId }: { data: LesenTeil2Data; sectionI
   );
 }
 
-export default function LesenTeil2() {
+export default function M4LesenTeil2() {
   return (
     <div className="p-6">
       <p className="text-xs text-right text-gray-500 mb-4 italic">
@@ -186,19 +166,19 @@ export default function LesenTeil2() {
 
       <p className="text-sm text-gray-800 mb-5">
         Lesen Sie den Text aus der Presse und die Aufgaben 7 bis 9 dazu.
-        Wählen Sie bei jeder Aufgabe die richtige Lösung a, b oder c.
+        W&auml;hlen Sie bei jeder Aufgabe die richtige L&ouml;sung a, b oder c.
       </p>
 
-      <LesenTeil2Section data={module1LesenTeil2A} sectionId="m1-lesen-teil2a" />
+      <LesenTeil2Section data={module4LesenTeil2A} sectionId="m4-lesen-teil2a" />
 
       <hr className="my-8 border-gray-300" />
 
       <p className="text-sm text-gray-800 mb-5">
         Lesen Sie den Text aus der Presse und die Aufgaben 10 bis 12 dazu.
-        Wählen Sie bei jeder Aufgabe die richtige Lösung a, b oder c.
+        W&auml;hlen Sie bei jeder Aufgabe die richtige L&ouml;sung a, b oder c.
       </p>
 
-      <LesenTeil2Section data={module1LesenTeil2B} sectionId="m1-lesen-teil2b" />
+      <LesenTeil2Section data={module4LesenTeil2B} sectionId="m4-lesen-teil2b" />
     </div>
   );
 }

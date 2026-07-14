@@ -1,15 +1,15 @@
 import { useState } from "react";
-import LesenTeil1 from "./LesenTeil1";
-import LesenTeil2 from "./LesenTeil2";
-import LesenTeil3 from "./LesenTeil3";
-import LesenTeil4 from "./LesenTeil4";
-import LesenTeil5 from "./LesenTeil5";
-import HoerenTeil1 from "./HoerenTeil1";
-import HoerenTeil2 from "./HoerenTeil2";
-import HoerenTeil3 from "./HoerenTeil3";
-import HoerenTeil4 from "./HoerenTeil4";
-import Schreiben from "./Schreiben";
-import Sprechen from "./Sprechen";
+import LesenTeil1 from "./module1/LesenTeil1";
+import LesenTeil2 from "./module1/LesenTeil2";
+import LesenTeil3 from "./module1/LesenTeil3";
+import LesenTeil4 from "./module1/LesenTeil4";
+import LesenTeil5 from "./module1/LesenTeil5";
+import HoerenTeil1 from "./module1/HoerenTeil1";
+import HoerenTeil2 from "./module1/HoerenTeil2";
+import HoerenTeil3 from "./module1/HoerenTeil3";
+import HoerenTeil4 from "./module1/HoerenTeil4";
+import Schreiben from "./module1/Schreiben";
+import Sprechen from "./module1/Sprechen";
 
 interface AccordionProps {
   title: string;

@@ -1,7 +1,7 @@
 import { useEffect } from "react";
-import { module1HoerenTeil1 } from "../data/module1/hoerenTeil1";
-import { useProgress } from "../context/ProgressContext";
-import { useAnswers } from "../context/AnswersContext";
+import { module1HoerenTeil1 } from "../../data/module1/hoerenTeil1";
+import { useProgress } from "../../context/ProgressContext";
+import { useAnswers } from "../../context/AnswersContext";
 
 type RFAnswer = "richtig" | "falsch" | null;
 type MCAnswer = "a" | "b" | "c" | null;

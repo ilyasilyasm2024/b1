@@ -1,8 +1,8 @@
 import { useState, useEffect } from "react";
-import { module1Sprechen } from "../data/module1/sprechen";
-import { useProgress } from "../context/ProgressContext";
-import { useAnswers } from "../context/AnswersContext";
-import AudioRecorder from "./AudioRecorder";
+import { module1Sprechen } from "../../data/module1/sprechen";
+import { useProgress } from "../../context/ProgressContext";
+import { useAnswers } from "../../context/AnswersContext";
+import AudioRecorder from "../AudioRecorder";
 
 type TabKey = "teil1" | "teil2a" | "teil2b" | "teil3";
 const SECTION_ID = "m1-sprechen";
