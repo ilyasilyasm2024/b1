@@ -1,0 +1,37 @@
+{
+  "file": "module2/m2-teil1-text5.mp3",
+  "text": " Lesen Sie jetzt die Aufgaben 9 und 10. Dazu haben Sie 10 Sekunden Zeit. Sie hören eine Durchsage am Hauptbahnhof. Achtung, Achtung! Wir möchten Sie darauf aufmerksam machen, dass der ICE aus Paris über Saarbrücken mit einer Verspätung von 30 Minuten erwartet wird. Der Zug fährt auf Gleis 5 ein und hat 45 Minuten Aufenthalt. Der D-Zug aus München Richtung Berlin hat Einfahrt auf Gleis 3. Ankunft fahrplanmäßig um 17.20 Uhr. Ich wiederhole. Sie hören jetzt den Text noch einmal.",
+  "segments": [
+    {
+      "start": 0,
+      "end": 7.52,
+      "text": " Lesen Sie jetzt die Aufgaben 9 und 10. Dazu haben Sie 10 Sekunden Zeit."
+    },
+    {
+      "start": 17.2,
+      "end": 20.16,
+      "text": " Sie hören eine Durchsage am Hauptbahnhof."
+    },
+    {
+      "start": 20.16,
+      "end": 34.46,
+      "text": " Achtung, Achtung! Wir möchten Sie darauf aufmerksam machen, dass der ICE aus Paris über Saarbrücken mit einer Verspätung von 30 Minuten erwartet wird."
+    },
+    {
+      "start": 35.26,
+      "end": 39.68,
+      "text": " Der Zug fährt auf Gleis 5 ein und hat 45 Minuten Aufenthalt."
+    },
+    {
+      "start": 39.96,
+      "end": 49.94,
+      "text": " Der D-Zug aus München Richtung Berlin hat Einfahrt auf Gleis 3. Ankunft fahrplanmäßig um 17.20 Uhr. Ich wiederhole."
+    },
+    {
+      "start": 50.16,
+      "end": 65.04,
+      "text": " Sie hören jetzt den Text noch einmal."
+    }
+  ],
+  "duration": 65.019999999
+}

@@ -1,4 +1,6 @@
 import { useRef, useEffect, useState } from "react";
+import { MdOutlinePushPin, MdPushPin } from "react-icons/md";
+import { MdDragIndicator } from "react-icons/md";
 import type { NoteDir } from "../services/notes";
 
 export interface LinkableNote {
@@ -8,28 +10,28 @@ export interface LinkableNote {
 }
 
 interface RichTextNoteProps {
+  id: string;
   title: string;
   value: string;
   dir: NoteDir;
   collapsed: boolean;
   pinned: boolean;
   canPin: boolean;
-  isFirst: boolean;
-  isLast: boolean;
   selected: boolean;
   linkedNotes: LinkableNote[];
   availableToLink: LinkableNote[];
   onToggleSelect: () => void;
   onToggleCollapse: () => void;
   onTogglePin: () => void;
-  onMoveUp: () => void;
-  onMoveDown: () => void;
   onTitleChange: (title: string) => void;
   onChange: (html: string) => void;
   onDirChange: (dir: NoteDir) => void;
   onToggleLink: (otherId: string) => void;
   onSave: () => void;
   onDelete: () => void;
+  onDragStart: (e: React.DragEvent) => void;
+  onDragOver: (e: React.DragEvent) => void;
+  onDrop: (e: React.DragEvent) => void;
 }
 
 // Simple rich-text editor built on contentEditable + execCommand.
@@ -43,22 +45,21 @@ export default function RichTextNote({
   collapsed,
   pinned,
   canPin,
-  isFirst,
-  isLast,
   selected,
   linkedNotes,
   availableToLink,
   onToggleSelect,
   onToggleCollapse,
   onTogglePin,
-  onMoveUp,
-  onMoveDown,
   onTitleChange,
   onChange,
   onDirChange,
   onToggleLink,
   onSave,
   onDelete,
+  onDragStart,
+  onDragOver,
+  onDrop,
 }: RichTextNoteProps) {
   const editorRef = useRef<HTMLDivElement>(null);
   const [dirty, setDirty] = useState(false);
@@ -95,9 +96,19 @@ export default function RichTextNote({
   };
 
   return (
-    <div className={`border rounded-lg bg-white ${selected ? "border-blue-500 ring-1 ring-blue-300" : pinned ? "border-amber-300" : "border-gray-200"}`}>
-      {/* Header row: select + pin + collapse + move + title (always visible) */}
-      <div className="flex items-center gap-1 px-2 py-1.5">
+    <div
+      className={`border rounded-lg bg-white transition-shadow ${selected ? "border-blue-500 ring-1 ring-blue-300" : pinned ? "border-amber-300 shadow-sm" : "border-gray-200"}`}
+      draggable
+      onDragStart={onDragStart}
+      onDragOver={onDragOver}
+      onDrop={onDrop}
+    >
+      {/* Header row: drag handle + select + pin + collapse + title */}
+      <div className="flex items-center gap-1.5 px-2 py-1.5">
+        {/* Drag handle */}
+        <span className="cursor-grab active:cursor-grabbing shrink-0 text-gray-300 hover:text-gray-500">
+          <MdDragIndicator className="w-5 h-5" />
+        </span>
         <input
           type="checkbox"
           checked={selected}
@@ -105,50 +116,27 @@ export default function RichTextNote({
           className="accent-blue-600 w-4 h-4 cursor-pointer shrink-0"
           title="Auswählen"
         />
-        {/* Pin */}
+        {/* Pin (react-icons) */}
         <button
           onClick={onTogglePin}
           disabled={!pinned && !canPin}
-          className={`p-1 rounded cursor-pointer shrink-0 transition-colors ${
-            pinned ? "text-amber-500 hover:text-amber-600" : canPin ? "text-gray-400 hover:text-amber-500" : "text-gray-200 cursor-not-allowed"
+          className={`p-0.5 rounded cursor-pointer shrink-0 transition-colors ${
+            pinned ? "text-amber-500 hover:text-amber-600" : canPin ? "text-gray-300 hover:text-amber-500" : "text-gray-200 cursor-not-allowed"
           }`}
-          title={pinned ? "Anpinnen aufheben" : canPin ? "Anpinnen" : "Max. 5 Pins erreicht"}
+          title={pinned ? "Anpinnen aufheben" : canPin ? "Anpinnen (max 5)" : "Max. 5 Pins erreicht"}
         >
-          <svg className="w-4 h-4" fill={pinned ? "currentColor" : "none"} stroke="currentColor" viewBox="0 0 24 24">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 5a2 2 0 012-2h10a2 2 0 012 2v16l-7-3.5L5 21V5z" />
-          </svg>
+          {pinned ? <MdPushPin className="w-5 h-5" /> : <MdOutlinePushPin className="w-5 h-5" />}
         </button>
         {/* Collapse */}
         <button
           onClick={onToggleCollapse}
-          className="p-1 hover:bg-gray-100 rounded cursor-pointer shrink-0"
+          className="p-0.5 hover:bg-gray-100 rounded cursor-pointer shrink-0"
           title={collapsed ? "Öffnen" : "Schließen"}
         >
           <svg
-            className={`w-4 h-4 text-gray-500 transition-transform ${collapsed ? "" : "rotate-180"}`}
+            className={`w-4 h-4 text-gray-400 transition-transform ${collapsed ? "" : "rotate-180"}`}
             fill="none" stroke="currentColor" viewBox="0 0 24 24"
           >
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
-          </svg>
-        </button>
-        {/* Move up/down */}
-        <button
-          onClick={onMoveUp}
-          disabled={isFirst}
-          className={`p-1 rounded shrink-0 ${isFirst ? "text-gray-200 cursor-not-allowed" : "text-gray-400 hover:text-gray-700 cursor-pointer"}`}
-          title="Nach oben"
-        >
-          <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 15l7-7 7 7" />
-          </svg>
-        </button>
-        <button
-          onClick={onMoveDown}
-          disabled={isLast}
-          className={`p-1 rounded shrink-0 ${isLast ? "text-gray-200 cursor-not-allowed" : "text-gray-400 hover:text-gray-700 cursor-pointer"}`}
-          title="Nach unten"
-        >
-          <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
           </svg>
         </button>
@@ -165,12 +153,8 @@ export default function RichTextNote({
           placeholder="Titel..."
           className="flex-1 min-w-0 text-sm font-bold text-gray-800 placeholder-gray-400 focus:outline-none bg-transparent"
         />
-        {pinned && (
-          <span title="Angeheftet" className="shrink-0">
-            <svg className="w-3.5 h-3.5 text-amber-500" fill="currentColor" viewBox="0 0 24 24">
-              <path d="M9 4h6l-1 6 3 3H7l3-3-1-6z" />
-            </svg>
-          </span>
+        {pinned && collapsed && (
+          <MdPushPin className="w-4 h-4 text-amber-500 shrink-0" />
         )}
         {collapsed && linkedNotes.length > 0 && (
           <span className="shrink-0 text-[10px] text-gray-400 flex items-center gap-0.5" title={`${linkedNotes.length} verknüpft`}>

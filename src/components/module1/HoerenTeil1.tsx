@@ -2,6 +2,7 @@ import { useEffect } from "react";
 import { module1HoerenTeil1 } from "../../data/module1/hoerenTeil1";
 import { useProgress } from "../../context/ProgressContext";
 import { useAnswers } from "../../context/AnswersContext";
+import TranscriptToggle from "../TranscriptToggle";
 
 type RFAnswer = "richtig" | "falsch" | null;
 type MCAnswer = "a" | "b" | "c" | null;
@@ -66,6 +67,7 @@ export default function HoerenTeil1() {
         <audio controls controlsList="nodownload" className="w-full h-9">
           <source src="/horen/module1/teil1-introduction.mp3" type="audio/mpeg" />
         </audio>
+        <TranscriptToggle module="module1" fileName="teil1-introduction" />
       </div>
 
       {/* Example */}
@@ -74,6 +76,7 @@ export default function HoerenTeil1() {
         <audio controls controlsList="nodownload" className="w-full h-8 mb-2">
           <source src="/horen/module1/teil1-beispiel.mp3" type="audio/mpeg" />
         </audio>
+        <TranscriptToggle module="module1" fileName="teil1-beispiel" />
         <p className="text-sm mb-1">
           <span className="font-bold">0a)</span>{" "}
           {data.example.richtigFalsch.statement} →{" "}
@@ -116,9 +119,10 @@ export default function HoerenTeil1() {
               <h4 className="font-bold text-sm text-gray-500 mb-2">
                 Text {text.id}
               </h4>
-              <audio controls controlsList="nodownload" className="w-full h-8 mb-3">
+              <audio controls controlsList="nodownload" className="w-full h-8 mb-1">
                 <source src={`/horen/module1/model1-tail1-text${text.id}.mp3`} type="audio/mpeg" />
               </audio>
+              <TranscriptToggle module="module1" fileName={`model1-tail1-text${text.id}`} />
 
               {/* Richtig/Falsch */}
               <div

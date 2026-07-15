@@ -1,0 +1,87 @@
+{
+  "file": "module1/model1-tail1-text5.mp3",
+  "text": " Sie hören eine automatische Telefonauskunft. Schokoladenmuseum Waldenbuch, wir danken für Ihren Anruf. Unsere Schokoausstellung ist für Sie geöffnet von Montag bis Freitag 8 bis 18 Uhr, Samstag 9 bis 18 Uhr, sowie an Sonn- und Feiertagen 11 bis 18 Uhr. Eintritt 4 Euro. Eintritt in den Schokoladen frei. Teilnahme an dem Workshop der Schoko-Werkstatt für Kinder ab sieben Jahren 6 Euro. Sie hören jetzt den Text noch einmal. Schokoladenmuseum Waldenbuch, wir danken für Ihren Anruf. Unsere Schoko-Ausstellung ist für Sie geöffnet von Montag bis Freitag 8 bis 18 Uhr. Samstag 9 bis 18 Uhr sowie an Sonn- und Feiertagen 11 bis 18 Uhr Eintritt 4 Euro Eintritt in den Schokoladen frei Teilnahme an dem Workshop der Schokowerkstatt für Kinder ab 7 Jahren 6 Euro Vielen Dank.",
+  "segments": [
+    {
+      "start": 0,
+      "end": 4.04,
+      "text": " Sie hören eine automatische Telefonauskunft."
+    },
+    {
+      "start": 4.04,
+      "end": 14.759999,
+      "text": " Schokoladenmuseum Waldenbuch, wir danken für Ihren Anruf."
+    },
+    {
+      "start": 15.54,
+      "end": 20.38,
+      "text": " Unsere Schokoausstellung ist für Sie geöffnet von Montag bis Freitag 8 bis 18 Uhr,"
+    },
+    {
+      "start": 20.94,
+      "end": 26.4,
+      "text": " Samstag 9 bis 18 Uhr, sowie an Sonn- und Feiertagen 11 bis 18 Uhr."
+    },
+    {
+      "start": 26.859999,
+      "end": 28.099998,
+      "text": " Eintritt 4 Euro."
+    },
+    {
+      "start": 28.9,
+      "end": 31,
+      "text": " Eintritt in den Schokoladen frei."
+    },
+    {
+      "start": 31,
+      "end": 37.48,
+      "text": " Teilnahme an dem Workshop der Schoko-Werkstatt für Kinder ab sieben Jahren 6 Euro."
+    },
+    {
+      "start": 40.36,
+      "end": 43,
+      "text": " Sie hören jetzt den Text noch einmal."
+    },
+    {
+      "start": 51.56,
+      "end": 54.62,
+      "text": " Schokoladenmuseum Waldenbuch, wir danken für Ihren Anruf."
+    },
+    {
+      "start": 55.42,
+      "end": 60.239998,
+      "text": " Unsere Schoko-Ausstellung ist für Sie geöffnet von Montag bis Freitag 8 bis 18 Uhr."
+    },
+    {
+      "start": 60.239998,
+      "end": 62.76,
+      "text": " Samstag 9 bis 18 Uhr"
+    },
+    {
+      "start": 62.76,
+      "end": 66.299995,
+      "text": " sowie an Sonn- und Feiertagen 11 bis 18 Uhr"
+    },
+    {
+      "start": 66.299995,
+      "end": 68.02,
+      "text": " Eintritt 4 Euro"
+    },
+    {
+      "start": 68.02,
+      "end": 70.899994,
+      "text": " Eintritt in den Schokoladen frei"
+    },
+    {
+      "start": 70.899994,
+      "end": 77.32,
+      "text": " Teilnahme an dem Workshop der Schokowerkstatt für Kinder ab 7 Jahren 6 Euro"
+    },
+    {
+      "start": 90.24,
+      "end": 120.22,
+      "text": " Vielen Dank."
+    }
+  ],
+  "duration": 92.029001728
+}

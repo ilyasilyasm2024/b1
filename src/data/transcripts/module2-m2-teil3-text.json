@@ -1,0 +1,212 @@
+{
+  "file": "module2/m2-teil3-text.mp3",
+  "text": " Sie sitzen im Bus und hören, wie sich eine Frau und ein Mann über Haustiere unterhalten. Schön, dass wir den Bus noch gekriegt haben. Kommen Sie, Frau Böhm. Hier sind noch zwei Plätze. Das ist vielleicht ein Wetter. Ich bin ganz nass. Ich habe nicht damit gerechnet, dass es regnen würde und meinen Schirm zu Hause gelassen. Naja, jetzt sitzen wir ja im Bus. Waren Sie im Tiergeschäft? Die sind dort sehr nett. Ich kaufe da immer Futter für meine Fische. Wollen Sie ein Haustier kaufen? Äh, ja. Nein, ich weiß nicht. Timmy hätte ja so gern einen Hund. Ja, ich weiß. Das hat er mir erzählt. Erzählt? Timmy kommt nach der Schule manchmal bei mir vorbei. Er guckt sich gerne meine Fische an. Na, und dann erzählt er schon mal ein bisschen. Ja, richtig. Von den Fischen hat er mir erzählt. Ich wollte auch bei Ihnen vorbeikommen und mich bedanken, dass Sie so nett zu Timmy sind. Aber ich habe einfach keine Zeit. Das ist nicht nötig, dass Sie mir danken. Timmy ist ein netter Junge. Seit ich Rentner bin, habe ich zu viel Zeit. Und da ist es sehr schön, wenn Timmy mich besuchen kommt. Und was machen Sie jetzt mit dem Hund Wenn es schon ein Haustier sein muss dann lieber eine Katze Die macht nicht so viel Arbeit Und ich habe auch gelesen dass Familien mit Kindern h eine Katze haben als ein Hund Dann sind Katzen vielleicht auch besser für Kinder. Die Mütter wollen Katzen. Die meisten Kinder wollen lieber einen Hund. Ach, so ist das. Dann bin ich wohl wie alle Mütter. Aber ein Hund? Wir hatten noch nie einen Hund. Den muss man doch auch erziehen. Ich habe keine Ahnung, wie man das macht. Und mein Mann hat auch keine Zeit. Er... Arbeitet in Hamburg und ist nur am Wochenende zu Hause. Ja, hat Timmy mir auch erzählt. Vielleicht könnte ich helfen. Ich hatte immer einen Hund, manchmal sogar zwei. So ein Hund ist ein echter Freund. Aber man muss sich um sie kümmern können. Und jetzt bin ich leider zu alt dafür. Und deshalb habe ich jetzt die Fische. Das würde mir Spaß machen. Wirklich? Ja, aber ein Hund in einer Wohnung … Ist das denn gut für das Tier? Wenn Sie einen Hund nehmen, der nicht so groß wird, dann geht das. Der Hund braucht natürlich Bewegung. Aber der Park fängt ja gleich am Ende der Straße an. Da kann Timmy problemlos mit ihm spazieren gehen. Dafür ist er alt genug. Hier ist jetzt unsere Haltestelle. Kommen Sie, wir müssen aussteigen.",
+  "segments": [
+    {
+      "start": 0,
+      "end": 5,
+      "text": " Sie sitzen im Bus und hören, wie sich eine Frau und ein Mann über Haustiere unterhalten."
+    },
+    {
+      "start": 10.5199995,
+      "end": 16.5,
+      "text": " Schön, dass wir den Bus noch gekriegt haben. Kommen Sie, Frau Böhm. Hier sind noch zwei Plätze."
+    },
+    {
+      "start": 18.16,
+      "end": 25.66,
+      "text": " Das ist vielleicht ein Wetter. Ich bin ganz nass. Ich habe nicht damit gerechnet, dass es regnen würde und meinen Schirm zu Hause gelassen."
+    },
+    {
+      "start": 26.4,
+      "end": 28.74,
+      "text": " Naja, jetzt sitzen wir ja im Bus."
+    },
+    {
+      "start": 29.68,
+      "end": 30.9,
+      "text": " Waren Sie im Tiergeschäft?"
+    },
+    {
+      "start": 31.72,
+      "end": 33.079998,
+      "text": " Die sind dort sehr nett."
+    },
+    {
+      "start": 33.78,
+      "end": 35.78,
+      "text": " Ich kaufe da immer Futter für meine Fische."
+    },
+    {
+      "start": 36.86,
+      "end": 38.46,
+      "text": " Wollen Sie ein Haustier kaufen?"
+    },
+    {
+      "start": 39.52,
+      "end": 41.7,
+      "text": " Äh, ja."
+    },
+    {
+      "start": 41.7,
+      "end": 44.88,
+      "text": " Nein, ich weiß nicht."
+    },
+    {
+      "start": 45.64,
+      "end": 47.3,
+      "text": " Timmy hätte ja so gern einen Hund."
+    },
+    {
+      "start": 47.5,
+      "end": 50.5,
+      "text": " Ja, ich weiß. Das hat er mir erzählt."
+    },
+    {
+      "start": 51.079998,
+      "end": 51.62,
+      "text": " Erzählt?"
+    },
+    {
+      "start": 52.079998,
+      "end": 54.559998,
+      "text": " Timmy kommt nach der Schule manchmal bei mir vorbei."
+    },
+    {
+      "start": 55.199997,
+      "end": 56.76,
+      "text": " Er guckt sich gerne meine Fische an."
+    },
+    {
+      "start": 57.3,
+      "end": 59.12,
+      "text": " Na, und dann erzählt er schon mal ein bisschen."
+    },
+    {
+      "start": 59.639996,
+      "end": 60.479996,
+      "text": " Ja, richtig."
+    },
+    {
+      "start": 61.359997,
+      "end": 62.76,
+      "text": " Von den Fischen hat er mir erzählt."
+    },
+    {
+      "start": 63.44,
+      "end": 67.54,
+      "text": " Ich wollte auch bei Ihnen vorbeikommen und mich bedanken, dass Sie so nett zu Timmy sind."
+    },
+    {
+      "start": 68.1,
+      "end": 69.56,
+      "text": " Aber ich habe einfach keine Zeit."
+    },
+    {
+      "start": 69.979996,
+      "end": 71.74,
+      "text": " Das ist nicht nötig, dass Sie mir danken."
+    },
+    {
+      "start": 72.34,
+      "end": 73.38,
+      "text": " Timmy ist ein netter Junge."
+    },
+    {
+      "start": 74.21999,
+      "end": 76.18,
+      "text": " Seit ich Rentner bin, habe ich zu viel Zeit."
+    },
+    {
+      "start": 76.18,
+      "end": 79.259995,
+      "text": " Und da ist es sehr schön, wenn Timmy mich besuchen kommt."
+    },
+    {
+      "start": 80.28,
+      "end": 93.956,
+      "text": " Und was machen Sie jetzt mit dem Hund Wenn es schon ein Haustier sein muss dann lieber eine Katze Die macht nicht so viel Arbeit Und ich habe auch gelesen dass Familien mit Kindern h eine Katze haben als ein Hund"
+    },
+    {
+      "start": 94.736,
+      "end": 97.215996,
+      "text": " Dann sind Katzen vielleicht auch besser für Kinder."
+    },
+    {
+      "start": 97.836,
+      "end": 101.416,
+      "text": " Die Mütter wollen Katzen. Die meisten Kinder wollen lieber einen Hund."
+    },
+    {
+      "start": 102.416,
+      "end": 107.136,
+      "text": " Ach, so ist das. Dann bin ich wohl wie alle Mütter."
+    },
+    {
+      "start": 107.136,
+      "end": 110.756,
+      "text": " Aber ein Hund? Wir hatten noch nie einen Hund."
+    },
+    {
+      "start": 111.016,
+      "end": 118.136,
+      "text": " Den muss man doch auch erziehen. Ich habe keine Ahnung, wie man das macht. Und mein Mann hat auch keine Zeit. Er..."
+    },
+    {
+      "start": 118.136,
+      "end": 122.856,
+      "text": " Arbeitet in Hamburg und ist nur am Wochenende zu Hause. Ja, hat Timmy mir auch erzählt."
+    },
+    {
+      "start": 123.895996,
+      "end": 128.57599,
+      "text": " Vielleicht könnte ich helfen. Ich hatte immer einen Hund, manchmal sogar zwei."
+    },
+    {
+      "start": 129.596,
+      "end": 134.07599,
+      "text": " So ein Hund ist ein echter Freund. Aber man muss sich um sie kümmern können."
+    },
+    {
+      "start": 134.79599,
+      "end": 139.256,
+      "text": " Und jetzt bin ich leider zu alt dafür. Und deshalb habe ich jetzt die Fische."
+    },
+    {
+      "start": 140.436,
+      "end": 141.716,
+      "text": " Das würde mir Spaß machen."
+    },
+    {
+      "start": 142.716,
+      "end": 143.196,
+      "text": " Wirklich?"
+    },
+    {
+      "start": 143.196,
+      "end": 149.51599,
+      "text": " Ja, aber ein Hund in einer Wohnung … Ist das denn gut für das Tier?"
+    },
+    {
+      "start": 149.51599,
+      "end": 155.176,
+      "text": " Wenn Sie einen Hund nehmen, der nicht so groß wird, dann geht das. Der Hund braucht natürlich"
+    },
+    {
+      "start": 155.176,
+      "end": 161.736,
+      "text": " Bewegung. Aber der Park fängt ja gleich am Ende der Straße an. Da kann Timmy problemlos mit ihm"
+    },
+    {
+      "start": 161.736,
+      "end": 167.51599,
+      "text": " spazieren gehen. Dafür ist er alt genug. Hier ist jetzt unsere Haltestelle. Kommen Sie,"
+    },
+    {
+      "start": 167.51599,
+      "end": 168.636,
+      "text": " wir müssen aussteigen."
+    }
+  ],
+  "duration": 171.988995584
+}

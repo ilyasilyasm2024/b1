@@ -1,0 +1,22 @@
+{
+  "file": "module2/m2-t1-introduction.mp3",
+  "text": " Modelltest 2, Teil 1. Sie hören nun fünf kurze Texte. Sie hören jeden Text zweimal. Zu jedem Text lösen Sie zwei Aufgaben. Wählen Sie bei jeder Aufgabe die richtige Lösung. Lesen Sie zuerst das Beispiel. Dazu haben Sie zehn Sekunden Zeit.",
+  "segments": [
+    {
+      "start": 0.64,
+      "end": 9.5199995,
+      "text": " Modelltest 2, Teil 1. Sie hören nun fünf kurze Texte. Sie hören jeden Text zweimal."
+    },
+    {
+      "start": 10.76,
+      "end": 17.34,
+      "text": " Zu jedem Text lösen Sie zwei Aufgaben. Wählen Sie bei jeder Aufgabe die richtige Lösung."
+    },
+    {
+      "start": 19.199999,
+      "end": 24.019999,
+      "text": " Lesen Sie zuerst das Beispiel. Dazu haben Sie zehn Sekunden Zeit."
+    }
+  ],
+  "duration": 28.045000704
+}

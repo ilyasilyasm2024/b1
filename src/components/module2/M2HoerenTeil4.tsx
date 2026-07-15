@@ -2,6 +2,7 @@ import { useEffect } from "react";
 import { module2HoerenTeil4 } from "../../data/module2/hoerenTeil4";
 import { useProgress } from "../../context/ProgressContext";
 import { useAnswers } from "../../context/AnswersContext";
+import TranscriptToggle from "../TranscriptToggle";
 
 type Answer = "moderator" | "juergen" | "anna" | null;
 const SECTION_ID = "m2-hoeren-teil4";
@@ -47,12 +48,14 @@ export default function M2HoerenTeil4() {
         <audio controls controlsList="nodownload" className="w-full h-9 mb-2">
           <source src="/horen/module2/m2-teil4-introduction.mp3" type="audio/mpeg" />
         </audio>
+        <TranscriptToggle module="module2" fileName="m2-teil4-introduction" />
       </div>
       <div className="mb-6">
         <p className="text-xs font-medium text-gray-500 mb-1">Diskussion anhören:</p>
         <audio controls controlsList="nodownload" className="w-full h-9">
           <source src="/horen/module2/m2-teil4-text.mp3" type="audio/mpeg" />
         </audio>
+        <TranscriptToggle module="module2" fileName="m2-teil4-text" />
       </div>
 
       {/* Example */}

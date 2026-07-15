@@ -1,0 +1,37 @@
+{
+  "file": "module2/m2-teil2-introduction.mp3",
+  "text": " Teil 2 Sie hören nun einen Text. Sie hören den Text einmal. Dazu lösen Sie fünf Aufgaben. Wählen Sie bei jeder Aufgabe die richtige Lösung A, B oder C. Lesen Sie jetzt die Aufgaben 11 bis 15. Dazu haben Sie 60 Sekunden Zeit.",
+  "segments": [
+    {
+      "start": 0,
+      "end": 5.48,
+      "text": " Teil 2 Sie hören nun einen Text."
+    },
+    {
+      "start": 5.48,
+      "end": 8.48,
+      "text": " Sie hören den Text einmal."
+    },
+    {
+      "start": 8.48,
+      "end": 10.559999,
+      "text": " Dazu lösen Sie fünf Aufgaben."
+    },
+    {
+      "start": 10.559999,
+      "end": 16.44,
+      "text": " Wählen Sie bei jeder Aufgabe die richtige Lösung A, B oder C."
+    },
+    {
+      "start": 16.44,
+      "end": 21.32,
+      "text": " Lesen Sie jetzt die Aufgaben 11 bis 15."
+    },
+    {
+      "start": 21.32,
+      "end": 23.64,
+      "text": " Dazu haben Sie 60 Sekunden Zeit."
+    }
+  ],
+  "duration": 28.021000192
+}
