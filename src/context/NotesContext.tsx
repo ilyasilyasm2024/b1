@@ -12,6 +12,8 @@ interface NotesContextType {
   deleteNote: (id: string) => Promise<void>;
   deleteMany: (ids: string[]) => Promise<void>;
   toggleLink: (idA: string, idB: string) => void;
+  togglePin: (id: string) => void;
+  moveNote: (id: string, direction: "up" | "down") => void;
   reload: () => Promise<void>;
 }
 
@@ -93,6 +95,8 @@ export function NotesProvider({ children }: { children: ReactNode }) {
         color: current.color,
         dir: current.dir,
         collapsed: current.collapsed,
+        pinned: current.pinned,
+        order: current.order,
         links: current.links,
         x: current.x,
         y: current.y,
@@ -114,10 +118,52 @@ export function NotesProvider({ children }: { children: ReactNode }) {
       color: current.color,
       dir: current.dir,
       collapsed: current.collapsed,
+      pinned: current.pinned,
+      order: current.order,
       links: current.links,
       x: current.x,
       y: current.y,
     });
+  }, []);
+
+  // Toggle pin and persist. Newly pinned notes float to the top of the list.
+  const togglePin = useCallback((id: string) => {
+    const current = notesRef.current.find((n) => n._id === id);
+    if (!current) return;
+    const pinned = !current.pinned;
+    setNotes((prev) => prev.map((n) => (n._id === id ? { ...n, pinned } : n)));
+    notesService.update(id, { pinned });
+  }, []);
+
+  // Reorder a text note up/down within the text-note ordering, persisting both
+  // affected notes' order values.
+  const moveNote = useCallback((id: string, direction: "up" | "down") => {
+    const all = notesRef.current;
+    // Work within the same pin group so pinned notes stay above unpinned ones.
+    const current = all.find((n) => n._id === id);
+    if (!current) return;
+
+    const sameType = all
+      .filter((n) => n.type === current.type && !!n.pinned === !!current.pinned)
+      .slice()
+      .sort((a, b) => (a.order ?? 0) - (b.order ?? 0) || (a._id < b._id ? -1 : 1));
+
+    const idx = sameType.findIndex((n) => n._id === id);
+    const swapWith = direction === "up" ? idx - 1 : idx + 1;
+    if (swapWith < 0 || swapWith >= sameType.length) return;
+
+    const a = sameType[idx];
+    const b = sameType[swapWith];
+    const aOrder = a.order ?? 0;
+    const bOrder = b.order ?? 0;
+
+    setNotes((prev) =>
+      prev.map((n) =>
+        n._id === a._id ? { ...n, order: bOrder } : n._id === b._id ? { ...n, order: aOrder } : n
+      )
+    );
+    notesService.update(a._id, { order: bOrder });
+    notesService.update(b._id, { order: aOrder });
   }, []);
 
   // Link/unlink two notes bidirectionally and persist both.
@@ -183,7 +229,7 @@ export function NotesProvider({ children }: { children: ReactNode }) {
   };
 
   return (
-    <NotesContext.Provider value={{ notes, isLoading, error, addNote, updateNote, saveNote, deleteNote, deleteMany, toggleLink, reload }}>
+    <NotesContext.Provider value={{ notes, isLoading, error, addNote, updateNote, saveNote, deleteNote, deleteMany, toggleLink, togglePin, moveNote, reload }}>
       {children}
     </NotesContext.Provider>
   );

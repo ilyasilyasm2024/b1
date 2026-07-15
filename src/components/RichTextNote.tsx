@@ -12,11 +12,18 @@ interface RichTextNoteProps {
   value: string;
   dir: NoteDir;
   collapsed: boolean;
+  pinned: boolean;
+  canPin: boolean;
+  isFirst: boolean;
+  isLast: boolean;
   selected: boolean;
   linkedNotes: LinkableNote[];
   availableToLink: LinkableNote[];
   onToggleSelect: () => void;
   onToggleCollapse: () => void;
+  onTogglePin: () => void;
+  onMoveUp: () => void;
+  onMoveDown: () => void;
   onTitleChange: (title: string) => void;
   onChange: (html: string) => void;
   onDirChange: (dir: NoteDir) => void;
@@ -34,11 +41,18 @@ export default function RichTextNote({
   value,
   dir,
   collapsed,
+  pinned,
+  canPin,
+  isFirst,
+  isLast,
   selected,
   linkedNotes,
   availableToLink,
   onToggleSelect,
   onToggleCollapse,
+  onTogglePin,
+  onMoveUp,
+  onMoveDown,
   onTitleChange,
   onChange,
   onDirChange,
@@ -81,9 +95,9 @@ export default function RichTextNote({
   };
 
   return (
-    <div className={`border rounded-lg bg-white ${selected ? "border-blue-500 ring-1 ring-blue-300" : "border-gray-200"}`}>
-      {/* Header row: select + collapse chevron + title (always visible) */}
-      <div className="flex items-center gap-2 px-2 py-1.5">
+    <div className={`border rounded-lg bg-white ${selected ? "border-blue-500 ring-1 ring-blue-300" : pinned ? "border-amber-300" : "border-gray-200"}`}>
+      {/* Header row: select + pin + collapse + move + title (always visible) */}
+      <div className="flex items-center gap-1 px-2 py-1.5">
         <input
           type="checkbox"
           checked={selected}
@@ -91,6 +105,20 @@ export default function RichTextNote({
           className="accent-blue-600 w-4 h-4 cursor-pointer shrink-0"
           title="Auswählen"
         />
+        {/* Pin */}
+        <button
+          onClick={onTogglePin}
+          disabled={!pinned && !canPin}
+          className={`p-1 rounded cursor-pointer shrink-0 transition-colors ${
+            pinned ? "text-amber-500 hover:text-amber-600" : canPin ? "text-gray-400 hover:text-amber-500" : "text-gray-200 cursor-not-allowed"
+          }`}
+          title={pinned ? "Anpinnen aufheben" : canPin ? "Anpinnen" : "Max. 5 Pins erreicht"}
+        >
+          <svg className="w-4 h-4" fill={pinned ? "currentColor" : "none"} stroke="currentColor" viewBox="0 0 24 24">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 5a2 2 0 012-2h10a2 2 0 012 2v16l-7-3.5L5 21V5z" />
+          </svg>
+        </button>
+        {/* Collapse */}
         <button
           onClick={onToggleCollapse}
           className="p-1 hover:bg-gray-100 rounded cursor-pointer shrink-0"
@@ -103,6 +131,28 @@ export default function RichTextNote({
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
           </svg>
         </button>
+        {/* Move up/down */}
+        <button
+          onClick={onMoveUp}
+          disabled={isFirst}
+          className={`p-1 rounded shrink-0 ${isFirst ? "text-gray-200 cursor-not-allowed" : "text-gray-400 hover:text-gray-700 cursor-pointer"}`}
+          title="Nach oben"
+        >
+          <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 15l7-7 7 7" />
+          </svg>
+        </button>
+        <button
+          onClick={onMoveDown}
+          disabled={isLast}
+          className={`p-1 rounded shrink-0 ${isLast ? "text-gray-200 cursor-not-allowed" : "text-gray-400 hover:text-gray-700 cursor-pointer"}`}
+          title="Nach unten"
+        >
+          <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+          </svg>
+        </button>
+        {/* Title */}
         <input
           type="text"
           value={title}
@@ -115,6 +165,11 @@ export default function RichTextNote({
           placeholder="Titel..."
           className="flex-1 min-w-0 text-sm font-bold text-gray-800 placeholder-gray-400 focus:outline-none bg-transparent"
         />
+        {pinned && (
+          <svg className="w-3.5 h-3.5 text-amber-500 shrink-0" fill="currentColor" viewBox="0 0 24 24" title="Angeheftet">
+            <path d="M9 4h6l-1 6 3 3H7l3-3-1-6z" />
+          </svg>
+        )}
         {collapsed && linkedNotes.length > 0 && (
           <span className="shrink-0 text-[10px] text-gray-400 flex items-center gap-0.5" title={`${linkedNotes.length} verknüpft`}>
             <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">

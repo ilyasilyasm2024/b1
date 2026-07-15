@@ -12,7 +12,7 @@ interface NotesPanelProps {
 
 export default function NotesPanel({ isOpen, onClose }: NotesPanelProps) {
   const { user } = useAuth();
-  const { notes, isLoading, error, addNote, updateNote, saveNote, deleteNote, deleteMany, toggleLink } = useNotes();
+  const { notes, isLoading, error, addNote, updateNote, saveNote, deleteNote, deleteMany, toggleLink, togglePin, moveNote } = useNotes();
   const [confirmDeleteId, setConfirmDeleteId] = useState<string | null>(null);
   const [selectedIds, setSelectedIds] = useState<Set<string>>(new Set());
   const [confirmBulk, setConfirmBulk] = useState(false);
@@ -21,7 +21,17 @@ export default function NotesPanel({ isOpen, onClose }: NotesPanelProps) {
 
   if (!isOpen) return null;
 
-  const textNotes = notes.filter((n) => n.type === "text");
+  // Pinned first, then by manual order, then newest first as a stable fallback.
+  const sortNotes = (list: typeof notes) =>
+    list.slice().sort((a, b) => {
+      if (!!b.pinned !== !!a.pinned) return b.pinned ? 1 : -1;
+      const ao = a.order ?? 0;
+      const bo = b.order ?? 0;
+      if (ao !== bo) return ao - bo;
+      return new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime();
+    });
+
+  const textNotes = sortNotes(notes.filter((n) => n.type === "text"));
   const tickNotes = notes.filter((n) => n.type === "tick");
 
   const toggleSelect = (id: string) => {
@@ -58,6 +68,31 @@ export default function NotesPanel({ isOpen, onClose }: NotesPanelProps) {
     setConfirmBulk(false);
     deleteMany([...selectedIds]);
     setSelectedIds(new Set());
+  };
+
+  const MAX_PINS = 5;
+  const pinnedCount = textNotes.filter((n) => n.pinned).length;
+
+  const togglePin = (id: string) => {
+    const note = notes.find((n) => n._id === id);
+    if (!note) return;
+    if (!note.pinned && pinnedCount >= MAX_PINS) return; // enforce max 5
+    updateNote(id, { pinned: !note.pinned });
+  };
+
+  const moveNote = (id: string, direction: "up" | "down") => {
+    const idx = textNotes.findIndex((n) => n._id === id);
+    if (idx < 0) return;
+    const swapIdx = direction === "up" ? idx - 1 : idx + 1;
+    if (swapIdx < 0 || swapIdx >= textNotes.length) return;
+    const currentOrder = textNotes[idx].order ?? 0;
+    const targetOrder = textNotes[swapIdx].order ?? 0;
+    if (currentOrder === targetOrder) {
+      updateNote(textNotes[idx]._id, { order: direction === "up" ? targetOrder - 1 : targetOrder + 1 });
+    } else {
+      updateNote(textNotes[idx]._id, { order: targetOrder });
+      updateNote(textNotes[swapIdx]._id, { order: currentOrder });
+    }
   };
 
   return (
@@ -232,30 +267,74 @@ export default function NotesPanel({ isOpen, onClose }: NotesPanelProps) {
                   )}
 
                   <div className="space-y-3">
-                    {textNotes.map((note) => (
-                      <RichTextNote
-                        key={note._id}
-                        title={note.title}
-                        value={note.content}
-                        dir={note.dir}
-                        collapsed={note.collapsed}
-                        selected={selectedIds.has(note._id)}
-                        linkedNotes={(note.links || [])
-                          .map((lid) => notes.find((n) => n._id === lid))
-                          .filter((n): n is typeof note => !!n)
-                          .map((n) => ({ _id: n._id, title: n.title, color: n.color }))}
-                        availableToLink={notes
-                          .filter((n) => n._id !== note._id && !(note.links || []).includes(n._id))
-                          .map((n) => ({ _id: n._id, title: n.title, color: n.color }))}
-                        onToggleSelect={() => toggleSelect(note._id)}
-                        onToggleCollapse={() => updateNote(note._id, { collapsed: !note.collapsed })}
-                        onTitleChange={(title) => updateNote(note._id, { title })}
-                        onChange={(html) => updateNote(note._id, { content: html })}
-                        onDirChange={(d) => updateNote(note._id, { dir: d })}
-                        onToggleLink={(otherId) => toggleLink(note._id, otherId)}
-                        onSave={() => saveNote(note._id)}
-                        onDelete={() => setConfirmDeleteId(note._id)}
-                      />
+                    {textNotes.map((note, index) => (
+                      <div key={note._id} className="flex items-start gap-1.5">
+                        {/* Order / pin controls */}
+                        <div className="flex flex-col items-center gap-0.5 pt-2 shrink-0">
+                          <button
+                            onClick={() => togglePin(note._id)}
+                            className={`p-0.5 rounded cursor-pointer ${note.pinned ? "text-amber-500" : "text-gray-300 hover:text-gray-500"}`}
+                            title={note.pinned ? "Lösen" : "Anheften"}
+                          >
+                            <svg className="w-4 h-4" fill={note.pinned ? "currentColor" : "none"} stroke="currentColor" viewBox="0 0 24 24">
+                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 5l7 7m0 0l7-7m-7 7v7" transform="rotate(45 12 12)" />
+                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.6} d="M9 4h6l-1 6 3 3H7l3-3-1-6z" />
+                            </svg>
+                          </button>
+                          <button
+                            onClick={() => moveNote(note._id, "up")}
+                            disabled={index === 0}
+                            className="p-0.5 rounded cursor-pointer text-gray-300 hover:text-gray-600 disabled:opacity-30 disabled:cursor-not-allowed"
+                            title="Nach oben"
+                          >
+                            <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 15l7-7 7 7" />
+                            </svg>
+                          </button>
+                          <button
+                            onClick={() => moveNote(note._id, "down")}
+                            disabled={index === textNotes.length - 1}
+                            className="p-0.5 rounded cursor-pointer text-gray-300 hover:text-gray-600 disabled:opacity-30 disabled:cursor-not-allowed"
+                            title="Nach unten"
+                          >
+                            <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+                            </svg>
+                          </button>
+                        </div>
+
+                        <div className="flex-1 min-w-0">
+                          <RichTextNote
+                            title={note.title}
+                            value={note.content}
+                            dir={note.dir}
+                            collapsed={note.collapsed}
+                            pinned={note.pinned}
+                            canPin={note.pinned || pinnedCount < MAX_PINS}
+                            isFirst={index === 0}
+                            isLast={index === textNotes.length - 1}
+                            selected={selectedIds.has(note._id)}
+                            linkedNotes={(note.links || [])
+                              .map((lid) => notes.find((n) => n._id === lid))
+                              .filter((n): n is typeof note => !!n)
+                              .map((n) => ({ _id: n._id, title: n.title, color: n.color }))}
+                            availableToLink={notes
+                              .filter((n) => n._id !== note._id && !(note.links || []).includes(n._id))
+                              .map((n) => ({ _id: n._id, title: n.title, color: n.color }))}
+                            onToggleSelect={() => toggleSelect(note._id)}
+                            onToggleCollapse={() => updateNote(note._id, { collapsed: !note.collapsed })}
+                            onTogglePin={() => togglePin(note._id)}
+                            onMoveUp={() => moveNote(note._id, "up")}
+                            onMoveDown={() => moveNote(note._id, "down")}
+                            onTitleChange={(title) => updateNote(note._id, { title })}
+                            onChange={(html) => updateNote(note._id, { content: html })}
+                            onDirChange={(d) => updateNote(note._id, { dir: d })}
+                            onToggleLink={(otherId) => toggleLink(note._id, otherId)}
+                            onSave={() => saveNote(note._id)}
+                            onDelete={() => setConfirmDeleteId(note._id)}
+                          />
+                        </div>
+                      </div>
                     ))}
                   </div>
                   </>

@@ -14,6 +14,8 @@ export interface NoteBackend {
   color: string;
   dir: NoteDir;
   collapsed: boolean;
+  pinned: boolean;
+  order: number;
   links: string[];
   x: number;
   y: number;
@@ -28,6 +30,8 @@ export interface CreateNoteData {
   color?: string;
   dir?: NoteDir;
   collapsed?: boolean;
+  pinned?: boolean;
+  order?: number;
   links?: string[];
   x?: number;
   y?: number;
@@ -40,6 +44,8 @@ export interface UpdateNoteData {
   color?: string;
   dir?: NoteDir;
   collapsed?: boolean;
+  pinned?: boolean;
+  order?: number;
   links?: string[];
   x?: number;
   y?: number;
