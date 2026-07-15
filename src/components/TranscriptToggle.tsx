@@ -1,5 +1,6 @@
 import { useState, useEffect, useRef, useCallback } from "react";
 import { loadTranscript, type Transcript, type TranscriptSegment } from "../services/transcripts";
+import { usePermissions } from "../context/Permissions";
 
 interface TranscriptToggleProps {
   /** e.g. "module1" */
@@ -17,6 +18,7 @@ interface TranscriptToggleProps {
  * with playback and allows clicking a segment to seek.
  */
 export default function TranscriptToggle({ module, fileName, audioRef }: TranscriptToggleProps) {
+  const { hasFeature } = usePermissions();
   const [open, setOpen] = useState(false);
   const [transcript, setTranscript] = useState<Transcript | null>(null);
   const [loading, setLoading] = useState(false);
@@ -129,6 +131,14 @@ export default function TranscriptToggle({ module, fileName, audioRef }: Transcr
 
   return (
     <div ref={selfRef} className="mt-1">
+      {!hasFeature("audioTranscript") ? (
+        <span className="text-[11px] text-gray-400 flex items-center gap-1 cursor-not-allowed">
+          <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
+          </svg>
+          Transkript (Platinum+)
+        </span>
+      ) : (
       <button
         onClick={() => setOpen((v) => !v)}
         className="text-[11px] text-blue-600 hover:text-blue-800 cursor-pointer flex items-center gap-1"
@@ -138,8 +148,9 @@ export default function TranscriptToggle({ module, fileName, audioRef }: Transcr
         </svg>
         {open ? "Transkript ausblenden" : "Transkript anzeigen"}
       </button>
+      )}
 
-      {open && (
+      {open && hasFeature("audioTranscript") && (
         <div
           ref={containerRef}
           className="mt-2 border border-gray-200 rounded-lg bg-gray-50 overflow-hidden"
