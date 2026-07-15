@@ -166,9 +166,11 @@ export default function RichTextNote({
           className="flex-1 min-w-0 text-sm font-bold text-gray-800 placeholder-gray-400 focus:outline-none bg-transparent"
         />
         {pinned && (
-          <svg className="w-3.5 h-3.5 text-amber-500 shrink-0" fill="currentColor" viewBox="0 0 24 24" title="Angeheftet">
-            <path d="M9 4h6l-1 6 3 3H7l3-3-1-6z" />
-          </svg>
+          <span title="Angeheftet" className="shrink-0">
+            <svg className="w-3.5 h-3.5 text-amber-500" fill="currentColor" viewBox="0 0 24 24">
+              <path d="M9 4h6l-1 6 3 3H7l3-3-1-6z" />
+            </svg>
+          </span>
         )}
         {collapsed && linkedNotes.length > 0 && (
           <span className="shrink-0 text-[10px] text-gray-400 flex items-center gap-0.5" title={`${linkedNotes.length} verknüpft`}>

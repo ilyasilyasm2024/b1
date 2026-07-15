@@ -12,7 +12,7 @@ interface NotesPanelProps {
 
 export default function NotesPanel({ isOpen, onClose }: NotesPanelProps) {
   const { user } = useAuth();
-  const { notes, isLoading, error, addNote, updateNote, saveNote, deleteNote, deleteMany, toggleLink, togglePin, moveNote } = useNotes();
+  const { notes, isLoading, error, addNote, updateNote, saveNote, deleteNote, deleteMany, toggleLink } = useNotes();
   const [confirmDeleteId, setConfirmDeleteId] = useState<string | null>(null);
   const [selectedIds, setSelectedIds] = useState<Set<string>>(new Set());
   const [confirmBulk, setConfirmBulk] = useState(false);
