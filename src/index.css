@@ -14,3 +14,8 @@
   list-style: decimal;
   padding-left: 1.25rem;
 }
+
+/* Theme-aware overrides: module cards pick up theme colors via CSS variables */
+[style*="--theme-page-bg"] .rounded-xl {
+  border-color: var(--theme-card-border);
+}

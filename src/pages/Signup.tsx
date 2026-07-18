@@ -1,8 +1,9 @@
-import { useState, type FormEvent } from "react";
-import { Link } from "react-router-dom";
-import { authService } from "../services/auth";
+import { useState, useEffect, type FormEvent } from "react";
+import { Link, useSearchParams } from "react-router-dom";
+import { authService, type ReferralValidation } from "../services/auth";
 
 export default function Signup() {
+  const [searchParams] = useSearchParams();
 
   const [form, setForm] = useState({
     username: "",
@@ -18,6 +19,19 @@ export default function Signup() {
   const [isLoading, setIsLoading] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+  const [referral, setReferral] = useState<ReferralValidation | null>(null);
+
+  // Capture ?ref=CODE from the URL and validate it
+  useEffect(() => {
+    const ref = searchParams.get("ref");
+    if (ref) {
+      authService.validateReferral(ref).then((res) => {
+        if (res.data?.valid) {
+          setReferral(res.data);
+        }
+      });
+    }
+  }, [searchParams]);
 
   const updateField = (field: string, value: string) => {
     setForm((prev) => ({ ...prev, [field]: value }));
@@ -41,6 +55,7 @@ export default function Signup() {
       firstName: form.firstName,
       lastName: form.lastName,
       password: form.password,
+      ...(referral?.referralCode ? { referralCode: referral.referralCode } : {}),
     });
 
     if (res.data) {
@@ -97,6 +112,19 @@ export default function Signup() {
           {success && (
             <div className="mb-4 p-3 rounded-lg bg-green-50 border border-green-200 text-green-700 text-sm">
               {success}
+            </div>
+          )}
+
+          {referral?.valid && (
+            <div className="mb-4 p-3 rounded-lg bg-emerald-50 border border-emerald-200 text-emerald-800 text-sm flex items-center gap-2">
+              <svg className="w-5 h-5 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+              </svg>
+              <span>
+                <strong>{referral.discountPercent}% Rabatt</strong> mit dem Code{" "}
+                <strong>{referral.referralCode}</strong>
+                {referral.influencerName ? ` (empfohlen von ${referral.influencerName})` : ""} wird beim Abo angewendet.
+              </span>
             </div>
           )}
 

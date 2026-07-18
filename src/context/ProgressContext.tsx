@@ -8,6 +8,11 @@ const MODULE_TOTALS: Record<string, number> = {
   "m3": 68, // Same structure as m1
   "m4": 67, // Lesen: 6+3+3+7+7+4=30, Hören: 10+5+7+8=30, Schreiben: 3, Sprechen: 4
   "m5": 67, // Lesen: 6+3+3+7+7+4=30, Hören: 10+5+7+8=30, Schreiben: 3, Sprechen: 4
+  "m6": 67, // Lesen: 6+3+3+7+7+4=30, Hören: 10+5+7+8=30, Schreiben: 3, Sprechen: 4
+  "m7": 67, // Lesen: 6+3+3+7+7+4=30, Hören: 10+5+7+8=30, Schreiben: 3, Sprechen: 4
+  "m8": 67, // Lesen: 6+3+3+7+7+4=30, Hören: 10+5+7+8=30, Schreiben: 3, Sprechen: 4
+  "m9": 67, // Lesen: 6+3+3+7+7+4=30, Hören: 10+5+7+8=30, Schreiben: 3, Sprechen: 4
+  "m10": 67, // Lesen: 6+3+3+7+7+4=30, Hören: 10+5+7+8=30, Schreiben: 3, Sprechen: 4
 };
 
 // Map of section IDs to their question counts for calculating progress from stored answers
@@ -81,6 +86,76 @@ const SECTION_QUESTION_COUNTS: Record<string, number> = {
   "m5-hoeren-teil4": 8,
   "m5-schreiben": 3,
   "m5-sprechen": 4,
+  // Module 6
+  "m6-lesen-teil1": 6,
+  "m6-lesen-teil2a": 3,
+  "m6-lesen-teil2b": 3,
+  "m6-lesen-teil3": 7,
+  "m6-lesen-teil4": 7,
+  "m6-lesen-teil5": 4,
+  "m6-hoeren-teil1-rf": 5,
+  "m6-hoeren-teil1-mc": 5,
+  "m6-hoeren-teil2": 5,
+  "m6-hoeren-teil3": 7,
+  "m6-hoeren-teil4": 8,
+  "m6-schreiben": 3,
+  "m6-sprechen": 4,
+  // Module 7
+  "m7-lesen-teil1": 6,
+  "m7-lesen-teil2a": 3,
+  "m7-lesen-teil2b": 3,
+  "m7-lesen-teil3": 7,
+  "m7-lesen-teil4": 7,
+  "m7-lesen-teil5": 4,
+  "m7-hoeren-teil1-rf": 5,
+  "m7-hoeren-teil1-mc": 5,
+  "m7-hoeren-teil2": 5,
+  "m7-hoeren-teil3": 7,
+  "m7-hoeren-teil4": 8,
+  "m7-schreiben": 3,
+  "m7-sprechen": 4,
+  // Module 8
+  "m8-lesen-teil1": 6,
+  "m8-lesen-teil2a": 3,
+  "m8-lesen-teil2b": 3,
+  "m8-lesen-teil3": 7,
+  "m8-lesen-teil4": 7,
+  "m8-lesen-teil5": 4,
+  "m8-hoeren-teil1-rf": 5,
+  "m8-hoeren-teil1-mc": 5,
+  "m8-hoeren-teil2": 5,
+  "m8-hoeren-teil3": 7,
+  "m8-hoeren-teil4": 8,
+  "m8-schreiben": 3,
+  "m8-sprechen": 4,
+  // Module 9
+  "m9-lesen-teil1": 6,
+  "m9-lesen-teil2a": 3,
+  "m9-lesen-teil2b": 3,
+  "m9-lesen-teil3": 7,
+  "m9-lesen-teil4": 7,
+  "m9-lesen-teil5": 4,
+  "m9-hoeren-teil1-rf": 5,
+  "m9-hoeren-teil1-mc": 5,
+  "m9-hoeren-teil2": 5,
+  "m9-hoeren-teil3": 7,
+  "m9-hoeren-teil4": 8,
+  "m9-schreiben": 3,
+  "m9-sprechen": 4,
+  // Module 10
+  "m10-lesen-teil1": 6,
+  "m10-lesen-teil2a": 3,
+  "m10-lesen-teil2b": 3,
+  "m10-lesen-teil3": 7,
+  "m10-lesen-teil4": 7,
+  "m10-lesen-teil5": 4,
+  "m10-hoeren-teil1-rf": 5,
+  "m10-hoeren-teil1-mc": 5,
+  "m10-hoeren-teil2": 5,
+  "m10-hoeren-teil3": 7,
+  "m10-hoeren-teil4": 8,
+  "m10-schreiben": 3,
+  "m10-sprechen": 4,
 };
 
 interface ProgressContextType {

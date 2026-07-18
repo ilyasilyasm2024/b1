@@ -6,6 +6,14 @@ export interface SignupData {
   firstName: string;
   lastName: string;
   password: string;
+  referralCode?: string;
+}
+
+export interface ReferralValidation {
+  valid: boolean;
+  referralCode?: string;
+  discountPercent?: number;
+  influencerName?: string;
 }
 
 export interface LoginData {
@@ -56,4 +64,7 @@ export const authService = {
     api.post<MessageResponse>("/auth/reset-password", { token, password }),
 
   getProfile: () => api.get<User>("/users/me"),
+
+  validateReferral: (code: string) =>
+    api.get<ReferralValidation>(`/affiliate/validate/${encodeURIComponent(code)}`),
 };
