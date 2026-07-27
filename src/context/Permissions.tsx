@@ -8,7 +8,7 @@ export type PlanType = "beta" | "free" | "silver" | "gold" | "platinum" | "lifet
 // Plan limits configuration
 const PLAN_LIMITS = {
   beta: {
-    modelTests: 15,
+    modelTests: 0,
     vocabularyCapacity: -1,
     schreibenSaves: -1,
     sprechenRecordings: -1,
@@ -23,7 +23,7 @@ const PLAN_LIMITS = {
     advancedSuggestions: true,
   },
   free: {
-    modelTests: 1,
+    modelTests: 0,
     vocabularyCapacity: 50,
     schreibenSaves: 2,
     sprechenRecordings: 2,
@@ -38,7 +38,7 @@ const PLAN_LIMITS = {
     advancedSuggestions: false,
   },
   silver: {
-    modelTests: 5,
+    modelTests: 0,
     vocabularyCapacity: 500,
     schreibenSaves: 4,
     sprechenRecordings: 4,
@@ -53,7 +53,7 @@ const PLAN_LIMITS = {
     advancedSuggestions: false,
   },
   gold: {
-    modelTests: 15,
+    modelTests: 0,
     vocabularyCapacity: 2500,
     schreibenSaves: 15,
     sprechenRecordings: 15,
@@ -68,7 +68,7 @@ const PLAN_LIMITS = {
     advancedSuggestions: false,
   },
   platinum: {
-    modelTests: 15,
+    modelTests: 0,
     vocabularyCapacity: -1,
     schreibenSaves: 60,
     sprechenRecordings: 60,
@@ -83,7 +83,7 @@ const PLAN_LIMITS = {
     advancedSuggestions: true,
   },
   lifetime: {
-    modelTests: 15,
+    modelTests: 0,
     vocabularyCapacity: -1,
     schreibenSaves: 60,
     sprechenRecordings: 60,
@@ -174,6 +174,7 @@ export function PermissionsProvider({ children }: { children: ReactNode }) {
     expiresAt,
 
     canAccessModelTest: (testNumber: number) => {
+      return false
       return testNumber <= effectiveLimits.modelTests;
     },
 

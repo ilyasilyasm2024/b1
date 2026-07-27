@@ -1,10 +1,11 @@
 import { useState, type FormEvent } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useNavigate, useSearchParams } from "react-router-dom";
 import { authService } from "../services/auth";
 import { useAuth } from "../context/AuthContext";
 
 export default function Login() {
   const navigate = useNavigate();
+  const [searchParams] = useSearchParams();
   const { login } = useAuth();
 
   const [identifier, setIdentifier] = useState("");
@@ -27,7 +28,8 @@ export default function Login() {
 
     if (res.data) {
       login(res.data.token, res.data.user);
-      navigate("/");
+      const redirect = searchParams.get("redirect") || "/";
+      navigate(redirect);
     } else {
       const errMsg = res.error || "Login failed";
       setError(errMsg);

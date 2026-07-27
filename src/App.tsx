@@ -61,6 +61,8 @@ function AppContent() {
   const m15Progress = getModuleProgress("m15");
 
   const toggleModule = (key: string) => {
+    // All Modelltests require a signed-in account.
+    if (!user) return;
     setOpenModules((prev) => ({ ...prev, [key]: !prev[key] }));
   };
 
@@ -184,8 +186,8 @@ function AppContent() {
           </p>
         </div>
 
-        {/* Modules */}
-        <div className="space-y-3">
+        {/* Modules — locked (grayed) until the user signs in */}
+        <div className={`space-y-3 ${!user ? "opacity-50 grayscale pointer-events-none select-none" : ""}`}>
           {/* Module 1 */}
           <div className="rounded-xl border border-gray-200 bg-white overflow-hidden shadow-sm" data-tour="module-1">
             <button
