@@ -1,5 +1,5 @@
 import { Link } from "react-router-dom";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useAuth } from "../context/AuthContext";
 import { payWithCard, type PaidPlan, type Billing } from "../services/billing";
 
@@ -287,6 +287,13 @@ export default function Pricing() {
     return plan.priceEur;
   };
 
+
+  useEffect(()=>{
+    setTimeout(()=>{
+      setPaymentModal(null);
+    },3000)
+  },[paymentModal])
+
   return (
     <div className="min-h-screen bg-gray-50 py-12 px-4">
       <div className="max-w-5xl mx-auto">
@@ -388,11 +395,16 @@ export default function Pricing() {
         {/* Footer */}
         <div className="mt-12 text-center">
           <p className="text-xs text-gray-400">Secure payment by credit card. Prices in EUR. Cancel anytime.</p>
+         {paymentModal && (
+  <p className="text-center text-sm font-medium text-amber-600 bg-amber-50 border border-amber-200 rounded-lg px-4 py-2 mt-3">
+    Coming soon
+  </p>
+)}
         </div>
       </div>
 
       {/* Payment Modal */}
-      {paymentModal && (
+      {/* {paymentModal && (
         <CardPaymentModal
           plan={paymentModal.plan}
           billing={billing}
@@ -404,7 +416,7 @@ export default function Pricing() {
             setSuccessPlan(paymentModal.plan);
           }}
         />
-      )}
+      )} */}
     </div>
   );
 }
