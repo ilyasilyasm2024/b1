@@ -181,7 +181,7 @@ function AppContent() {
           </h1>
           <p className="text-gray-500 text-sm">Zertifikat B1 neu</p>
           <p className="text-gray-400 text-[10px] mt-1">
-            v0.0.1-beta · 05.07.2026 ·{" "}
+            v0.0.1-beta · testing mode ·{" "}
             {/* <Link to="/pricing" className="text-blue-500 hover:underline">Pricing</Link> */}
           </p>
         </div>
