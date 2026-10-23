@@ -35,7 +35,8 @@ export default function Login() {
     } else {
       setError(res.error || t("auth.login.failed"));
       // Show resend option if it's a verification issue
-      setNeedsVerification(res.code === "EMAIL_NOT_VERIFIED");
+      // Older backends send no code: fall back to the English message
+      setNeedsVerification(res.code === "EMAIL_NOT_VERIFIED" || (!res.code && /verify/i.test(res.error || "")));
     }
 
     setIsLoading(false);
