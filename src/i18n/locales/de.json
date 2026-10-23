@@ -27,7 +27,9 @@
     "LAST_NAME_REQUIRED": "Nachname ist erforderlich.",
     "LAST_NAME_TOO_LONG": "Der Nachname darf höchstens 50 Zeichen lang sein.",
     "LAST_NAME_TOO_SHORT": "Der Nachname muss mindestens 2 Zeichen lang sein.",
+    "MAX_COLOR_NOTES": "Du kannst bis zu 10 Farbnotizen haben. Lösche eine alte Notiz, um eine neue hinzuzufügen.",
     "MAX_RECORDINGS": "Du kannst maximal 5 Aufnahmen pro Teil speichern. Lösche eine alte, um eine neue zu speichern.",
+    "MAX_TEXT_NOTES": "Du kannst bis zu 20 Textnotizen haben. Lösche eine alte Notiz, um eine neue hinzuzufügen.",
     "MAX_VERSIONS": "Du kannst maximal 5 Versionen pro Aufgabe speichern. Lösche eine alte Version, um eine neue zu speichern.",
     "NETWORK": "Netzwerkfehler. Bitte überprüfe deine Verbindung.",
     "NOTE_NOT_FOUND": "Notiz nicht gefunden.",
@@ -98,9 +100,11 @@
     "VOCABULARY_DELETED": "Vokabel gelöscht."
   },
   "app": {
+    "chat": "Chat",
     "hello": "Hallo, {{name}}",
     "myNotes": "Meine Notizen",
     "myVocabulary": "Meine Vokabeln",
+    "navigation": "Hauptnavigation",
     "newModelltest": "Neuer Modelltest (Lesen)",
     "notes": "Notizen",
     "questionsCount": "{{answered}}/{{total}} Fragen",
@@ -282,8 +286,9 @@
   },
   "notes": {
     "colorNote": "Farbnotiz",
-    "colorNotes": "Farbnotizen ({{count}})",
+    "colorNotes": "Farbnotizen ({{count}}/{{max}})",
     "colorNotesHint": "Diese Notizen schweben über der App. Zieh sie an eine beliebige Stelle.",
+    "colorNotesHintMobile": "Tippe auf eine Notiz, um sie als Karte zu öffnen.",
     "colorNotesMovable": "Farbnotizen sind frei verschiebbar",
     "count_many": "{{count}} Notizen",
     "count_one": "{{count}} Notiz",
@@ -301,11 +306,13 @@
     "emptyNote": "(leer)",
     "loadFailed": "Notizen konnten nicht geladen werden.",
     "loginToSave": "Melde dich an, um deine Notizen zur Prüfung zu speichern.",
+    "openCard": "Als Karte öffnen",
+    "openCards": "Karten öffnen",
     "selectAll": "Alle auswählen",
     "selected": "{{count}} ausgewählt",
     "someDeleteFailed": "Einige Notizen konnten nicht gelöscht werden.",
     "textNote": "Textnotiz",
-    "textNotes": "Textnotizen ({{count}})"
+    "textNotes": "Textnotizen ({{count}}/{{max}})"
   },
   "pricing": {
     "allTests": "Alle ({{count}})",
@@ -369,9 +376,11 @@
     "clearFormatting": "Formatierung entfernen",
     "collapse": "Schließen",
     "contentPlaceholder": "Deine Notiz zur Prüfung...",
+    "dragToReorder": "Zum Sortieren ziehen",
     "expand": "Öffnen",
     "highlight": "Markieren",
     "italic": "Kursiv",
+    "limitHint": "Eine Notiz kann bis zu 5000 Zeichen enthalten, Formatierung inklusive.",
     "link": "Verknüpfen",
     "linkTitle": "Mit anderer Notiz verknüpfen",
     "linkedCount": "{{count}} verknüpft",
@@ -382,6 +391,9 @@
     "pin": "Anpinnen (max. 5)",
     "rtl": "Rechts nach links (RTL)",
     "select": "Auswählen",
+    "showLinked_many": "{{count}} verknüpfte Notizen zeigen",
+    "showLinked_one": "Verknüpfte Notiz zeigen",
+    "showLinked_other": "{{count}} verknüpfte Notizen zeigen",
     "strikethrough": "Durchgestrichen",
     "textColor": "Textfarbe",
     "titlePlaceholder": "Titel...",
@@ -389,6 +401,12 @@
     "unlink": "Verknüpfung entfernen",
     "unpin": "Anpinnen aufheben",
     "untitled": "(ohne Titel)"
+  },
+  "stickyBoard": {
+    "add": "Neue Farbnotiz",
+    "goTo": "Zu Karte {{n}}",
+    "open": "Farbnotizen öffnen",
+    "title": "Farbnotizen"
   },
   "streak": {
     "active": "Aktiv",
@@ -405,7 +423,7 @@
   },
   "theme": {
     "addSticker": "{{emoji}} hinzufügen",
-    "boysDescription": "Dunkel, Navy & Stark",
+    "boysDescription": "Mittelblau & kräftig",
     "button": "Design",
     "colorScheme": "Farbschema",
     "customize": "Design anpassen",
@@ -414,7 +432,8 @@
     "girlsDescription": "Rosa, Pink & Lila",
     "removeSticker": "Entfernen",
     "removeStickers": "Alle Sticker entfernen",
-    "stickers": "Hintergrund-Sticker ({{count}})"
+    "stickers": "Hintergrund-Sticker ({{count}})",
+    "stickersNotInStandard": "🎈 Hintergrund-Sticker gibt es in Pink Dream und Ocean Blue."
   },
   "timer": {
     "overtime": "Über!",

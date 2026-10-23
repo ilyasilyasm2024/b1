@@ -74,7 +74,7 @@ export default function Timer({ timeLimit: initialTimeLimit }: TimerProps) {
   const progress = Math.min((seconds / timeLimitSeconds) * 100, 100);
 
   return (
-    <div className="flex items-center gap-1.5">
+    <div className="flex items-center gap-1.5 bg-white border border-gray-200 rounded-lg px-2 py-1 shadow-sm">
       {/* Time selector */}
       <select
         value={timeLimit}
@@ -101,7 +101,7 @@ export default function Timer({ timeLimit: initialTimeLimit }: TimerProps) {
       </span>
 
       {/* Progress bar */}
-      <div className="w-12 sm:w-20 h-1.5 bg-gray-200 rounded-full overflow-hidden">
+      <div className="hidden sm:block w-20 h-1.5 bg-gray-200 rounded-full overflow-hidden">
         <div
           className={`h-full rounded-full transition-all duration-1000 ${
             isOverTime ? "bg-red-500" : progress > 75 ? "bg-yellow-500" : "bg-emerald-500"

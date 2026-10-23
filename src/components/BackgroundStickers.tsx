@@ -4,13 +4,14 @@ import { useTranslation } from "react-i18next";
 
 /**
  * Renders decorative background stickers that users can drag to personalize
- * their study space. Sits behind the main content (z-index 0, pointer-events
- * only on the stickers themselves).
+ * their study space. Sits behind the main content (z-index 0; the app content is
+ * raised above it), pointer-events only on the stickers themselves.
+ * Hidden in the Standard theme, which stays plain.
  */
 export default function BackgroundStickers() {
-  const { stickers, moveSticker, removeSticker } = useTheme();
+  const { preset, stickers, moveSticker, removeSticker } = useTheme();
 
-  if (stickers.length === 0) return null;
+  if (preset === "default" || stickers.length === 0) return null;
 
   return (
     <div className="fixed inset-0 z-0 pointer-events-none overflow-hidden">
@@ -66,7 +67,7 @@ function DraggableSticker({
 
   return (
     <div
-      className="absolute pointer-events-auto cursor-grab active:cursor-grabbing select-none group"
+      className="absolute pointer-events-auto cursor-grab active:cursor-grabbing select-none touch-none group"
       style={{
         left: sticker.x,
         top: sticker.y,
@@ -79,14 +80,15 @@ function DraggableSticker({
       onPointerMove={handlePointerMove}
       onPointerUp={handlePointerUp}
     >
-      <span className="group-hover:opacity-100 opacity-60 transition-opacity">{sticker.emoji}</span>
+      <span className="group-hover:opacity-100 opacity-60 pointer-coarse:opacity-100 transition-opacity">{sticker.emoji}</span>
       {/* Remove button on hover */}
       <button
+        onPointerDown={(e) => e.stopPropagation()}
         onClick={(e) => {
           e.stopPropagation();
           onRemove();
         }}
-        className="absolute -top-2 -right-2 w-4 h-4 bg-red-500 text-white rounded-full text-[8px] flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity cursor-pointer"
+        className="absolute -top-2 -right-2 w-4 h-4 pointer-coarse:w-5 pointer-coarse:h-5 bg-red-500 text-white rounded-full text-[8px] pointer-coarse:text-[10px] flex items-center justify-center pointer-fine:opacity-0 pointer-fine:group-hover:opacity-100 transition-opacity cursor-pointer"
         title={t("theme.removeSticker")}
       >
         ×

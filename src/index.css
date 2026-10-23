@@ -19,3 +19,18 @@
 [style*="--theme-page-bg"] .rounded-xl {
   border-color: var(--theme-card-border);
 }
+
+/* Flash on notes linked to the one whose link icon was clicked (color = the link group's color) */
+@keyframes note-link-flash {
+  0%, 100% { box-shadow: 0 0 0 0 transparent; }
+  50% { box-shadow: 0 0 0 3px var(--flash-color, #3b82f6); }
+}
+.note-link-flash {
+  animation: note-link-flash 0.5s ease-in-out 4;
+}
+@media (prefers-reduced-motion: reduce) {
+  .note-link-flash {
+    animation: none;
+    box-shadow: 0 0 0 3px var(--flash-color, #3b82f6);
+  }
+}

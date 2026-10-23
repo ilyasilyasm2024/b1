@@ -37,6 +37,9 @@ import ComingSoon from "./components/ComingSoon";
 import GlobalChat from "./components/GlobalChat";
 import StreakCalendar from "./components/StreakCalendar";
 import LanguageSwitcher from "./components/LanguageSwitcher";
+import MobileDock from "./components/MobileDock";
+import MobileStickyNotes from "./components/MobileStickyNotes";
+import useIsMobile from "./hooks/useIsMobile";
 import { useTranslation } from "react-i18next";
 
 function AppContent() {
@@ -44,8 +47,11 @@ function AppContent() {
   const [vocabOpen, setVocabOpen] = useState(false);
   const [notesOpen, setNotesOpen] = useState(false);
   const [chatOpen, setChatOpen] = useState(false);
+  // Phone color-note board: opened from its stack button or from a note in the notes panel
+  const [stickyBoard, setStickyBoard] = useState<{ open: boolean; focusId?: string }>({ open: false });
   const { user, logout } = useAuth();
   const { t } = useTranslation();
+  const isMobile = useIsMobile();
   const { getModuleProgress } = useProgress();
   const { plan } = usePermissions();
   const m1Progress = getModuleProgress("m1");
@@ -72,7 +78,7 @@ function AppContent() {
   };
 
   return (
-    <div className="min-h-screen pt-16 pb-8 relative" style={{ backgroundColor: "var(--theme-page-bg)", color: "var(--theme-page-text)" }}>
+    <div className="min-h-screen pt-16 pb-28 sm:pb-8 relative" style={{ backgroundColor: "var(--theme-page-bg)", color: "var(--theme-page-text)" }}>
       <BackgroundStickers />
       <GuidedTour />
       <ComingSoon onOpenChat={() => setChatOpen(true)} />
@@ -80,7 +86,8 @@ function AppContent() {
       <div className="fixed top-0 left-0 right-0 z-40 backdrop-blur-sm border-b px-3 py-2" style={{ backgroundColor: "var(--theme-bar-bg)", borderColor: "var(--theme-bar-border)" }}>
         <div className="max-w-4xl mx-auto flex items-center justify-between gap-2">
           <div className="flex items-center gap-2 shrink-0">
-            {user && (
+            {/* On phones these move to the bottom dock */}
+            {!isMobile && user && (
               <button
                 onClick={() => setNotesOpen(true)}
                 className="bg-white border border-gray-200 rounded-lg px-2.5 py-1.5 shadow-sm flex items-center gap-1.5 cursor-pointer hover:bg-gray-50 transition-colors shrink-0"
@@ -93,6 +100,7 @@ function AppContent() {
                 <span className="text-xs font-medium text-gray-700 hidden sm:inline">{t("app.notes")}</span>
               </button>
             )}
+            {!isMobile && (
             <button
               onClick={() => setVocabOpen(true)}
               className="bg-white border border-gray-200 rounded-lg px-2.5 py-1.5 shadow-sm flex items-center gap-1.5 cursor-pointer hover:bg-gray-50 transition-colors shrink-0"
@@ -104,7 +112,8 @@ function AppContent() {
               </svg>
               <span className="text-xs font-medium text-gray-700 hidden sm:inline">{t("app.vocabulary")}</span>
             </button>
-            <ThemePicker />
+            )}
+            {!isMobile && <ThemePicker />}
             <LanguageSwitcher />
           </div>
 
@@ -116,7 +125,7 @@ function AppContent() {
           <div className="flex items-center gap-2 shrink-0" data-tour="auth-section">
             {user ? (
               <>
-                <span className="text-xs text-gray-500 hidden sm:inline">
+                <span className="text-xs hidden sm:inline" style={{ color: "var(--theme-page-muted)" }}>
                   {t("app.hello", { name: user.firstName })}
                 </span>
                 {user.streak > 0 && (
@@ -153,6 +162,18 @@ function AppContent() {
         </div>
       </div>
 
+      {isMobile && (
+        <MobileDock
+          showNotes={!!user}
+          notesOpen={notesOpen}
+          vocabOpen={vocabOpen}
+          chatOpen={chatOpen}
+          onNotes={() => setNotesOpen((v) => !v)}
+          onVocab={() => setVocabOpen((v) => !v)}
+          onChat={() => setChatOpen((v) => !v)}
+        />
+      )}
+
       {/* Text Highlighter */}
       <TextHighlighter />
 
@@ -160,18 +181,36 @@ function AppContent() {
       <VocabularyPanel isOpen={vocabOpen} onClose={() => setVocabOpen(false)} />
 
       {/* Notes Panel (left, non-blocking) */}
-      <NotesPanel isOpen={notesOpen} onClose={() => setNotesOpen(false)} />
+      <NotesPanel
+        isOpen={notesOpen}
+        onClose={() => setNotesOpen(false)}
+        onOpenColorNote={isMobile ? (focusId) => setStickyBoard({ open: true, focusId }) : undefined}
+      />
 
       {/* Floating draggable color notes over the whole app */}
-      <FloatingNotes />
+      {/* Phones get a swipeable board instead of notes floating over the page */}
+      {isMobile ? (
+        user && (
+          <MobileStickyNotes
+            open={stickyBoard.open}
+            focusId={stickyBoard.focusId}
+            onOpenChange={(open) => setStickyBoard({ open })}
+          />
+        )
+      ) : (
+        <FloatingNotes />
+      )}
 
       {/* Global Chat Panel */}
       <GlobalChat isOpen={chatOpen} onClose={() => setChatOpen(false)} />
 
-      <div className="max-w-4xl mx-auto px-4">
+      {/* relative z-10: page content always stays above the background stickers.
+          pointer-events-none on the wrapper, header and module list (only the module cards take
+          input) so stickers around the cards can still be dragged, also with touch. */}
+      <div className="relative z-10 max-w-4xl mx-auto px-4 pointer-events-none">
         {/* Header */}
         <div className="text-center mb-8">
-          <h1 className="text-3xl font-bold text-gray-900 mb-1">
+          <h1 className="text-3xl font-bold mb-1" style={{ color: "var(--theme-page-text)" }}>
             {t("app.title")}
             <span className={`ml-2 inline-block text-[10px] font-semibold px-2 py-0.5 rounded-full align-middle ${
               plan === "beta" ? "bg-amber-100 text-amber-800" :
@@ -185,15 +224,15 @@ function AppContent() {
               {plan.toUpperCase()}
             </span>
           </h1>
-          <p className="text-gray-500 text-sm">Zertifikat B1 neu</p>
-          <p className="text-gray-400 text-[10px] mt-1">
+          <p className="text-sm" style={{ color: "var(--theme-page-muted)" }}>Zertifikat B1 neu</p>
+          <p className="text-[10px] mt-1 opacity-80" style={{ color: "var(--theme-page-muted)" }}>
             v0.0.1-beta · {t("app.testingMode")} ·{" "}
             {/* <Link to="/pricing" className="text-blue-500 hover:underline">Pricing</Link> */}
           </p>
         </div>
 
         {/* Modules — locked (grayed) until the user signs in */}
-        <div className={`space-y-3 ${!user ? "opacity-50 grayscale pointer-events-none select-none" : ""}`}>
+        <div className={`space-y-3 ${!user ? "opacity-50 grayscale select-none" : "[&>*]:pointer-events-auto"}`}>
           {/* Module 1 */}
           <div className="rounded-xl border border-gray-200 bg-white overflow-hidden shadow-sm" data-tour="module-1">
             <button

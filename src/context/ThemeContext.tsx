@@ -6,6 +6,8 @@ export interface ThemeColors {
   // Page
   pageBg: string;
   pageText: string;
+  /** Secondary text directly on the page background (subtitles, greeting) */
+  pageMuted: string;
   // Cards / modules
   cardBg: string;
   cardBorder: string;
@@ -45,6 +47,7 @@ const PRESETS: Record<ThemePreset, ThemeColors> = {
   default: {
     pageBg: "#f9fafb",
     pageText: "#111827",
+    pageMuted: "#6b7280",
     cardBg: "#ffffff",
     cardBorder: "#e5e7eb",
     accent: "#111827",
@@ -58,6 +61,7 @@ const PRESETS: Record<ThemePreset, ThemeColors> = {
   girls: {
     pageBg: "#fdf2f8",
     pageText: "#831843",
+    pageMuted: "#9d174d",
     cardBg: "#ffffff",
     cardBorder: "#fbcfe8",
     accent: "#db2777",
@@ -68,18 +72,20 @@ const PRESETS: Record<ThemePreset, ThemeColors> = {
     moduleRing: "#ec4899",
     moduleBadge: "#9d174d",
   },
+  // Medium blue: dark enough to feel bold, light enough to keep text readable (white 5.6:1, muted 4.6:1)
   boys: {
-    pageBg: "#0f172a",
-    pageText: "#e2e8f0",
-    cardBg: "#1e293b",
-    cardBorder: "#334155",
-    accent: "#3b82f6",
-    accentHover: "#2563eb",
+    pageBg: "#2f6aa8",
+    pageText: "#ffffff",
+    pageMuted: "#dbeafe",
+    cardBg: "#ffffff",
+    cardBorder: "#93c5fd",
+    accent: "#1d4ed8",
+    accentHover: "#1e40af",
     accentText: "#ffffff",
-    barBg: "rgba(15,23,42,0.95)",
-    barBorder: "#334155",
-    moduleRing: "#3b82f6",
-    moduleBadge: "#e2e8f0",
+    barBg: "rgba(39,90,145,0.95)",
+    barBorder: "#5b8cc4",
+    moduleRing: "#2563eb",
+    moduleBadge: "#1e3a8a",
   },
 };
 
@@ -116,6 +122,7 @@ export function ThemeProvider({ children }: { children: ReactNode }) {
     const root = document.documentElement;
     root.style.setProperty("--theme-page-bg", colors.pageBg);
     root.style.setProperty("--theme-page-text", colors.pageText);
+    root.style.setProperty("--theme-page-muted", colors.pageMuted);
     root.style.setProperty("--theme-card-bg", colors.cardBg);
     root.style.setProperty("--theme-card-border", colors.cardBorder);
     root.style.setProperty("--theme-accent", colors.accent);

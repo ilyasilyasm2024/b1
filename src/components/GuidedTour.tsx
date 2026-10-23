@@ -80,7 +80,7 @@ export default function GuidedTour() {
       {/* Help button - bottom right */}
       <button
         onClick={startTour}
-        className="fixed bottom-5 right-5 z-50 w-10 h-10 bg-gray-900 text-white rounded-full shadow-lg flex items-center justify-center cursor-pointer hover:bg-gray-700 transition-colors"
+        className="fixed bottom-24 sm:bottom-5 right-5 z-50 w-10 h-10 bg-gray-900 text-white rounded-full shadow-lg flex items-center justify-center cursor-pointer hover:bg-gray-700 transition-colors"
         title={t("tour.start")}
       >
         <span className="text-lg font-bold">?</span>

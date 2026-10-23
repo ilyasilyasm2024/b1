@@ -1,17 +1,24 @@
-import { useState } from "react";
+import { useRef, useState } from "react";
 import { Link } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
 import { useNotes } from "../context/NotesContext";
 import RichTextNote from "./RichTextNote";
 import ConfirmModal from "./ConfirmModal";
 import { useTranslation } from "react-i18next";
+import { NOTE_LIMITS } from "../services/notes";
+
+// Colors for groups of linked notes (one color per group of notes connected through links)
+const LINK_GROUP_COLORS = ["#3b82f6", "#10b981", "#f59e0b", "#8b5cf6", "#ef4444", "#06b6d4", "#ec4899", "#84cc16"];
+const FLASH_MS = 2000;
 
 interface NotesPanelProps {
   isOpen: boolean;
   onClose: () => void;
+  /** Phones: open the swipeable color-note board, optionally on a given note */
+  onOpenColorNote?: (id?: string) => void;
 }
 
-export default function NotesPanel({ isOpen, onClose }: NotesPanelProps) {
+export default function NotesPanel({ isOpen, onClose, onOpenColorNote }: NotesPanelProps) {
   const { user } = useAuth();
   const { t } = useTranslation();
   const { notes, isLoading, error, addNote, updateNote, saveNote, deleteNote, deleteMany, toggleLink } = useNotes();
@@ -20,6 +27,10 @@ export default function NotesPanel({ isOpen, onClose }: NotesPanelProps) {
   const [confirmBulk, setConfirmBulk] = useState(false);
   const [tickOpen, setTickOpen] = useState(true);
   const [textOpen, setTextOpen] = useState(true);
+  const [flashIds, setFlashIds] = useState<Set<string>>(new Set());
+  const [reorder, setReorder] = useState<{ dragId: string; overId: string | null } | null>(null);
+  const listRef = useRef<HTMLDivElement>(null);
+  const flashTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   if (!isOpen) return null;
 
@@ -35,6 +46,81 @@ export default function NotesPanel({ isOpen, onClose }: NotesPanelProps) {
 
   const textNotes = sortNotes(notes.filter((n) => n.type === "text"));
   const tickNotes = notes.filter((n) => n.type === "tick");
+
+  // Group notes connected through links (A–B and B–C are one group) and give each group a color,
+  // assigned in list order so the colors read top to bottom.
+  const groupColor = new Map<string, string>();
+  {
+    const ids = new Set(textNotes.map((n) => n._id));
+    const adj = new Map(textNotes.map((n) => [n._id, (n.links || []).filter((l) => ids.has(l))]));
+    let next = 0;
+    for (const start of textNotes) {
+      if (groupColor.has(start._id) || !adj.get(start._id)?.length) continue;
+      const color = LINK_GROUP_COLORS[next++ % LINK_GROUP_COLORS.length];
+      const stack = [start._id];
+      while (stack.length) {
+        const id = stack.pop()!;
+        if (groupColor.has(id)) continue;
+        groupColor.set(id, color);
+        stack.push(...(adj.get(id) || []));
+      }
+    }
+  }
+
+  // Swap the manual order of two text notes (falls back to list positions when their order values are equal).
+  const swapOrder = (draggedId: string, targetId: string) => {
+    const draggedIdx = textNotes.findIndex((n) => n._id === draggedId);
+    const targetIdx = textNotes.findIndex((n) => n._id === targetId);
+    if (draggedIdx < 0 || targetIdx < 0) return;
+    const draggedOrder = textNotes[draggedIdx].order ?? 0;
+    const targetOrder = textNotes[targetIdx].order ?? 0;
+    if (draggedOrder === targetOrder) {
+      updateNote(draggedId, { order: targetIdx });
+      updateNote(targetId, { order: draggedIdx });
+    } else {
+      updateNote(draggedId, { order: targetOrder });
+      updateNote(targetId, { order: draggedOrder });
+    }
+  };
+
+  // Reorder by dragging the ⋮⋮ handle. Pointer events (not HTML5 drag & drop) so it works with touch too.
+  const startReorder = (e: React.PointerEvent, id: string) => {
+    if (e.button !== 0) return;
+    e.preventDefault();
+    let over: string | null = null;
+    setReorder({ dragId: id, overId: null });
+    const onMove = (ev: PointerEvent) => {
+      const el = document.elementFromPoint(ev.clientX, ev.clientY)?.closest("[data-note-id]");
+      const hit = el?.getAttribute("data-note-id") ?? null;
+      over = hit && hit !== id ? hit : null;
+      setReorder({ dragId: id, overId: over });
+      // Auto-scroll the list when dragging near its top or bottom edge
+      const box = listRef.current?.getBoundingClientRect();
+      if (box && ev.clientY < box.top + 40) listRef.current?.scrollBy(0, -12);
+      else if (box && ev.clientY > box.bottom - 40) listRef.current?.scrollBy(0, 12);
+    };
+    const onEnd = (ev: PointerEvent) => {
+      window.removeEventListener("pointermove", onMove);
+      window.removeEventListener("pointerup", onEnd);
+      window.removeEventListener("pointercancel", onEnd);
+      if (ev.type === "pointerup" && over) swapOrder(id, over);
+      setReorder(null);
+    };
+    window.addEventListener("pointermove", onMove);
+    window.addEventListener("pointerup", onEnd);
+    window.addEventListener("pointercancel", onEnd);
+  };
+
+  // Briefly flash the given notes (restarting the animation on repeated clicks) and scroll to the first one.
+  const flashNotes = (ids: string[]) => {
+    if (flashTimer.current) clearTimeout(flashTimer.current);
+    setFlashIds(new Set());
+    requestAnimationFrame(() => {
+      setFlashIds(new Set(ids));
+      document.querySelector(`[data-note-id="${ids[0]}"]`)?.scrollIntoView({ behavior: "smooth", block: "nearest" });
+    });
+    flashTimer.current = setTimeout(() => setFlashIds(new Set()), FLASH_MS);
+  };
 
   const toggleSelect = (id: string) => {
     setSelectedIds((prev) => {
@@ -91,7 +177,9 @@ export default function NotesPanel({ isOpen, onClose }: NotesPanelProps) {
           <div>
             <h2 className="text-lg font-bold text-gray-800">{t("app.myNotes")}</h2>
             <p className="text-xs text-gray-500">
-              {t("notes.count", { count: notes.length })} · {t("notes.colorNotesMovable")}
+              {t("notes.count", { count: notes.length })}
+              {/* Color notes only float (and move) on larger screens */}
+              {!onOpenColorNote && <> · {t("notes.colorNotesMovable")}</>}
             </p>
           </div>
           <button
@@ -128,7 +216,9 @@ export default function NotesPanel({ isOpen, onClose }: NotesPanelProps) {
             <div className="px-5 py-3 border-b border-gray-100 flex gap-2">
               <button
                 onClick={() => addNote("text")}
-                className="flex-1 bg-black text-white px-3 py-2 rounded-lg text-sm font-medium cursor-pointer hover:bg-gray-800 flex items-center justify-center gap-1.5"
+                disabled={textNotes.length >= NOTE_LIMITS.text}
+                title={textNotes.length >= NOTE_LIMITS.text ? t("apiErrors.MAX_TEXT_NOTES") : undefined}
+                className="flex-1 bg-black text-white px-3 py-2 rounded-lg text-sm font-medium cursor-pointer hover:bg-gray-800 flex items-center justify-center gap-1.5 disabled:opacity-40 disabled:cursor-not-allowed"
               >
                 <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h7" />
@@ -137,14 +227,16 @@ export default function NotesPanel({ isOpen, onClose }: NotesPanelProps) {
               </button>
               <button
                 onClick={() => addNote("tick")}
-                className="flex-1 border border-gray-300 text-gray-700 px-3 py-2 rounded-lg text-sm font-medium cursor-pointer hover:bg-gray-50 flex items-center justify-center gap-1.5"
+                disabled={tickNotes.length >= NOTE_LIMITS.tick}
+                title={tickNotes.length >= NOTE_LIMITS.tick ? t("apiErrors.MAX_COLOR_NOTES") : undefined}
+                className="flex-1 border border-gray-300 text-gray-700 px-3 py-2 rounded-lg text-sm font-medium cursor-pointer hover:bg-gray-50 flex items-center justify-center gap-1.5 disabled:opacity-40 disabled:cursor-not-allowed"
               >
                 <span className="w-4 h-4 rounded-sm inline-block" style={{ backgroundColor: "#fca5a5" }} />
                 {t("notes.colorNote")}
               </button>
             </div>
 
-            <div className="flex-1 overflow-y-auto px-5 py-4 space-y-6">
+            <div ref={listRef} className="flex-1 overflow-y-auto px-5 py-4 space-y-6">
               {error && (
                 <p className="text-xs text-red-600 bg-red-50 border border-red-200 rounded p-2">{error}</p>
               )}
@@ -164,7 +256,7 @@ export default function NotesPanel({ isOpen, onClose }: NotesPanelProps) {
                     className="w-full flex items-center justify-between mb-2 cursor-pointer group"
                   >
                     <h3 className="text-xs font-bold text-gray-400 uppercase tracking-wide group-hover:text-gray-600">
-                      {t("notes.colorNotes", { count: tickNotes.length })}
+                      {t("notes.colorNotes", { count: tickNotes.length, max: NOTE_LIMITS.tick })}
                     </h3>
                     <svg
                       className={`w-4 h-4 text-gray-400 transition-transform ${tickOpen ? "rotate-180" : ""}`}
@@ -175,9 +267,25 @@ export default function NotesPanel({ isOpen, onClose }: NotesPanelProps) {
                   </button>
                   {tickOpen && (
                   <>
+                  {onOpenColorNote ? (
+                    <div className="flex items-center justify-between gap-2 mb-2">
+                      <p className="text-[11px] text-gray-400">{t("notes.colorNotesHintMobile")}</p>
+                      <button
+                        onClick={() => onOpenColorNote()}
+                        className="shrink-0 inline-flex items-center gap-1.5 rounded-full bg-gray-900 text-white px-3 py-1.5 text-[11px] font-medium cursor-pointer active:bg-gray-700"
+                      >
+                        <span className="relative w-3.5 h-3.5" aria-hidden="true">
+                          <span className="absolute inset-0 rounded-sm bg-amber-300 rotate-[-12deg]" />
+                          <span className="absolute inset-0 rounded-sm bg-pink-300 rotate-[8deg]" />
+                        </span>
+                        {t("notes.openCards")}
+                      </button>
+                    </div>
+                  ) : (
                   <p className="text-[11px] text-gray-400 mb-2">
                     {t("notes.colorNotesHint")}
                   </p>
+                  )}
                   <div className="flex flex-wrap gap-2">
                     {tickNotes.map((note) => (
                       <div
@@ -185,9 +293,22 @@ export default function NotesPanel({ isOpen, onClose }: NotesPanelProps) {
                         className="flex items-center gap-2 rounded-md px-2 py-1 text-xs text-gray-800 max-w-full"
                         style={{ backgroundColor: note.color }}
                       >
+                        {onOpenColorNote ? (
+                          <button
+                            onClick={() => onOpenColorNote(note._id)}
+                            className="truncate max-w-[160px] inline-flex items-center gap-1 cursor-pointer underline decoration-gray-700/30 underline-offset-2"
+                            title={t("notes.openCard")}
+                          >
+                            <span className="truncate">{note.title.trim() || note.content.trim() || t("notes.emptyNote")}</span>
+                            <svg className="w-3 h-3 shrink-0 text-gray-700/60" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M14 5h5v5M19 5l-8 8M10 5H6a1 1 0 00-1 1v12a1 1 0 001 1h12a1 1 0 001-1v-4" />
+                            </svg>
+                          </button>
+                        ) : (
                         <span className="truncate max-w-[160px]">
                           {note.title.trim() || note.content.trim() || t("notes.emptyNote")}
                         </span>
+                        )}
                         <button
                           onClick={() => setConfirmDeleteId(note._id)}
                           className="text-gray-700/60 hover:text-red-600 cursor-pointer shrink-0"
@@ -208,33 +329,31 @@ export default function NotesPanel({ isOpen, onClose }: NotesPanelProps) {
               {/* Text notes */}
               {textNotes.length > 0 && (
                 <div>
-                  <div className="flex items-center justify-between mb-2">
-                    <button
-                      onClick={() => setTextOpen((v) => !v)}
-                      className="flex items-center gap-1 cursor-pointer group"
+                  <button
+                    onClick={() => setTextOpen((v) => !v)}
+                    className="w-full flex items-center justify-between mb-2 cursor-pointer group"
+                  >
+                    <h3 className="text-xs font-bold text-gray-400 uppercase tracking-wide group-hover:text-gray-600">
+                      {t("notes.textNotes", { count: textNotes.length, max: NOTE_LIMITS.text })}
+                    </h3>
+                    <svg
+                      className={`w-4 h-4 text-gray-400 transition-transform ${textOpen ? "rotate-180" : ""}`}
+                      fill="none" stroke="currentColor" viewBox="0 0 24 24"
                     >
-                      <svg
-                        className={`w-4 h-4 text-gray-400 transition-transform ${textOpen ? "rotate-180" : ""}`}
-                        fill="none" stroke="currentColor" viewBox="0 0 24 24"
-                      >
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
-                      </svg>
-                      <h3 className="text-xs font-bold text-gray-400 uppercase tracking-wide group-hover:text-gray-600">
-                        {t("notes.textNotes", { count: textNotes.length })}
-                      </h3>
-                    </button>
-                    {textOpen && (
-                      <button
-                        onClick={toggleSelectAll}
-                        className="text-[11px] text-gray-500 hover:text-gray-800 cursor-pointer"
-                      >
-                        {allTextSelected ? t("notes.deselectAll") : t("notes.selectAll")}
-                      </button>
-                    )}
-                  </div>
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+                    </svg>
+                  </button>
 
                   {textOpen && (
                   <>
+                  <div className="flex justify-end mb-2">
+                    <button
+                      onClick={toggleSelectAll}
+                      className="text-[11px] text-gray-500 hover:text-gray-800 cursor-pointer"
+                    >
+                      {allTextSelected ? t("notes.deselectAll") : t("notes.selectAll")}
+                    </button>
+                  </div>
                   {/* Bulk action bar */}
                   {selectedIds.size > 0 && (
                     <div className="flex items-center justify-between bg-blue-50 border border-blue-200 rounded-lg px-3 py-2 mb-3">
@@ -254,7 +373,7 @@ export default function NotesPanel({ isOpen, onClose }: NotesPanelProps) {
                   )}
 
                   <div className="space-y-2">
-                    {textNotes.map((note, index) => (
+                    {textNotes.map((note) => (
                       <RichTextNote
                         key={note._id}
                         id={note._id}
@@ -265,11 +384,14 @@ export default function NotesPanel({ isOpen, onClose }: NotesPanelProps) {
                         pinned={note.pinned}
                         canPin={note.pinned || pinnedCount < MAX_PINS}
                         selected={selectedIds.has(note._id)}
+                        groupColor={groupColor.get(note._id)}
+                        flashing={flashIds.has(note._id)}
+                        onShowLinks={flashNotes}
                         linkedNotes={(note.links || [])
-                          .map((lid) => notes.find((n) => n._id === lid))
+                          .map((lid) => textNotes.find((n) => n._id === lid))
                           .filter((n): n is typeof note => !!n)
                           .map((n) => ({ _id: n._id, title: n.title, color: n.color }))}
-                        availableToLink={notes
+                        availableToLink={textNotes
                           .filter((n) => n._id !== note._id && !(note.links || []).includes(n._id))
                           .map((n) => ({ _id: n._id, title: n.title, color: n.color }))}
                         onToggleSelect={() => toggleSelect(note._id)}
@@ -281,31 +403,9 @@ export default function NotesPanel({ isOpen, onClose }: NotesPanelProps) {
                         onToggleLink={(otherId) => toggleLink(note._id, otherId)}
                         onSave={() => saveNote(note._id)}
                         onDelete={() => setConfirmDeleteId(note._id)}
-                        onDragStart={(e) => {
-                          e.dataTransfer.setData("text/plain", note._id);
-                          e.dataTransfer.effectAllowed = "move";
-                        }}
-                        onDragOver={(e) => {
-                          e.preventDefault();
-                          e.dataTransfer.dropEffect = "move";
-                        }}
-                        onDrop={(e) => {
-                          e.preventDefault();
-                          const draggedId = e.dataTransfer.getData("text/plain");
-                          if (!draggedId || draggedId === note._id) return;
-                          const draggedIdx = textNotes.findIndex((n) => n._id === draggedId);
-                          if (draggedIdx < 0) return;
-                          // Swap order values
-                          const draggedOrder = textNotes[draggedIdx].order ?? 0;
-                          const targetOrder = note.order ?? 0;
-                          if (draggedOrder === targetOrder) {
-                            updateNote(draggedId, { order: index });
-                            updateNote(note._id, { order: draggedIdx });
-                          } else {
-                            updateNote(draggedId, { order: targetOrder });
-                            updateNote(note._id, { order: draggedOrder });
-                          }
-                        }}
+                        dragging={reorder?.dragId === note._id}
+                        dropTarget={reorder?.overId === note._id}
+                        onReorderStart={(e) => startReorder(e, note._id)}
                       />
                     ))}
                   </div>

@@ -454,7 +454,7 @@ export default function VocabularyPanel({ isOpen, onClose }: VocabularyPanelProp
                     </div>
                     <button
                       onClick={() => handleDeleteClick(item.id, item.word)}
-                      className="opacity-0 group-hover:opacity-100 p-1 hover:bg-red-50 rounded cursor-pointer transition-opacity"
+                      className="pointer-fine:opacity-0 pointer-fine:group-hover:opacity-100 p-1 hover:bg-red-50 rounded cursor-pointer transition-opacity"
                       title={t("common.delete")}
                     >
                       <svg className="w-3.5 h-3.5 text-red-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">

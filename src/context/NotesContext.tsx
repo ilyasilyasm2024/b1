@@ -1,5 +1,5 @@
 import { createContext, useContext, useState, useEffect, useCallback, useRef, type ReactNode } from "react";
-import { notesService, type NoteBackend, type NoteType, type UpdateNoteData } from "../services/notes";
+import { notesService, NOTE_LIMITS, TICK_COLORS, type NoteBackend, type NoteType, type UpdateNoteData } from "../services/notes";
 import { useAuth } from "./AuthContext";
 import i18n from "../i18n";
 
@@ -19,11 +19,6 @@ interface NotesContextType {
 }
 
 const NotesContext = createContext<NotesContextType | null>(null);
-
-const TICK_COLORS = [
-  "#fca5a5", "#fdba74", "#fde68a", "#bef264", "#86efac",
-  "#7dd3fc", "#a5b4fc", "#d8b4fe", "#f9a8d4",
-];
 
 function randomColor(): string {
   return TICK_COLORS[Math.floor(Math.random() * TICK_COLORS.length)];
@@ -63,6 +58,10 @@ export function NotesProvider({ children }: { children: ReactNode }) {
 
   const addNote = async (type: NoteType) => {
     if (!user) return;
+    if (notesRef.current.filter((n) => n.type === type).length >= NOTE_LIMITS[type]) {
+      setError(i18n.t(type === "text" ? "apiErrors.MAX_TEXT_NOTES" : "apiErrors.MAX_COLOR_NOTES"));
+      return;
+    }
     // Place new tick notes at a slightly randomized spot so they don't stack exactly.
     const payload =
       type === "tick"
@@ -172,7 +171,8 @@ export function NotesProvider({ children }: { children: ReactNode }) {
     if (idA === idB) return;
     const a = notesRef.current.find((n) => n._id === idA);
     const b = notesRef.current.find((n) => n._id === idB);
-    if (!a || !b) return;
+    // Only text notes can be linked (color notes float on the page and can't show links)
+    if (!a || !b || a.type !== "text" || b.type !== "text") return;
 
     const linked = (a.links || []).includes(idB);
     const newALinks = linked

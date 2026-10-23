@@ -27,7 +27,9 @@
     "LAST_NAME_REQUIRED": "Last name is required.",
     "LAST_NAME_TOO_LONG": "Last name must be at most 50 characters.",
     "LAST_NAME_TOO_SHORT": "Last name must be at least 2 characters.",
+    "MAX_COLOR_NOTES": "You can have up to 10 color notes. Delete an old note to add a new one.",
     "MAX_RECORDINGS": "You can save up to 5 recordings per part. Delete an old one to save a new one.",
+    "MAX_TEXT_NOTES": "You can have up to 20 text notes. Delete an old note to add a new one.",
     "MAX_VERSIONS": "You can save up to 5 versions per task. Delete an old version to save a new one.",
     "NETWORK": "Network error. Please check your connection.",
     "NOTE_NOT_FOUND": "Note not found.",
@@ -98,9 +100,11 @@
     "VOCABULARY_DELETED": "Word deleted."
   },
   "app": {
+    "chat": "Chat",
     "hello": "Hi, {{name}}",
     "myNotes": "My notes",
     "myVocabulary": "My vocabulary",
+    "navigation": "Main navigation",
     "newModelltest": "New Modelltest (Lesen)",
     "notes": "Notes",
     "questionsCount": "{{answered}}/{{total}} questions",
@@ -282,8 +286,9 @@
   },
   "notes": {
     "colorNote": "Color note",
-    "colorNotes": "Color notes ({{count}})",
+    "colorNotes": "Color notes ({{count}}/{{max}})",
     "colorNotesHint": "These notes float over the app. Drag them anywhere.",
+    "colorNotesHintMobile": "Tap a note to open it as a card.",
     "colorNotesMovable": "color notes can be moved freely",
     "count_many": "{{count}} notes",
     "count_one": "{{count}} note",
@@ -301,11 +306,13 @@
     "emptyNote": "(empty)",
     "loadFailed": "Could not load notes.",
     "loginToSave": "Sign in to save your exam notes.",
+    "openCard": "Open as card",
+    "openCards": "Open cards",
     "selectAll": "Select all",
     "selected": "{{count}} selected",
     "someDeleteFailed": "Some notes could not be deleted.",
     "textNote": "Text note",
-    "textNotes": "Text notes ({{count}})"
+    "textNotes": "Text notes ({{count}}/{{max}})"
   },
   "pricing": {
     "allTests": "All ({{count}})",
@@ -369,9 +376,11 @@
     "clearFormatting": "Clear formatting",
     "collapse": "Collapse",
     "contentPlaceholder": "Your exam note...",
+    "dragToReorder": "Drag to reorder",
     "expand": "Expand",
     "highlight": "Highlight",
     "italic": "Italic",
+    "limitHint": "Notes can hold up to 5000 characters, formatting included.",
     "link": "Link",
     "linkTitle": "Link to another note",
     "linkedCount": "{{count}} linked",
@@ -382,6 +391,9 @@
     "pin": "Pin (max. 5)",
     "rtl": "Right to left (RTL)",
     "select": "Select",
+    "showLinked_many": "Show {{count}} linked notes",
+    "showLinked_one": "Show linked note",
+    "showLinked_other": "Show {{count}} linked notes",
     "strikethrough": "Strikethrough",
     "textColor": "Text color",
     "titlePlaceholder": "Title...",
@@ -389,6 +401,12 @@
     "unlink": "Remove link",
     "unpin": "Unpin",
     "untitled": "(untitled)"
+  },
+  "stickyBoard": {
+    "add": "New color note",
+    "goTo": "Go to card {{n}}",
+    "open": "Open color notes",
+    "title": "Color notes"
   },
   "streak": {
     "active": "Active",
@@ -405,7 +423,7 @@
   },
   "theme": {
     "addSticker": "Add {{emoji}}",
-    "boysDescription": "Dark, navy & bold",
+    "boysDescription": "Medium blue & bold",
     "button": "Design",
     "colorScheme": "Color scheme",
     "customize": "Customize design",
@@ -414,7 +432,8 @@
     "girlsDescription": "Rose, pink & purple",
     "removeSticker": "Remove",
     "removeStickers": "Remove all stickers",
-    "stickers": "Background stickers ({{count}})"
+    "stickers": "Background stickers ({{count}})",
+    "stickersNotInStandard": "🎈 Background stickers are available in Pink Dream and Ocean Blue."
   },
   "timer": {
     "overtime": "Over!",

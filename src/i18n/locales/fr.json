@@ -27,7 +27,9 @@
     "LAST_NAME_REQUIRED": "Le nom est requis.",
     "LAST_NAME_TOO_LONG": "Le nom doit contenir au maximum 50 caractères.",
     "LAST_NAME_TOO_SHORT": "Le nom doit contenir au moins 2 caractères.",
+    "MAX_COLOR_NOTES": "Vous pouvez avoir jusqu'à 10 notes de couleur. Supprimez une ancienne note pour en ajouter une nouvelle.",
     "MAX_RECORDINGS": "Vous pouvez enregistrer 5 enregistrements par partie au maximum. Supprimez-en un ancien pour en enregistrer un nouveau.",
+    "MAX_TEXT_NOTES": "Vous pouvez avoir jusqu'à 20 notes texte. Supprimez une ancienne note pour en ajouter une nouvelle.",
     "MAX_VERSIONS": "Vous pouvez enregistrer 5 versions par tâche au maximum. Supprimez une ancienne version pour en enregistrer une nouvelle.",
     "NETWORK": "Erreur réseau. Veuillez vérifier votre connexion.",
     "NOTE_NOT_FOUND": "Note introuvable.",
@@ -98,9 +100,11 @@
     "VOCABULARY_DELETED": "Mot supprimé."
   },
   "app": {
+    "chat": "Chat",
     "hello": "Bonjour, {{name}}",
     "myNotes": "Mes notes",
     "myVocabulary": "Mon vocabulaire",
+    "navigation": "Navigation principale",
     "newModelltest": "Nouveau Modelltest (Lesen)",
     "notes": "Notes",
     "questionsCount": "{{answered}}/{{total}} questions",
@@ -282,8 +286,9 @@
   },
   "notes": {
     "colorNote": "Note de couleur",
-    "colorNotes": "Notes de couleur ({{count}})",
+    "colorNotes": "Notes de couleur ({{count}}/{{max}})",
     "colorNotesHint": "Ces notes flottent au-dessus de l'application. Faites-les glisser où vous voulez.",
+    "colorNotesHintMobile": "Touchez une note pour l'ouvrir en carte.",
     "colorNotesMovable": "les notes de couleur se déplacent librement",
     "count_many": "{{count}} notes",
     "count_one": "{{count}} note",
@@ -301,11 +306,13 @@
     "emptyNote": "(vide)",
     "loadFailed": "Impossible de charger les notes.",
     "loginToSave": "Connectez-vous pour enregistrer vos notes d'examen.",
+    "openCard": "Ouvrir en carte",
+    "openCards": "Voir les cartes",
     "selectAll": "Tout sélectionner",
     "selected": "{{count}} sélectionnée(s)",
     "someDeleteFailed": "Certaines notes n'ont pas pu être supprimées.",
     "textNote": "Note texte",
-    "textNotes": "Notes texte ({{count}})"
+    "textNotes": "Notes texte ({{count}}/{{max}})"
   },
   "pricing": {
     "allTests": "Tous ({{count}})",
@@ -369,9 +376,11 @@
     "clearFormatting": "Effacer la mise en forme",
     "collapse": "Réduire",
     "contentPlaceholder": "Votre note d'examen...",
+    "dragToReorder": "Faire glisser pour réorganiser",
     "expand": "Développer",
     "highlight": "Surligner",
     "italic": "Italique",
+    "limitHint": "Une note peut contenir jusqu'à 5000 caractères, mise en forme comprise.",
     "link": "Lier",
     "linkTitle": "Lier à une autre note",
     "linkedCount": "{{count}} liée(s)",
@@ -382,6 +391,9 @@
     "pin": "Épingler (5 max.)",
     "rtl": "De droite à gauche (RTL)",
     "select": "Sélectionner",
+    "showLinked_many": "Afficher les {{count}} notes liées",
+    "showLinked_one": "Afficher la note liée",
+    "showLinked_other": "Afficher les {{count}} notes liées",
     "strikethrough": "Barré",
     "textColor": "Couleur du texte",
     "titlePlaceholder": "Titre...",
@@ -389,6 +401,12 @@
     "unlink": "Supprimer le lien",
     "unpin": "Désépingler",
     "untitled": "(sans titre)"
+  },
+  "stickyBoard": {
+    "add": "Nouvelle note de couleur",
+    "goTo": "Aller à la carte {{n}}",
+    "open": "Ouvrir les notes de couleur",
+    "title": "Notes de couleur"
   },
   "streak": {
     "active": "Actif",
@@ -405,7 +423,7 @@
   },
   "theme": {
     "addSticker": "Ajouter {{emoji}}",
-    "boysDescription": "Sombre, marine et intense",
+    "boysDescription": "Bleu moyen et intense",
     "button": "Thème",
     "colorScheme": "Palette de couleurs",
     "customize": "Personnaliser le thème",
@@ -414,7 +432,8 @@
     "girlsDescription": "Rose, fuchsia et violet",
     "removeSticker": "Retirer",
     "removeStickers": "Supprimer tous les stickers",
-    "stickers": "Stickers d'arrière-plan ({{count}})"
+    "stickers": "Stickers d'arrière-plan ({{count}})",
+    "stickersNotInStandard": "🎈 Les stickers d'arrière-plan sont disponibles avec Pink Dream et Ocean Blue."
   },
   "timer": {
     "overtime": "Dépassé !",

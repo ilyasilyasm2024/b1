@@ -35,15 +35,30 @@ function saveHighlights(entries: HighlightEntry[]) {
   } catch {}
 }
 
+// Viewport coordinates of what the popup points at: horizontal center, plus the top and
+// bottom of the selection (equal for a right-click point).
 interface PopupPosition {
   x: number;
-  y: number;
+  top: number;
+  bottom: number;
+}
+
+const POPUP_HEIGHT = 44;
+
+// Above the anchor with a mouse; below it on touch screens, where the phone's own
+// copy/paste bar sits above the selection. Always kept inside the viewport.
+function popupTop(pos: PopupPosition): number {
+  const touch = window.matchMedia("(pointer: coarse)").matches;
+  const above = pos.top - POPUP_HEIGHT - 8;
+  const below = pos.bottom + 10;
+  const top = touch || above < 10 ? below : above;
+  return Math.max(10, Math.min(top, window.innerHeight - POPUP_HEIGHT - 10));
 }
 
 export default function TextHighlighter() {
   const { t } = useTranslation();
   const [showPopup, setShowPopup] = useState(false);
-  const [popupPos, setPopupPos] = useState<PopupPosition>({ x: 0, y: 0 });
+  const [popupPos, setPopupPos] = useState<PopupPosition>({ x: 0, top: 0, bottom: 0 });
   const [translation, setTranslation] = useState<string | null>(null);
   const [translating, setTranslating] = useState(false);
   const [showVocabModal, setShowVocabModal] = useState(false);
@@ -83,7 +98,7 @@ export default function TextHighlighter() {
       const selection = window.getSelection();
       if (selection && !selection.isCollapsed && selection.toString().trim()) {
         e.preventDefault();
-        setPopupPos({ x: e.clientX, y: e.clientY });
+        setPopupPos({ x: e.clientX, top: e.clientY, bottom: e.clientY });
         setShowPopup(true);
       }
     };
@@ -103,7 +118,8 @@ export default function TextHighlighter() {
         if (rect.width > 0) {
           setPopupPos({
             x: rect.left + rect.width / 2,
-            y: rect.top + window.scrollY,
+            top: rect.top,
+            bottom: rect.bottom,
           });
           setShowPopup(true);
         }
@@ -293,8 +309,8 @@ export default function TextHighlighter() {
           ref={popupRef}
           className="fixed z-[999] bg-white border border-gray-300 rounded-lg shadow-lg p-2 flex items-center gap-1.5 flex-wrap max-w-[90vw]"
           style={{
-            left: `${Math.min(popupPos.x, window.innerWidth - 280)}px`,
-            top: `${Math.max(popupPos.y - 50, 10)}px`,
+            left: `${Math.max(8, Math.min(popupPos.x, window.innerWidth - 280))}px`,
+            top: `${popupTop(popupPos)}px`,
           }}
         >
           {HIGHLIGHT_COLORS.map((c) => (
@@ -381,8 +397,8 @@ export default function TextHighlighter() {
         <div
           className="fixed z-[999] bg-gray-900 text-white text-sm rounded-lg px-3 py-2 shadow-lg max-w-xs"
           style={{
-            left: `${popupPos.x}px`,
-            top: `${popupPos.y + 5}px`,
+            left: `${Math.max(8, Math.min(popupPos.x, window.innerWidth - 328))}px`,
+            top: `${Math.min(popupTop(popupPos) + POPUP_HEIGHT + 6, window.innerHeight - 60)}px`,
           }}
         >
           <div className="flex items-center justify-between gap-2">

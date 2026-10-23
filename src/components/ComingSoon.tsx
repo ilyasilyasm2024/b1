@@ -7,7 +7,7 @@ interface ComingSoonProps {
 export default function ComingSoon({ onOpenChat }: ComingSoonProps) {
   const { t } = useTranslation();
   return (
-    <div className="fixed bottom-5 left-5 z-50">
+    <div className="hidden sm:block fixed bottom-5 left-5 z-50">
       <button
         onClick={onOpenChat}
         className="w-12 h-12 bg-gray-900 text-white rounded-full shadow-lg flex items-center justify-center cursor-pointer hover:bg-gray-700 hover:scale-105 transition-all"

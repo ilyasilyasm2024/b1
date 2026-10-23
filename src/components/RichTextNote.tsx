@@ -1,7 +1,7 @@
 import { useRef, useEffect, useState } from "react";
 import { MdOutlinePushPin, MdPushPin } from "react-icons/md";
 import { MdDragIndicator } from "react-icons/md";
-import type { NoteDir } from "../services/notes";
+import { NOTE_CONTENT_MAX, NOTE_TITLE_MAX, type NoteDir } from "../services/notes";
 import { useTranslation } from "react-i18next";
 
 export interface LinkableNote {
@@ -19,6 +19,10 @@ interface RichTextNoteProps {
   pinned: boolean;
   canPin: boolean;
   selected: boolean;
+  /** Color shared by all notes in the same linked group; undefined when not linked */
+  groupColor?: string;
+  /** True while this note is being highlighted because a linked note's link icon was clicked */
+  flashing: boolean;
   linkedNotes: LinkableNote[];
   availableToLink: LinkableNote[];
   onToggleSelect: () => void;
@@ -28,11 +32,16 @@ interface RichTextNoteProps {
   onChange: (html: string) => void;
   onDirChange: (dir: NoteDir) => void;
   onToggleLink: (otherId: string) => void;
+  /** Highlight the given linked notes in the list */
+  onShowLinks: (ids: string[]) => void;
   onSave: () => void;
   onDelete: () => void;
-  onDragStart: (e: React.DragEvent) => void;
-  onDragOver: (e: React.DragEvent) => void;
-  onDrop: (e: React.DragEvent) => void;
+  /** True while this note is being dragged to a new position */
+  dragging: boolean;
+  /** True while another note is dragged over this one (drop target) */
+  dropTarget: boolean;
+  /** Pointer down on the drag handle (mouse or touch) starts reordering */
+  onReorderStart: (e: React.PointerEvent) => void;
 }
 
 // Simple rich-text editor built on contentEditable + execCommand.
@@ -40,6 +49,7 @@ interface RichTextNoteProps {
 // highlight, bullet/numbered lists, LTR/RTL text direction, collapse to
 // title only, and linking to other notes.
 export default function RichTextNote({
+  id,
   title,
   value,
   dir,
@@ -47,6 +57,8 @@ export default function RichTextNote({
   pinned,
   canPin,
   selected,
+  groupColor,
+  flashing,
   linkedNotes,
   availableToLink,
   onToggleSelect,
@@ -56,17 +68,22 @@ export default function RichTextNote({
   onChange,
   onDirChange,
   onToggleLink,
+  onShowLinks,
   onSave,
   onDelete,
-  onDragStart,
-  onDragOver,
-  onDrop,
+  dragging,
+  dropTarget,
+  onReorderStart,
 }: RichTextNoteProps) {
   const { t } = useTranslation();
   const editorRef = useRef<HTMLDivElement>(null);
   const [dirty, setDirty] = useState(false);
   const [saved, setSaved] = useState(false);
   const [showLinkMenu, setShowLinkMenu] = useState(false);
+  // Last content within the length limit, restored when an edit (format, paste…) would exceed it
+  const lastValid = useRef(value);
+  const [limitHit, setLimitHit] = useState(false);
+  const limitTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   // Only sync incoming value into the DOM when it differs, to avoid
   // clobbering the caret while the user types. Runs when expanded (editor mounted).
@@ -75,6 +92,7 @@ export default function RichTextNote({
     if (el && el.innerHTML !== value) {
       el.innerHTML = value;
     }
+    lastValid.current = value;
   }, [value, collapsed]);
 
   const exec = (command: string, arg?: string) => {
@@ -83,8 +101,48 @@ export default function RichTextNote({
     handleInput();
   };
 
-  const handleInput = () => {
+  const flashLimit = () => {
+    setLimitHit(true);
+    if (limitTimer.current) clearTimeout(limitTimer.current);
+    limitTimer.current = setTimeout(() => setLimitHit(false), 1500);
+  };
+
+  // Block typing once the stored HTML is at the limit.
+  const handleBeforeInput = (e: React.FormEvent<HTMLDivElement>) => {
+    const inputType = (e.nativeEvent as InputEvent).inputType || "";
     const html = editorRef.current?.innerHTML ?? "";
+    if (inputType.startsWith("insert") && html.length >= NOTE_CONTENT_MAX) {
+      e.preventDefault();
+      flashLimit();
+    }
+  };
+
+  // A paste that would go over the limit is inserted as plain text, cut to what still fits.
+  const handlePaste = (e: React.ClipboardEvent<HTMLDivElement>) => {
+    const text = e.clipboardData.getData("text/plain");
+    const room = NOTE_CONTENT_MAX - (editorRef.current?.innerHTML.length ?? 0);
+    if (text.length <= room) return;
+    e.preventDefault();
+    if (room > 0) document.execCommand("insertText", false, text.slice(0, room));
+    flashLimit();
+  };
+
+  const handleInput = () => {
+    const el = editorRef.current;
+    const html = el?.innerHTML ?? "";
+    if (el && html.length > NOTE_CONTENT_MAX) {
+      // Formatting/markup pushed it over: undo this edit and keep the caret at the end.
+      el.innerHTML = lastValid.current;
+      const range = document.createRange();
+      range.selectNodeContents(el);
+      range.collapse(false);
+      const sel = window.getSelection();
+      sel?.removeAllRanges();
+      sel?.addRange(range);
+      flashLimit();
+      return;
+    }
+    lastValid.current = html;
     onChange(html);
     setDirty(true);
     setSaved(false);
@@ -99,16 +157,19 @@ export default function RichTextNote({
 
   return (
     <div
-      className={`border rounded-lg bg-white transition-shadow ${selected ? "border-blue-500 ring-1 ring-blue-300" : pinned ? "border-amber-300 shadow-sm" : "border-gray-200"}`}
-      draggable
-      onDragStart={onDragStart}
-      onDragOver={onDragOver}
-      onDrop={onDrop}
+      data-note-id={id}
+      className={`border rounded-lg bg-white transition-shadow ${selected ? "border-blue-500 ring-1 ring-blue-300" : pinned ? "border-amber-300 shadow-sm" : "border-gray-200"} ${flashing ? "note-link-flash" : ""} ${dragging ? "opacity-50" : ""} ${dropTarget ? "ring-2 ring-blue-400" : ""}`}
+      style={groupColor ? ({ borderLeft: `4px solid ${groupColor}`, "--flash-color": groupColor } as React.CSSProperties) : undefined}
     >
       {/* Header row: drag handle + select + pin + collapse + title */}
       <div className="flex items-center gap-1.5 px-2 py-1.5">
         {/* Drag handle */}
-        <span className="cursor-grab active:cursor-grabbing shrink-0 text-gray-300 hover:text-gray-500">
+        <span
+          onPointerDown={onReorderStart}
+          className="cursor-grab active:cursor-grabbing shrink-0 text-gray-300 hover:text-gray-500 touch-none p-1 -m-1"
+          title={t("richNote.dragToReorder")}
+          aria-label={t("richNote.dragToReorder")}
+        >
           <MdDragIndicator className="w-5 h-5" />
         </span>
         <input
@@ -153,18 +214,24 @@ export default function RichTextNote({
             setSaved(false);
           }}
           placeholder={t("richNote.titlePlaceholder")}
+          maxLength={NOTE_TITLE_MAX}
           className="flex-1 min-w-0 text-sm font-bold text-gray-800 placeholder-gray-400 focus:outline-none bg-transparent"
         />
         {pinned && collapsed && (
           <MdPushPin className="w-4 h-4 text-amber-500 shrink-0" />
         )}
         {collapsed && linkedNotes.length > 0 && (
-          <span className="shrink-0 text-[10px] text-gray-400 flex items-center gap-0.5" title={t("richNote.linkedCount", { count: linkedNotes.length })}>
+          <button
+            onClick={() => onShowLinks(linkedNotes.map((n) => n._id))}
+            className="shrink-0 text-[10px] text-gray-400 hover:text-blue-600 flex items-center gap-0.5 rounded px-0.5 cursor-pointer"
+            title={t("richNote.showLinked", { count: linkedNotes.length })}
+            style={groupColor ? { color: groupColor } : undefined}
+          >
             <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13.828 10.172a4 4 0 010 5.656l-3 3a4 4 0 01-5.656-5.656l1.5-1.5m5.656-5.656l3-3a4 4 0 015.656 5.656l-1.5 1.5" />
             </svg>
             {linkedNotes.length}
-          </span>
+          </button>
         )}
       </div>
 
@@ -254,6 +321,8 @@ export default function RichTextNote({
         contentEditable
         dir={dir}
         onInput={handleInput}
+        onBeforeInput={handleBeforeInput}
+        onPaste={handlePaste}
         data-placeholder={t("richNote.contentPlaceholder")}
         className={`rich-note-editor min-h-[110px] px-3 py-2 text-sm text-gray-800 focus:outline-none ${dir === "rtl" ? "text-right" : "text-left"}`}
         suppressContentEditableWarning
@@ -273,7 +342,13 @@ export default function RichTextNote({
                   <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13.828 10.172a4 4 0 010 5.656l-3 3a4 4 0 01-5.656-5.656l1.5-1.5m5.656-5.656l3-3a4 4 0 015.656 5.656l-1.5 1.5" />
                   </svg>
-                  <span className="truncate max-w-[120px]">{ln.title.trim() || t("richNote.untitled")}</span>
+                  <button
+                    onClick={() => onShowLinks([ln._id])}
+                    className="truncate max-w-[120px] cursor-pointer hover:underline"
+                    title={t("richNote.showLinked", { count: 1 })}
+                  >
+                    {ln.title.trim() || t("richNote.untitled")}
+                  </button>
                   <button
                     onClick={() => onToggleLink(ln._id)}
                     className="hover:text-red-600 cursor-pointer"
@@ -335,6 +410,15 @@ export default function RichTextNote({
             {t("richNote.link")}
           </button>
         </div>
+        <div className="flex items-center gap-2">
+        {(limitHit || value.length >= NOTE_CONTENT_MAX * 0.8) && (
+          <span
+            className={`text-[10px] tabular-nums ${limitHit || value.length >= NOTE_CONTENT_MAX ? "text-red-600 font-semibold" : "text-amber-600"}`}
+            title={t("richNote.limitHint")}
+          >
+            {value.length}/{NOTE_CONTENT_MAX}
+          </span>
+        )}
         <button
           onClick={handleSave}
           className={`px-3 py-1 rounded-md text-xs font-medium cursor-pointer transition-colors ${
@@ -347,6 +431,7 @@ export default function RichTextNote({
         >
           {saved ? `✓ ${t("common.saved")}` : t("common.save")}
         </button>
+        </div>
       </div>
       </>
       )}
