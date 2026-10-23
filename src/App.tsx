@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import Module1 from "./components/Module1";
 import Module2 from "./components/Module2";
@@ -38,6 +38,9 @@ import GlobalChat from "./components/GlobalChat";
 import StreakCalendar from "./components/StreakCalendar";
 import LanguageSwitcher from "./components/LanguageSwitcher";
 import MobileDock from "./components/MobileDock";
+import AISettings from "./components/AISettings";
+import { OPEN_AI_SETTINGS_EVENT } from "./services/ai";
+import useAIConfig from "./hooks/useAIConfig";
 import MobileStickyNotes from "./components/MobileStickyNotes";
 import useIsMobile from "./hooks/useIsMobile";
 import { useTranslation } from "react-i18next";
@@ -47,6 +50,14 @@ function AppContent() {
   const [vocabOpen, setVocabOpen] = useState(false);
   const [notesOpen, setNotesOpen] = useState(false);
   const [chatOpen, setChatOpen] = useState(false);
+  const [aiOpen, setAiOpen] = useState(false);
+  const aiConfig = useAIConfig();
+  // Any component can ask for the AI settings (e.g. "Set up AI" links) via openAISettings()
+  useEffect(() => {
+    const open = () => setAiOpen(true);
+    window.addEventListener(OPEN_AI_SETTINGS_EVENT, open);
+    return () => window.removeEventListener(OPEN_AI_SETTINGS_EVENT, open);
+  }, []);
   // Phone color-note board: opened from its stack button or from a note in the notes panel
   const [stickyBoard, setStickyBoard] = useState<{ open: boolean; focusId?: string }>({ open: false });
   const { user, logout } = useAuth();
@@ -115,6 +126,18 @@ function AppContent() {
             )}
             {!isMobile && <ThemePicker />}
             <LanguageSwitcher />
+            {!isMobile && (
+              <button
+                onClick={() => setAiOpen(true)}
+                className="bg-white border border-gray-200 rounded-lg px-2.5 py-1.5 shadow-sm flex items-center gap-1.5 cursor-pointer hover:bg-gray-50 transition-colors shrink-0"
+                title={t("aiSettings.title")}
+              >
+                <svg className="w-4 h-4 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 3v4M3 5h4M6 17v4m-2-2h4m5-16l2.286 6.857L21 12l-5.714 2.143L13 21l-2.286-6.857L5 12l5.714-2.143L13 3z" /></svg>
+                <span className="text-xs font-medium text-gray-700">AI</span>
+                {/* Status dot: green when the user's key is set up */}
+                <span className={`w-1.5 h-1.5 rounded-full ${aiConfig ? "bg-emerald-500" : "bg-gray-300"}`} aria-hidden="true" />
+              </button>
+            )}
           </div>
 
           <div data-tour="timer">
@@ -171,8 +194,13 @@ function AppContent() {
           onNotes={() => setNotesOpen((v) => !v)}
           onVocab={() => setVocabOpen((v) => !v)}
           onChat={() => setChatOpen((v) => !v)}
+          aiReady={!!aiConfig}
+          onAI={() => setAiOpen(true)}
         />
       )}
+
+      {/* Mounted only while open so it starts from the saved settings each time */}
+      {aiOpen && <AISettings isOpen onClose={() => setAiOpen(false)} />}
 
       {/* Text Highlighter */}
       <TextHighlighter />

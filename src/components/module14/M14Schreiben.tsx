@@ -1,10 +1,11 @@
-import { useEffect, useState, useRef } from "react";
+import { useEffect, useState } from "react";
 import { module14Schreiben } from "../../data/module14/schreiben";
 import { useProgress } from "../../context/ProgressContext";
 import { useAnswers } from "../../context/AnswersContext";
-import { useAuth } from "../../context/AuthContext";
-import { usePermissions } from "../../context/Permissions";
-import { suggestNextWords, isApiKeyConfigured } from "../../services/ai";
+import { schreibenContext } from "../../services/ai";
+import useWritingSuggestions from "../../hooks/useWritingSuggestions";
+import AISuggestionBar from "../AISuggestionBar";
+import SuggestionGhost from "../SuggestionGhost";
 import { useTranslation } from "react-i18next";
 
 const SECTION_ID = "m14-schreiben";
@@ -14,11 +15,9 @@ export default function M14Schreiben() {
   const data = module14Schreiben;
   const { updateProgress } = useProgress();
   const { getAnswers, setAnswers } = useAnswers();
-  const { user } = useAuth();
-  const { hasFeature } = usePermissions();
   const [activeTask, setActiveTask] = useState(0);
-  const [suggestion, setSuggestion] = useState("");
-  const suggestTimeout = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const ai = useWritingSuggestions();
+  const suggestion = ai.suggestionFor(activeTask);
 
   const savedTexts: string[] = (getAnswers<string>(SECTION_ID) ?? Array(data.aufgaben.length).fill("")) as string[];
 
@@ -27,21 +26,17 @@ export default function M14Schreiben() {
     updateProgress(SECTION_ID, completed, data.aufgaben.length);
   }, [savedTexts, data.aufgaben.length, updateProgress]);
 
+  // Ask the AI for the next words of the active task's text (after a pause in typing by default)
+  const requestSuggestion = (text: string, delay?: number) => {
+    const aufgabe = data.aufgaben[activeTask];
+    ai.request(activeTask, schreibenContext(aufgabe), text, aufgabe.wordCount, delay);
+  };
+
   const handleTextChange = (value: string) => {
     const newTexts = [...savedTexts];
     newTexts[activeTask] = value;
     setAnswers(SECTION_ID, newTexts);
-    setSuggestion("");
-
-    if (suggestTimeout.current) clearTimeout(suggestTimeout.current);
-    if (user && hasFeature("advancedSuggestions") && isApiKeyConfigured() && value.trim().length >= 1) {
-      suggestTimeout.current = setTimeout(async () => {
-        const aufgabe = data.aufgaben[activeTask];
-        const fullContext = `${aufgabe.instruction}\nPunkte: ${aufgabe.points.join(" / ")}`;
-        const result = await suggestNextWords(fullContext, value, aufgabe.wordCount);
-        if (result) setSuggestion(result);
-      }, 1500);
-    }
+    requestSuggestion(value);
   };
 
   const acceptSuggestion = () => {
@@ -52,17 +47,7 @@ export default function M14Schreiben() {
     const newTexts = [...savedTexts];
     newTexts[activeTask] = (savedTexts[activeTask] || "") + sep + clean;
     setAnswers(SECTION_ID, newTexts);
-    setSuggestion("");
-
-    if (suggestTimeout.current) clearTimeout(suggestTimeout.current);
-    suggestTimeout.current = setTimeout(async () => {
-      if (user && hasFeature("advancedSuggestions") && isApiKeyConfigured()) {
-        const aufgabe = data.aufgaben[activeTask];
-        const fullContext = `${aufgabe.instruction}\nPunkte: ${aufgabe.points.join(" / ")}`;
-        const result = await suggestNextWords(fullContext, newTexts[activeTask], aufgabe.wordCount);
-        if (result) setSuggestion(result);
-      }
-    }, 1000);
+    requestSuggestion(newTexts[activeTask], 1000);
   };
 
   const currentTask = data.aufgaben[activeTask];
@@ -76,7 +61,10 @@ export default function M14Schreiben() {
         {data.aufgaben.map((aufgabe, index) => (
           <button
             key={aufgabe.id}
-            onClick={() => setActiveTask(index)}
+            onClick={() => {
+              setActiveTask(index);
+              ai.clear();
+            }}
             className={`px-4 py-2 rounded-lg text-sm font-medium cursor-pointer transition-colors ${
               activeTask === index
                 ? "bg-black text-white"
@@ -125,7 +113,7 @@ export default function M14Schreiben() {
           {suggestion && (
             <div className="absolute top-0 left-0 right-0 p-4 pointer-events-none h-48 text-sm whitespace-pre-wrap break-words overflow-hidden">
               <span className="invisible">{currentText}</span>
-              <span className="text-gray-400 italic"> {suggestion}</span>
+              <SuggestionGhost text={suggestion} />
               <span className="pointer-events-auto ml-1 bg-gray-200 border border-gray-300 text-[8px] text-gray-500 px-1 py-0.5 rounded font-mono cursor-pointer" onClick={acceptSuggestion}>Tab</span>
             </div>
           )}
@@ -133,6 +121,13 @@ export default function M14Schreiben() {
             {t("exercise.wordsOfTarget", { count: wordCount, target: currentTask.wordCount })}
           </div>
         </div>
+
+        <AISuggestionBar
+          ai={ai}
+          fieldKey={activeTask}
+          onSuggestNow={() => requestSuggestion(currentText, 0)}
+          onAccept={acceptSuggestion}
+        />
 
         {/* Word count indicator */}
         <div className="mt-2 flex items-center gap-2">

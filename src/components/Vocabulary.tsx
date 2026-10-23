@@ -4,13 +4,13 @@ import {
   translateWord,
   generateExample,
   verifyGermanWord,
-  isApiKeyConfigured,
+  openAISettings,
   type TranslationLanguage,
 } from "../services/ai";
 import { useVocabulary } from "../context/VocabularyContext";
 import { useAuth } from "../context/AuthContext";
 import { usePermissions } from "../context/Permissions";
-import { useAIUsage } from "../context/AIUsageContext";
+import useAIConfig from "../hooks/useAIConfig";
 import ConfirmModal from "./ConfirmModal";
 import { Trans, useTranslation } from "react-i18next";
 
@@ -57,7 +57,7 @@ export default function VocabularyPanel({ isOpen, onClose }: VocabularyPanelProp
     setWordSuggestion("");
 
     // Verify the word is German using AI (if API key available)
-    if (isApiKeyConfigured()) {
+    if (aiConfig) {
       setIsVerifying(true);
       try {
         const result = await verifyGermanWord(newWord);
@@ -113,43 +113,36 @@ export default function VocabularyPanel({ isOpen, onClose }: VocabularyPanelProp
     }
   };
 
-  const { hasFeature, limits, canUseAI } = usePermissions();
-  const { todayUsage, increment: incrementAI } = useAIUsage();
+  const { hasFeature, limits } = usePermissions();
+  // AI runs on the user's own Gemini key, so there's no app-side daily AI limit anymore
+  const aiConfig = useAIConfig();
 
   const handleAITranslate = async () => {
+    if (!aiConfig) return openAISettings();
     if (!newWord) return;
-    if (!canUseAI(todayUsage)) {
-      alert(t("vocab.aiLimitReached"));
-      return;
-    }
     setAiLoading("translate");
     try {
       const result = await translateWord(newWord, translationLang);
       setNewTranslation(result);
-      incrementAI();
-    } catch {
-      alert(t("vocab.translateFailed"));
+    } catch (e) {
+      alert(`${t("vocab.translateFailed")}\n${(e as Error).message}`);
     }
     setAiLoading(null);
   };
 
   const handleAIExample = async () => {
+    if (!aiConfig) return openAISettings();
     if (!newWord) return;
     if (!hasFeature("contextSentences")) {
       alert(t("vocab.exampleNeedsGold"));
-      return;
-    }
-    if (!canUseAI(todayUsage)) {
-      alert(t("vocab.aiLimitReached"));
       return;
     }
     setAiLoading("example");
     try {
       const result = await generateExample(newWord);
       setNewContext(result);
-      incrementAI();
-    } catch {
-      alert(t("vocab.generateFailed"));
+    } catch (e) {
+      alert(`${t("vocab.generateFailed")}\n${(e as Error).message}`);
     }
     setAiLoading(null);
   };
@@ -280,9 +273,9 @@ export default function VocabularyPanel({ isOpen, onClose }: VocabularyPanelProp
                 </select>
                 <button
                   onClick={handleAITranslate}
-                  disabled={!newWord || aiLoading !== null || !isApiKeyConfigured()}
+                  disabled={!newWord || aiLoading !== null}
                   className="bg-blue-600 text-white px-2.5 py-1.5 rounded text-[10px] font-medium cursor-pointer hover:bg-blue-700 disabled:opacity-40 disabled:cursor-not-allowed flex items-center gap-1"
-                  title={!isApiKeyConfigured() ? t("vocab.apiKeyMissing") : t("vocab.aiTranslate")}
+                  title={!aiConfig ? t("vocab.apiKeyMissing") : t("vocab.aiTranslate")}
                 >
                   {aiLoading === "translate" ? (
                     <span className="animate-spin">⟳</span>
@@ -304,11 +297,11 @@ export default function VocabularyPanel({ isOpen, onClose }: VocabularyPanelProp
                 />
                 <button
                   onClick={handleAIExample}
-                  disabled={!newWord || aiLoading !== null || !isApiKeyConfigured() || !hasFeature("contextSentences")}
+                  disabled={!newWord || aiLoading !== null || !hasFeature("contextSentences")}
                   className={`px-2.5 py-1.5 rounded text-[10px] font-medium cursor-pointer disabled:opacity-40 disabled:cursor-not-allowed flex items-center gap-1 ${
                     hasFeature("contextSentences") ? "bg-purple-600 text-white hover:bg-purple-700" : "bg-gray-300 text-gray-500"
                   }`}
-                  title={!hasFeature("contextSentences") ? `🔒 ${t("vocab.goldRequired")}` : !isApiKeyConfigured() ? t("vocab.apiKeyMissing") : t("vocab.generateExample")}
+                  title={!hasFeature("contextSentences") ? `🔒 ${t("vocab.goldRequired")}` : !aiConfig ? t("vocab.apiKeyMissing") : t("vocab.generateExample")}
                 >
                   {aiLoading === "example" ? (
                     <span className="animate-spin">⟳</span>
@@ -320,20 +313,12 @@ export default function VocabularyPanel({ isOpen, onClose }: VocabularyPanelProp
                 </button>
               </div>
 
-              {!isApiKeyConfigured() && (
-                <p className="text-[9px] text-amber-600">
-                  ⚠️ {t("vocab.apiKeyHint")}
-                </p>
-              )}
-
-              {limits.aiTranslationsPerDay !== -1 ? (
-                <p className={`text-[9px] ${todayUsage >= limits.aiTranslationsPerDay ? "text-red-500" : "text-gray-400"}`}>
-                  🤖 {t("vocab.aiUsageToday", { used: todayUsage, limit: limits.aiTranslationsPerDay })}
-                </p>
+              {aiConfig ? (
+                <p className="text-[9px] text-gray-400">✨ {t("vocab.aiUsing", { model: aiConfig.model })}</p>
               ) : (
-                <p className="text-[9px] text-gray-400">
-                  🤖 {t("vocab.aiUsageUnlimited", { used: todayUsage })}
-                </p>
+                <button onClick={openAISettings} className="text-[10px] text-blue-600 hover:underline cursor-pointer">
+                  ✨ {t("vocab.aiSetUp")}
+                </button>
               )}
 
               <div className="flex gap-2">

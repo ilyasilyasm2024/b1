@@ -1,5 +1,6 @@
 import { useState, useEffect, useRef } from "react";
-import { translateWord, generateExample, isApiKeyConfigured } from "../services/ai";
+import { translateWord, generateExample, openAISettings } from "../services/ai";
+import useAIConfig from "../hooks/useAIConfig";
 import { useVocabulary } from "../context/VocabularyContext";
 import { useAnswers } from "../context/AnswersContext";
 import { usePermissions } from "../context/Permissions";
@@ -44,15 +45,42 @@ interface PopupPosition {
 }
 
 const POPUP_HEIGHT = 44;
+// Room kept free at the bottom of a phone screen for the dock
+const MOBILE_BOTTOM_SPACE = 96;
+// Upper estimate of the popup height on a phone (buttons wrap to two rows, plus a translation)
+const MOBILE_POPUP_ESTIMATE = 150;
 
-// Above the anchor with a mouse; below it on touch screens, where the phone's own
-// copy/paste bar sits above the selection. Always kept inside the viewport.
-function popupTop(pos: PopupPosition): number {
-  const touch = window.matchMedia("(pointer: coarse)").matches;
+const isTouch = () => window.matchMedia("(pointer: coarse)").matches;
+
+// Mouse: a small bar above the anchor. Touch: a full-width bar right under the last selected
+// line (the phone's own copy/paste bar sits above the selection), or above the selection when
+// there's no room below. Always inside the viewport.
+function popupStyle(pos: PopupPosition): React.CSSProperties {
+  if (isTouch()) {
+    const edges = { left: 8, right: 8 };
+    if (pos.bottom + 10 + MOBILE_POPUP_ESTIMATE < window.innerHeight - MOBILE_BOTTOM_SPACE) return { ...edges, top: pos.bottom + 10 };
+    if (pos.top - 10 - MOBILE_POPUP_ESTIMATE > 10) return { ...edges, bottom: window.innerHeight - pos.top + 10 };
+    return { ...edges, bottom: MOBILE_BOTTOM_SPACE };
+  }
   const above = pos.top - POPUP_HEIGHT - 8;
-  const below = pos.bottom + 10;
-  const top = touch || above < 10 ? below : above;
-  return Math.max(10, Math.min(top, window.innerHeight - POPUP_HEIGHT - 10));
+  const top = above < 10 ? pos.bottom + 10 : above;
+  return {
+    left: Math.max(8, Math.min(pos.x, window.innerWidth - 280)),
+    top: Math.max(10, Math.min(top, window.innerHeight - POPUP_HEIGHT - 10)),
+  };
+}
+
+// Position of the current selection: top of its first line, bottom and center of its last line.
+// null when there is no usable selection (empty, inside the notes editor or the guided tour).
+function selectionAnchor(isExcluded: (node: Node | null) => boolean): PopupPosition | null {
+  const selection = window.getSelection();
+  if (!selection || selection.isCollapsed || !selection.toString().trim() || selection.rangeCount === 0) return null;
+  if (isExcluded(selection.anchorNode)) return null;
+  const rects = [...selection.getRangeAt(0).getClientRects()].filter((r) => r.width > 0 && r.height > 0);
+  if (rects.length === 0) return null;
+  const first = rects[0];
+  const last = rects[rects.length - 1];
+  return { x: last.left + last.width / 2, top: first.top, bottom: last.bottom };
 }
 
 export default function TextHighlighter() {
@@ -70,6 +98,8 @@ export default function TextHighlighter() {
   const { addWord } = useVocabulary();
   const { triggerSync } = useAnswers();
   const { hasFeature } = usePermissions();
+  // Without the user's own AI key, AI buttons open the AI settings instead of doing nothing
+  const aiConfig = useAIConfig();
 
   useEffect(() => {
     const isInsideJoyride = (target: EventTarget | null): boolean => {
@@ -103,47 +133,63 @@ export default function TextHighlighter() {
       }
     };
 
+    // Selections in the guided tour or the notes area (notes have their own editor) don't get the popup.
+    const isExcluded = (node: Node | null) => {
+      const el = node?.nodeType === 3 ? node.parentElement : (node as HTMLElement | null);
+      return !!el?.closest?.('[data-testid^="joyride"], .react-joyride, .__react-joyride, [class*="joyride"]') || isInsideNotes(node);
+    };
+
+    // While a finger is down (dragging selection handles or scrolling) the popup stays hidden;
+    // it reappears under the final selection when the finger is lifted.
+    let touching = false;
+
+    const showForSelection = () => {
+      const anchor = selectionAnchor(isExcluded);
+      if (!anchor) return;
+      setPopupPos(anchor);
+      setShowPopup(true);
+    };
+
     const handleSelectionChange = () => {
-      const selection = window.getSelection();
-      if (selection && !selection.isCollapsed && selection.toString().trim()) {
-        // Check if selection is inside joyride
-        const anchorEl = selection.anchorNode?.parentElement;
-        if (anchorEl?.closest('[data-testid^="joyride"], .react-joyride, .__react-joyride, [class*="joyride"]')) return;
+      if (!touching) showForSelection();
+    };
 
-        // Ignore selections inside the notes area (notes have their own editor)
-        if (isInsideNotes(selection.anchorNode)) return;
-
-        const range = selection.getRangeAt(0);
-        const rect = range.getBoundingClientRect();
-        if (rect.width > 0) {
-          setPopupPos({
-            x: rect.left + rect.width / 2,
-            top: rect.top,
-            bottom: rect.bottom,
-          });
-          setShowPopup(true);
-        }
-      }
+    // Keep the fixed popup next to the selection when the page scrolls.
+    const handleScroll = () => {
+      if (!touching && popupRef.current) showForSelection();
     };
 
     const handleClick = (e: MouseEvent | TouchEvent) => {
       const target = e.target as Node;
-      if (popupRef.current && !popupRef.current.contains(target)) {
-        setShowPopup(false);
-        setTranslation(null);
-      }
+      if (popupRef.current?.contains(target)) return;
+      if (e.type === "touchstart") touching = true;
+      setShowPopup(false);
+      setTranslation(null);
+    };
+
+    const handleTouchEnd = (e: TouchEvent) => {
+      if (!touching || e.touches.length > 0) return;
+      touching = false;
+      // Let the browser finish updating the selection first
+      setTimeout(showForSelection, 50);
     };
 
     document.addEventListener("contextmenu", handleContextMenu);
     document.addEventListener("selectionchange", handleSelectionChange);
     document.addEventListener("mousedown", handleClick);
     document.addEventListener("touchstart", handleClick);
+    document.addEventListener("touchend", handleTouchEnd);
+    document.addEventListener("touchcancel", handleTouchEnd);
+    window.addEventListener("scroll", handleScroll, { capture: true, passive: true });
 
     return () => {
       document.removeEventListener("contextmenu", handleContextMenu);
       document.removeEventListener("selectionchange", handleSelectionChange);
       document.removeEventListener("mousedown", handleClick);
       document.removeEventListener("touchstart", handleClick);
+      document.removeEventListener("touchend", handleTouchEnd);
+      document.removeEventListener("touchcancel", handleTouchEnd);
+      window.removeEventListener("scroll", handleScroll, { capture: true });
     };
   }, []);
 
@@ -307,11 +353,8 @@ export default function TextHighlighter() {
       {showPopup && (
         <div
           ref={popupRef}
-          className="fixed z-[999] bg-white border border-gray-300 rounded-lg shadow-lg p-2 flex items-center gap-1.5 flex-wrap max-w-[90vw]"
-          style={{
-            left: `${Math.max(8, Math.min(popupPos.x, window.innerWidth - 280))}px`,
-            top: `${popupTop(popupPos)}px`,
-          }}
+          className="fixed z-[999] bg-white border border-gray-300 rounded-lg shadow-lg p-2 flex items-center gap-1.5 flex-wrap max-w-[90vw] pointer-coarse:max-w-none pointer-coarse:justify-center pointer-coarse:gap-2.5"
+          style={popupStyle(popupPos)}
         >
           {HIGHLIGHT_COLORS.map((c) => (
             <button
@@ -347,19 +390,20 @@ export default function TextHighlighter() {
           {/* Translate to Arabic */}
           <button
             onClick={async () => {
+              if (!aiConfig) return openAISettings();
               const selection = window.getSelection();
-              if (selection && selection.toString().trim() && isApiKeyConfigured()) {
+              if (selection && selection.toString().trim()) {
                 setTranslating(true);
                 try {
                   const result = await translateWord(selection.toString(), "arabic");
                   setTranslation(result);
-                } catch {
-                  setTranslation("Fehler");
+                } catch (e) {
+                  setTranslation(`⚠️ ${(e as Error).message}`);
                 }
                 setTranslating(false);
               }
             }}
-            disabled={!isApiKeyConfigured() || translating}
+            disabled={translating}
             className="w-6 h-6 rounded-full border border-gray-300 cursor-pointer hover:scale-110 transition-transform flex items-center justify-center bg-white disabled:opacity-40"
             title={t("highlighter.translateArabic")}
           >
@@ -389,29 +433,22 @@ export default function TextHighlighter() {
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
             </svg>
           </button>
-        </div>
-      )}
 
-      {/* Translation tooltip */}
-      {translation && showPopup && (
-        <div
-          className="fixed z-[999] bg-gray-900 text-white text-sm rounded-lg px-3 py-2 shadow-lg max-w-xs"
-          style={{
-            left: `${Math.max(8, Math.min(popupPos.x, window.innerWidth - 328))}px`,
-            top: `${Math.min(popupTop(popupPos) + POPUP_HEIGHT + 6, window.innerHeight - 60)}px`,
-          }}
-        >
-          <div className="flex items-center justify-between gap-2">
-            <span dir="rtl" className="font-medium">{translation}</span>
-            <button
-              onClick={() => setTranslation(null)}
-              className="text-gray-400 hover:text-white cursor-pointer"
-            >
-              <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
-              </svg>
-            </button>
-          </div>
+          {/* Translation (inside the popup so tapping it doesn't close the popup) */}
+          {translation && (
+            <div className="basis-full flex items-center justify-between gap-2 bg-gray-900 text-white text-sm rounded-md px-3 py-2">
+              <span dir="rtl" className="font-medium">{translation}</span>
+              <button
+                onClick={() => setTranslation(null)}
+                className="text-gray-400 hover:text-white cursor-pointer"
+                aria-label={t("common.close")}
+              >
+                <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                </svg>
+              </button>
+            </div>
+          )}
         </div>
       )}
 
@@ -464,7 +501,8 @@ export default function TextHighlighter() {
                 />
                 <button
                   onClick={async () => {
-                    if (!vocabWord || !isApiKeyConfigured()) return;
+                    if (!aiConfig) return openAISettings();
+                    if (!vocabWord) return;
                     setAiLoading("translate");
                     try {
                       const result = await translateWord(vocabWord, "arabic");
@@ -472,7 +510,7 @@ export default function TextHighlighter() {
                     } catch { /* ignore */ }
                     setAiLoading(null);
                   }}
-                  disabled={!vocabWord || aiLoading !== null || !isApiKeyConfigured()}
+                  disabled={!vocabWord || aiLoading !== null}
                   className="bg-blue-600 text-white px-3 py-2 rounded-lg text-[10px] font-medium cursor-pointer hover:bg-blue-700 disabled:opacity-40 disabled:cursor-not-allowed"
                   title={t("highlighter.aiTranslateArabic")}
                 >
@@ -495,7 +533,8 @@ export default function TextHighlighter() {
                 />
                 <button
                   onClick={async () => {
-                    if (!vocabWord || !isApiKeyConfigured()) return;
+                    if (!aiConfig) return openAISettings();
+                    if (!vocabWord) return;
                     if (!hasFeature("contextSentences")) {
                       alert(t("vocab.exampleNeedsGold"));
                       return;
@@ -507,7 +546,7 @@ export default function TextHighlighter() {
                     } catch { /* ignore */ }
                     setAiLoading(null);
                   }}
-                  disabled={!vocabWord || aiLoading !== null || !isApiKeyConfigured() || !hasFeature("contextSentences")}
+                  disabled={!vocabWord || aiLoading !== null || !hasFeature("contextSentences")}
                   className={`px-3 py-2 rounded-lg text-[10px] font-medium cursor-pointer disabled:opacity-40 disabled:cursor-not-allowed ${
                     hasFeature("contextSentences") ? "bg-purple-600 text-white hover:bg-purple-700" : "bg-gray-300 text-gray-500"
                   }`}

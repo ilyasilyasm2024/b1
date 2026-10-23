@@ -1,4 +1,4 @@
-import { useEffect, useState, useRef } from "react";
+import { useEffect, useState } from "react";
 import { module1Schreiben } from "../../data/module1/schreiben";
 import { useProgress } from "../../context/ProgressContext";
 import { useAnswers } from "../../context/AnswersContext";
@@ -6,7 +6,10 @@ import { useAuth } from "../../context/AuthContext";
 import { useToast } from "../Toast";
 import { usePermissions } from "../../context/Permissions";
 import { schreibenService, type SchreibenVersion } from "../../services/schreiben";
-import { suggestNextWords, isApiKeyConfigured } from "../../services/ai";
+import { schreibenContext } from "../../services/ai";
+import useWritingSuggestions from "../../hooks/useWritingSuggestions";
+import AISuggestionBar from "../AISuggestionBar";
+import SuggestionGhost from "../SuggestionGhost";
 import { useTranslation } from "react-i18next";
 
 const SECTION_ID = "m1-schreiben";
@@ -21,8 +24,8 @@ export default function Schreiben() {
   const [saving, setSaving] = useState<number | null>(null);
   const [versions, setVersions] = useState<Record<number, SchreibenVersion[]>>({});
   const [showVersions, setShowVersions] = useState<number | null>(null);
-  const [suggestions, setSuggestions] = useState<Record<number, string>>({});
-  const suggestTimeoutRef = useRef<Record<number, ReturnType<typeof setTimeout>>>({});
+  // One suggestion at a time, for the task field the user is writing in (key = task index)
+  const ai = useWritingSuggestions();
 
   const texts = getTexts(SECTION_ID) ?? Array(data.aufgaben.length).fill("");
   const done = getDone(SECTION_ID) ?? Array(data.aufgaben.length).fill(false);
@@ -32,34 +35,23 @@ export default function Schreiben() {
     updateProgress(SECTION_ID, answered, data.aufgaben.length);
   }, [done, data.aufgaben.length, updateProgress]);
 
-  const { canSaveSchreiben, hasFeature } = usePermissions();
+  const { canSaveSchreiben } = usePermissions();
+
+  // Ask the AI for the next words of a task's text (after a pause in typing by default)
+  const requestSuggestion = (index: number, text: string, delay?: number) => {
+    const aufgabe = data.aufgaben[index];
+    ai.request(index, schreibenContext(aufgabe), text, aufgabe.wordCount, delay);
+  };
 
   const handleChange = (index: number, value: string) => {
     const newTexts = [...texts];
     newTexts[index] = value;
     setGlobalTexts(SECTION_ID, newTexts);
-
-    // Clear current suggestion when typing
-    setSuggestions((prev) => ({ ...prev, [index]: "" }));
-
-    // Debounce suggestion fetch (1.5s after user stops typing)
-    if (suggestTimeoutRef.current[index]) {
-      clearTimeout(suggestTimeoutRef.current[index]);
-    }
-    if (user && hasFeature("advancedSuggestions") && isApiKeyConfigured() && value.trim().length >= 1) {
-      suggestTimeoutRef.current[index] = setTimeout(async () => {
-        const aufgabe = data.aufgaben[index];
-        const fullContext = `${aufgabe.instruction}\nPunkte: ${aufgabe.points.join(" / ")}\n${aufgabe.hints ? "Hinweise: " + aufgabe.hints.join(" ") : ""}`;
-        const result = await suggestNextWords(fullContext, value, aufgabe.wordCount);
-        if (result) {
-          setSuggestions((prev) => ({ ...prev, [index]: result }));
-        }
-      }, 1500);
-    }
+    requestSuggestion(index, value);
   };
 
   const acceptSuggestion = (index: number) => {
-    const suggestion = suggestions[index];
+    const suggestion = ai.suggestionFor(index);
     if (!suggestion) return;
     const newTexts = [...texts];
     const cleanSuggestion = suggestion.replace(/\\n/g, "\n");
@@ -68,25 +60,8 @@ export default function Schreiben() {
     const separator = currentEnd === "\n" || cleanSuggestion.startsWith("\n") ? "" : " ";
     newTexts[index] = texts[index] + separator + cleanSuggestion;
     setGlobalTexts(SECTION_ID, newTexts);
-    setSuggestions((prev) => ({ ...prev, [index]: "" }));
-
-    // Auto-fetch next suggestion after 1 second
-    if (suggestTimeoutRef.current[index]) {
-      clearTimeout(suggestTimeoutRef.current[index]);
-    }
-    suggestTimeoutRef.current[index] = setTimeout(async () => {
-      if (user && hasFeature("advancedSuggestions") && isApiKeyConfigured()) {
-        const updatedText = newTexts[index];
-        if (updatedText.trim().length >= 1) {
-          const aufgabe = data.aufgaben[index];
-          const fullContext = `${aufgabe.instruction}\nPunkte: ${aufgabe.points.join(" / ")}\n${aufgabe.hints ? "Hinweise: " + aufgabe.hints.join(" ") : ""}`;
-          const result = await suggestNextWords(fullContext, updatedText, aufgabe.wordCount);
-          if (result) {
-            setSuggestions((prev) => ({ ...prev, [index]: result }));
-          }
-        }
-      }
-    }, 1000);
+    // Fetch the next suggestion right away
+    requestSuggestion(index, newTexts[index], 1000);
   };
 
   const handleSaveVersion = async (aufgabeIndex: number) => {
@@ -213,10 +188,10 @@ export default function Schreiben() {
 
             <div className="relative">
               <textarea
-                value={texts[index] + (suggestions[index] ? "" : "")}
+                value={texts[index]}
                 onChange={(e) => handleChange(index, e.target.value)}
                 onKeyDown={(e) => {
-                  if (e.key === "Tab" && suggestions[index]) {
+                  if (e.key === "Tab" && ai.suggestionFor(index)) {
                     e.preventDefault();
                     acceptSuggestion(index);
                   }
@@ -226,16 +201,23 @@ export default function Schreiben() {
                 placeholder={t("exercise.writePlaceholderCount", { count: aufgabe.wordCount })}
               />
               {/* AI suggestion inline overlay */}
-              {suggestions[index] && (
+              {ai.suggestionFor(index) && (
                 <div className="absolute top-0 left-0 right-0 p-4 pointer-events-none min-h-[150px] text-sm whitespace-pre-wrap break-words">
                   <span className="invisible">{texts[index]}</span>
-                  <span className="text-gray-400 italic"> {suggestions[index]}</span>
+                  <SuggestionGhost text={ai.suggestionFor(index)} />
                   <span className="pointer-events-auto ml-1 bg-gray-200 border border-gray-300 text-[8px] text-gray-500 px-1 py-0.5 rounded font-mono cursor-pointer" onClick={() => acceptSuggestion(index)}>
                     Tab
                   </span>
                 </div>
               )}
             </div>
+
+            <AISuggestionBar
+              ai={ai}
+              fieldKey={index}
+              onSuggestNow={() => requestSuggestion(index, texts[index], 0)}
+              onAccept={() => acceptSuggestion(index)}
+            />
 
             <div className="flex items-center justify-between mt-3">
               <span

@@ -35,7 +35,7 @@ const PLAN_LIMITS = {
     audioTranscript: false,
     adFree: false,
     contextSentences: false,
-    advancedSuggestions: false,
+    advancedSuggestions: true,
   },
   silver: {
     modelTests: 0,
@@ -50,7 +50,7 @@ const PLAN_LIMITS = {
     audioTranscript: false,
     adFree: true,
     contextSentences: false,
-    advancedSuggestions: false,
+    advancedSuggestions: true,
   },
   gold: {
     modelTests: 0,
@@ -65,7 +65,7 @@ const PLAN_LIMITS = {
     audioTranscript: false,
     adFree: true,
     contextSentences: true,
-    advancedSuggestions: false,
+    advancedSuggestions: true,
   },
   platinum: {
     modelTests: 0,
