@@ -88,8 +88,10 @@ function AppContent() {
     setOpenModules((prev) => ({ ...prev, [key]: !prev[key] }));
   };
 
+  // Text stays dark by default: cards, inputs and panels are white in every theme. Only the
+  // text drawn directly on the page background (header) uses the theme's page text colors.
   return (
-    <div className="min-h-screen pt-16 pb-28 sm:pb-8 relative" style={{ backgroundColor: "var(--theme-page-bg)", color: "var(--theme-page-text)" }}>
+    <div className="min-h-screen pt-16 pb-28 sm:pb-8 relative text-gray-900" style={{ backgroundColor: "var(--theme-page-bg)" }}>
       <BackgroundStickers />
       <GuidedTour />
       <ComingSoon onOpenChat={() => setChatOpen(true)} />
