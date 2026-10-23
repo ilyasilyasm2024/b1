@@ -1,0 +1,87 @@
+{
+  "file": "module5/m5-teil1-text5.mp3",
+  "text": " Lesen Sie jetzt die Aufgaben 9 und 10. Dazu haben Sie 10 Sekunden Zeit. Sie hören eine Durchsage am Bahnhof. Bahnsteig 13, Schnellzug I459 Istria nach Koper über Graz Hauptbahnhof und Spielfeldstraß mit der Planabfahrt um 22.05 Uhr fährt ab. Die Schlafwagen befinden sich im hinteren Zugteil. Die Erste-Klasse-Wagen befinden sich im vorderen Zugteil. Der Speisewagen ist im mittleren Zugteil. Bitte einsteigen. Vorsicht, Türen schließen automatisch. Wir wünschen gute Reise. Attention, Platform 13. Rapid Drain I459 Istria to Koper via Graz. Sie hören jetzt den Text noch einmal. Bahnsteig 13, Schnellzug I459 Istria nach Koper über Graz Hauptbahnhof und Spielfeldstraß mit der Planabfahrt um 22.05 Uhr fährt ab. Die Schlafwagen befinden sich im hinteren Zugteil. Die Erste-Klasse-Wagen befinden sich im vorderen Zugteil. Der Speisewagen ist im mittleren Zugteil. Bitte einsteigen. Vorsicht, Türen schließen automatisch. Wir wünschen gute Reise. Attention, Platform 13. Rapid train I-459 Istria to Koper via Graz.",
+  "segments": [
+    {
+      "start": 0,
+      "end": 5.92,
+      "text": " Lesen Sie jetzt die Aufgaben 9 und 10. Dazu haben Sie 10 Sekunden Zeit."
+    },
+    {
+      "start": 16.32,
+      "end": 19.42,
+      "text": " Sie hören eine Durchsage am Bahnhof."
+    },
+    {
+      "start": 19.42,
+      "end": 35.92,
+      "text": " Bahnsteig 13, Schnellzug I459 Istria nach Koper über Graz Hauptbahnhof und Spielfeldstraß mit der Planabfahrt um 22.05 Uhr fährt ab."
+    },
+    {
+      "start": 36.8,
+      "end": 39.72,
+      "text": " Die Schlafwagen befinden sich im hinteren Zugteil."
+    },
+    {
+      "start": 40.579998,
+      "end": 43.66,
+      "text": " Die Erste-Klasse-Wagen befinden sich im vorderen Zugteil."
+    },
+    {
+      "start": 43.66,
+      "end": 46.88,
+      "text": " Der Speisewagen ist im mittleren Zugteil."
+    },
+    {
+      "start": 47.48,
+      "end": 48.559998,
+      "text": " Bitte einsteigen."
+    },
+    {
+      "start": 48.559998,
+      "end": 54.019997,
+      "text": " Vorsicht, Türen schließen automatisch. Wir wünschen gute Reise."
+    },
+    {
+      "start": 55.039997,
+      "end": 66.21999,
+      "text": " Attention, Platform 13. Rapid Drain I459 Istria to Koper via Graz."
+    },
+    {
+      "start": 68.82,
+      "end": 70.86,
+      "text": " Sie hören jetzt den Text noch einmal."
+    },
+    {
+      "start": 70.86,
+      "end": 88.02,
+      "text": " Bahnsteig 13, Schnellzug I459 Istria nach Koper über Graz Hauptbahnhof und Spielfeldstraß mit der Planabfahrt um 22.05 Uhr fährt ab."
+    },
+    {
+      "start": 88.9,
+      "end": 91.82,
+      "text": " Die Schlafwagen befinden sich im hinteren Zugteil."
+    },
+    {
+      "start": 92.7,
+      "end": 95.76,
+      "text": " Die Erste-Klasse-Wagen befinden sich im vorderen Zugteil."
+    },
+    {
+      "start": 95.76,
+      "end": 100.66,
+      "text": " Der Speisewagen ist im mittleren Zugteil. Bitte einsteigen."
+    },
+    {
+      "start": 100.86,
+      "end": 106.12,
+      "text": " Vorsicht, Türen schließen automatisch. Wir wünschen gute Reise."
+    },
+    {
+      "start": 107.12,
+      "end": 118.26,
+      "text": " Attention, Platform 13. Rapid train I-459 Istria to Koper via Graz."
+    }
+  ],
+  "duration": 119.412998144
+}

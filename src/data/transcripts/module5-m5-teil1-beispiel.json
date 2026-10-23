@@ -1,0 +1,62 @@
+{
+  "file": "module5/m5-teil1-beispiel.mp3",
+  "text": " Sie hören eine automatische Telefonauskunft. Sie sind mit dem automatischen Auskunftsdienst von Severin und Kühn Sightseeing verbunden. Abfahrtstelle für alle Touren vom 01.01. bis zum 31.12. ist Kurfürstendamm 216. Alle 15 Minuten zwischen 01.04. und 03.11. 10 bis 18 Uhr. Vom 01.01. bis 31.03. und vom 04.11. bis 31.12. alle 30 Minuten von 10 bis 17 Uhr. Die 14 verschiedenen Haltepunkte entnehmen Sie bitte unserem Programm Berlin City Circle Tours in 8 Sprachen an allen Kiosken erhältlich. Letzte Abfahrt für eine komplette Tour 16 Uhr Kurfürstendamm oder Alexanderplatz. Sie hören jetzt den Text noch einmal. 11. bis 31.12. alle 30 Minuten von 10 bis 17 Uhr. Die 14 verschiedenen Haltepunkte entnehmen Sie bitte unserem Programm Berlin City Circle Tours in acht Sprachen an allen Kiosken erhältlich. Letzte Abfahrt für eine komplette Tour 16 Uhr, Kurfürstendamm oder Alexanderplatz.",
+  "segments": [
+    {
+      "start": 0,
+      "end": 2.86,
+      "text": " Sie hören eine automatische Telefonauskunft."
+    },
+    {
+      "start": 4.74,
+      "end": 10.44,
+      "text": " Sie sind mit dem automatischen Auskunftsdienst von Severin und Kühn Sightseeing verbunden."
+    },
+    {
+      "start": 11.259999,
+      "end": 18.48,
+      "text": " Abfahrtstelle für alle Touren vom 01.01. bis zum 31.12. ist Kurfürstendamm 216."
+    },
+    {
+      "start": 19.22,
+      "end": 24.699999,
+      "text": " Alle 15 Minuten zwischen 01.04. und 03.11. 10 bis 18 Uhr."
+    },
+    {
+      "start": 24.699999,
+      "end": 35.199997,
+      "text": " Vom 01.01. bis 31.03. und vom 04.11. bis 31.12. alle 30 Minuten von 10 bis 17 Uhr."
+    },
+    {
+      "start": 35.199997,
+      "end": 45.12,
+      "text": " Die 14 verschiedenen Haltepunkte entnehmen Sie bitte unserem Programm Berlin City Circle Tours in 8 Sprachen an allen Kiosken erhältlich."
+    },
+    {
+      "start": 45.92,
+      "end": 52.199997,
+      "text": " Letzte Abfahrt für eine komplette Tour 16 Uhr Kurfürstendamm oder Alexanderplatz."
+    },
+    {
+      "start": 54.699997,
+      "end": 57.839996,
+      "text": " Sie hören jetzt den Text noch einmal."
+    },
+    {
+      "start": 84.7,
+      "end": 93.71999,
+      "text": " 11. bis 31.12. alle 30 Minuten von 10 bis 17 Uhr. Die 14 verschiedenen Haltepunkte entnehmen Sie"
+    },
+    {
+      "start": 93.71999,
+      "end": 100.479996,
+      "text": " bitte unserem Programm Berlin City Circle Tours in acht Sprachen an allen Kiosken erhältlich."
+    },
+    {
+      "start": 101.299995,
+      "end": 107.53999,
+      "text": " Letzte Abfahrt für eine komplette Tour 16 Uhr, Kurfürstendamm oder Alexanderplatz."
+    }
+  ],
+  "duration": 110.221000704
+}

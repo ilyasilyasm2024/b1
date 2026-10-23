@@ -3,11 +3,13 @@ import { module2HoerenTeil3 } from "../../data/module2/hoerenTeil3";
 import { useProgress } from "../../context/ProgressContext";
 import { useAnswers } from "../../context/AnswersContext";
 import TranscriptToggle from "../TranscriptToggle";
+import { useTranslation } from "react-i18next";
 
 type Answer = "richtig" | "falsch" | null;
 const SECTION_ID = "m2-hoeren-teil3";
 
 export default function M2HoerenTeil3() {
+  const { t } = useTranslation();
   const data = module2HoerenTeil3;
   const { updateProgress } = useProgress();
   const { getAnswers, setAnswers, isSubmitted, setSubmitted } = useAnswers();
@@ -43,7 +45,7 @@ export default function M2HoerenTeil3() {
 
       {/* Audio */}
       <div className="mb-4">
-        <audio controls controlsList="nodownload" className="w-full h-9 mb-2">
+        <audio controls controlsList="nodownload" preload="none" className="w-full h-9 mb-2">
           <source src="/horen/module2/m2-teil3-introduction.mp3" type="audio/mpeg" />
         </audio>
         <TranscriptToggle module="module2" fileName="m2-teil3-introduction" />
@@ -51,7 +53,7 @@ export default function M2HoerenTeil3() {
 
       <p className="text-gray-600 italic mb-6">{data.context}</p>
       <div className="mb-6">
-        <audio controls controlsList="nodownload" className="w-full h-9">
+        <audio controls controlsList="nodownload" preload="none" className="w-full h-9">
           <source src="/horen/module2/m2-teil3-text.mp3" type="audio/mpeg" />
         </audio>
         <TranscriptToggle module="module2" fileName="m2-teil3-text" />
@@ -117,18 +119,18 @@ export default function M2HoerenTeil3() {
             onClick={handleSubmit}
             className="bg-blue-600 text-white px-6 py-3 rounded-lg font-semibold hover:bg-blue-700 cursor-pointer"
           >
-            Auswerten
+            {t("exercise.check")}
           </button>
         ) : (
           <>
             <div className="bg-white border border-gray-200 rounded-lg px-4 py-3 font-semibold">
-              Ergebnis: {score} / {data.questions.length}
+              {t("exercise.result")}: {score} / {data.questions.length}
             </div>
             <button
               onClick={handleReset}
               className="bg-gray-600 text-white px-6 py-3 rounded-lg font-semibold hover:bg-gray-700 cursor-pointer"
             >
-              Nochmal versuchen
+              {t("exercise.tryAgain")}
             </button>
           </>
         )}

@@ -1,0 +1,42 @@
+{
+  "file": "module15/m15-teil1-beispiel.mp3",
+  "text": " Sie hören eine automatische Telefonauskunft. Sie hören jetzt den Text noch einmal. Herzlich willkommen bei der Firma Günthardt. Leider rufen Sie außerhalb unserer Geschäftszeiten an. Diese sind montags bis donnerstags von 9 bis 20 Uhr, freitags von 9 bis 19 Uhr. Sie haben jedoch die Möglichkeit, nach dem Signalton Ihren Namen und Ihre Telefonnummer zu hinterlassen. Wir werden uns schnellstmöglich bei Ihnen melden.",
+  "segments": [
+    {
+      "start": 0,
+      "end": 2.6399999,
+      "text": " Sie hören eine automatische Telefonauskunft."
+    },
+    {
+      "start": 30,
+      "end": 36.1,
+      "text": " Sie hören jetzt den Text noch einmal."
+    },
+    {
+      "start": 41.7,
+      "end": 44.2,
+      "text": " Herzlich willkommen bei der Firma Günthardt."
+    },
+    {
+      "start": 44.579998,
+      "end": 47.02,
+      "text": " Leider rufen Sie außerhalb unserer Geschäftszeiten an."
+    },
+    {
+      "start": 47.7,
+      "end": 53.239998,
+      "text": " Diese sind montags bis donnerstags von 9 bis 20 Uhr, freitags von 9 bis 19 Uhr."
+    },
+    {
+      "start": 53.899998,
+      "end": 58.82,
+      "text": " Sie haben jedoch die Möglichkeit, nach dem Signalton Ihren Namen und Ihre Telefonnummer zu hinterlassen."
+    },
+    {
+      "start": 58.82,
+      "end": 61.54,
+      "text": " Wir werden uns schnellstmöglich bei Ihnen melden."
+    }
+  ],
+  "duration": 66.80500224
+}

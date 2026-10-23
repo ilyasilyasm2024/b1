@@ -2,10 +2,12 @@ import { useEffect, useState } from "react";
 import { module8Sprechen } from "../../data/module8/sprechen";
 import { useProgress } from "../../context/ProgressContext";
 import { useAnswers } from "../../context/AnswersContext";
+import { useTranslation } from "react-i18next";
 
 const SECTION_ID = "m8-sprechen";
 
 export default function M8Sprechen() {
+  const { t } = useTranslation();
   const data = module8Sprechen;
   const { updateProgress } = useProgress();
   const { getAnswers, setAnswers } = useAnswers();
@@ -87,7 +89,7 @@ export default function M8Sprechen() {
           <textarea
             value={savedNotes["teil1"] || ""}
             onChange={(e) => handleNoteChange("teil1", e.target.value)}
-            placeholder="Notizen für Teil 1..."
+            placeholder={t("exercise.notesForPart", { part: 1 })}
             className="w-full h-32 border border-gray-300 rounded-lg p-4 text-sm resize-y focus:outline-none focus:ring-2 focus:ring-black focus:border-transparent"
           />
         </div>
@@ -112,11 +114,11 @@ export default function M8Sprechen() {
                     </div>
                   </div>
                   <div>
-                    <p className="text-xs font-bold text-gray-500 mb-1">Ihre Notizen</p>
+                    <p className="text-xs font-bold text-gray-500 mb-1">{t("exercise.yourNotes")}</p>
                     <textarea
                       value={savedNotes[`teil2a-${i}`] || ""}
                       onChange={(e) => handleNoteChange(`teil2a-${i}`, e.target.value)}
-                      placeholder="Notizen..."
+                      placeholder={t("exercise.notesPlaceholder")}
                       className="w-full h-24 border border-gray-300 rounded p-2 text-xs resize-y focus:outline-none focus:ring-2 focus:ring-black focus:border-transparent"
                     />
                   </div>
@@ -146,11 +148,11 @@ export default function M8Sprechen() {
                     </div>
                   </div>
                   <div>
-                    <p className="text-xs font-bold text-gray-500 mb-1">Ihre Notizen</p>
+                    <p className="text-xs font-bold text-gray-500 mb-1">{t("exercise.yourNotes")}</p>
                     <textarea
                       value={savedNotes[`teil2b-${i}`] || ""}
                       onChange={(e) => handleNoteChange(`teil2b-${i}`, e.target.value)}
-                      placeholder="Notizen..."
+                      placeholder={t("exercise.notesPlaceholder")}
                       className="w-full h-24 border border-gray-300 rounded p-2 text-xs resize-y focus:outline-none focus:ring-2 focus:ring-black focus:border-transparent"
                     />
                   </div>
@@ -178,7 +180,7 @@ export default function M8Sprechen() {
           <textarea
             value={savedNotes["teil3"] || ""}
             onChange={(e) => handleNoteChange("teil3", e.target.value)}
-            placeholder="Notizen für Teil 3..."
+            placeholder={t("exercise.notesForPart", { part: 3 })}
             className="w-full h-32 border border-gray-300 rounded-lg p-4 text-sm resize-y focus:outline-none focus:ring-2 focus:ring-black focus:border-transparent"
           />
         </div>

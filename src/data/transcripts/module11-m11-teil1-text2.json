@@ -1,0 +1,77 @@
+{
+  "file": "module11/m11-teil1-text2.mp3",
+  "text": " Lesen Sie jetzt die Aufgaben 3 und 4. Dazu haben Sie 10 Sekunden Zeit. Sie hören eine Nachricht auf dem Anrufbeantworter. Hallo Frau Heinrich, hier ist die Praxis Dr. Siebert. Es geht um Ihren Termin heute Nachmittag. Leider musste Herr Dr. Siebert wegen eines Notfalls dringend ins Krankenhaus. Könnten Sie vielleicht am Mittwoch zur gleichen Zeit kommen? Geben Sie mir bitte noch heute Bescheid, ob Ihnen das passt. Und vergessen Sie auch nicht, Ihre Untersuchungen vom Orthopäden mitzubringen. Ich erwarte Ihren Rückruf. Vielen Dank und auf Wiederhören. Sie hören jetzt den Text noch einmal. Hallo, Frau Heinrich. Hier ist die Praxis, Dr. Siebert. Es geht um Ihren Termin heute Nachmittag. Leider musste Herr Dr. Siebert wegen eines Notfalls dringend ins Krankenhaus. Könnten Sie vielleicht am Mittwoch zur gleichen Zeit kommen? Geben Sie mir bitte noch heute Bescheid, ob Ihnen das passt. Und vergessen Sie auch nicht, Ihre Untersuchungen vom Orthopäden mitzubringen. Ich erwarte Ihren Rückruf. Vielen Dank und auf Wiederhören.",
+  "segments": [
+    {
+      "start": 0,
+      "end": 5.8599997,
+      "text": " Lesen Sie jetzt die Aufgaben 3 und 4. Dazu haben Sie 10 Sekunden Zeit."
+    },
+    {
+      "start": 15.679999,
+      "end": 18.8,
+      "text": " Sie hören eine Nachricht auf dem Anrufbeantworter."
+    },
+    {
+      "start": 20.56,
+      "end": 26.699999,
+      "text": " Hallo Frau Heinrich, hier ist die Praxis Dr. Siebert. Es geht um Ihren Termin heute Nachmittag."
+    },
+    {
+      "start": 26.699999,
+      "end": 30.82,
+      "text": " Leider musste Herr Dr. Siebert wegen eines Notfalls dringend ins Krankenhaus."
+    },
+    {
+      "start": 30.82,
+      "end": 34.079998,
+      "text": " Könnten Sie vielleicht am Mittwoch zur gleichen Zeit kommen?"
+    },
+    {
+      "start": 34.079998,
+      "end": 37.199997,
+      "text": " Geben Sie mir bitte noch heute Bescheid, ob Ihnen das passt."
+    },
+    {
+      "start": 37.199997,
+      "end": 41.28,
+      "text": " Und vergessen Sie auch nicht, Ihre Untersuchungen vom Orthopäden mitzubringen."
+    },
+    {
+      "start": 41.28,
+      "end": 44.579998,
+      "text": " Ich erwarte Ihren Rückruf. Vielen Dank und auf Wiederhören."
+    },
+    {
+      "start": 44.579998,
+      "end": 50.34,
+      "text": " Sie hören jetzt den Text noch einmal."
+    },
+    {
+      "start": 50.34,
+      "end": 58.46,
+      "text": " Hallo, Frau Heinrich. Hier ist die Praxis, Dr. Siebert. Es geht um Ihren Termin heute"
+    },
+    {
+      "start": 58.46,
+      "end": 64.38,
+      "text": " Nachmittag. Leider musste Herr Dr. Siebert wegen eines Notfalls dringend ins Krankenhaus. Könnten"
+    },
+    {
+      "start": 64.38,
+      "end": 68.7,
+      "text": " Sie vielleicht am Mittwoch zur gleichen Zeit kommen? Geben Sie mir bitte noch heute Bescheid,"
+    },
+    {
+      "start": 68.7,
+      "end": 73.02,
+      "text": " ob Ihnen das passt. Und vergessen Sie auch nicht, Ihre Untersuchungen vom Orthopäden"
+    },
+    {
+      "start": 73.02,
+      "end": 76.86,
+      "text": " mitzubringen. Ich erwarte Ihren Rückruf. Vielen Dank und auf Wiederhören."
+    }
+  ],
+  "duration": 80.00499712
+}

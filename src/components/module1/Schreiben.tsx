@@ -7,10 +7,12 @@ import { useToast } from "../Toast";
 import { usePermissions } from "../../context/Permissions";
 import { schreibenService, type SchreibenVersion } from "../../services/schreiben";
 import { suggestNextWords, isApiKeyConfigured } from "../../services/ai";
+import { useTranslation } from "react-i18next";
 
 const SECTION_ID = "m1-schreiben";
 
 export default function Schreiben() {
+  const { t, i18n } = useTranslation();
   const data = module1Schreiben;
   const { updateProgress } = useProgress();
   const { getTexts, setTexts: setGlobalTexts, getDone, setDone: setGlobalDone } = useAnswers();
@@ -89,13 +91,13 @@ export default function Schreiben() {
 
   const handleSaveVersion = async (aufgabeIndex: number) => {
     if (!user) {
-      showToast("Please sign in to save versions.", "error");
+      showToast(t("exercise.signInToSaveVersions"), "error");
       return;
     }
 
     const currentVersions = versions[aufgabeIndex]?.length || 0;
     if (!canSaveSchreiben(currentVersions)) {
-      showToast("Save limit reached. Upgrade your plan for more.", "error");
+      showToast(t("exercise.saveLimitReached"), "error");
       return;
     }
     const text = texts[aufgabeIndex];
@@ -105,25 +107,25 @@ export default function Schreiben() {
     const minWords = data.aufgaben[aufgabeIndex].wordCount;
     const maxWords = data.aufgaben[aufgabeIndex].wordCount * 3;
     if (wc < minWords) {
-      showToast(`Mindestens ${minWords} Wörter erforderlich.`, "error");
+      showToast(t("exercise.minWords", { count: minWords }), "error");
       return;
     }
     if (wc > maxWords) {
-      showToast(`Maximal ${maxWords} Wörter erlaubt.`, "error");
+      showToast(t("exercise.maxWords", { count: maxWords }), "error");
       return;
     }
 
     setSaving(aufgabeIndex);
     const res = await schreibenService.saveVersion("m1", aufgabeIndex + 1, text);
     if (res.data) {
-      showToast("Version gespeichert ✓", "success");
+      showToast(`${t("exercise.versionSaved")} ✓`, "success");
       // Add to local versions
       setVersions((prev) => ({
         ...prev,
         [aufgabeIndex]: [res.data!, ...(prev[aufgabeIndex] || [])],
       }));
     } else {
-      showToast(res.error || "Fehler beim Speichern", "error");
+      showToast(res.error || t("vocab.saveFailed"), "error");
     }
     setSaving(null);
   };
@@ -148,13 +150,13 @@ export default function Schreiben() {
         ...prev,
         [aufgabeIndex]: (prev[aufgabeIndex] || []).filter((v) => v._id !== versionId),
       }));
-      showToast("Version gelöscht", "success");
+      showToast(t("apiMessages.VERSION_DELETED"), "success");
     }
   };
 
   const loadVersion = (aufgabeIndex: number, text: string) => {
     handleChange(aufgabeIndex, text);
-    showToast("Version geladen", "info");
+    showToast(t("exercise.versionLoaded"), "info");
   };
 
   const toggleDone = (index: number) => {
@@ -183,7 +185,7 @@ export default function Schreiben() {
               <div className="flex items-center gap-2">
                 <h3 className="text-lg font-bold">{aufgabe.title}</h3>
                 {done[index] && (
-                  <span className="text-emerald-600 text-sm font-medium">✓ Erledigt</span>
+                  <span className="text-emerald-600 text-sm font-medium">✓ {t("exercise.done")}</span>
                 )}
               </div>
               <span className="text-sm text-gray-500">
@@ -221,7 +223,7 @@ export default function Schreiben() {
                 }}
                 maxLength={1000}
                 className="w-full border border-gray-300 rounded-lg p-4 min-h-[150px] text-sm resize-y focus:outline-none focus:ring-2 focus:ring-blue-300"
-                placeholder={`Schreiben Sie hier Ihren Text (circa ${aufgabe.wordCount} Wörter)...`}
+                placeholder={t("exercise.writePlaceholderCount", { count: aufgabe.wordCount })}
               />
               {/* AI suggestion inline overlay */}
               {suggestions[index] && (
@@ -241,7 +243,7 @@ export default function Schreiben() {
                   wordCount(texts[index]) >= aufgabe.wordCount ? "text-green-600" : "text-gray-500"
                 }`}
               >
-                Wörter: {wordCount(texts[index])} / {aufgabe.wordCount}
+                {t("exercise.wordsLabel")}: {wordCount(texts[index])} / {aufgabe.wordCount}
               </span>
 
               <div className="flex items-center gap-2">
@@ -251,7 +253,7 @@ export default function Schreiben() {
                   disabled={saving === index || !texts[index].trim() || !user || wordCount(texts[index]) < data.aufgaben[index].wordCount || wordCount(texts[index]) > data.aufgaben[index].wordCount * 3}
                   className="px-3 py-1.5 rounded-lg text-xs font-medium cursor-pointer transition-colors disabled:opacity-40 disabled:cursor-not-allowed bg-blue-600 text-white hover:bg-blue-700"
                 >
-                  {saving === index ? "..." : "💾 Save version"}
+                  {saving === index ? "..." : `💾 ${t("exercise.saveVersion")}`}
                 </button>
 
                 {/* View versions button */}
@@ -264,7 +266,7 @@ export default function Schreiben() {
                         : "border-gray-200 text-gray-600 hover:bg-gray-50"
                     }`}
                   >
-                    📋 Versions
+                    📋 {t("exercise.versions")}
                   </button>
                 )}
 
@@ -278,7 +280,7 @@ export default function Schreiben() {
                       : "bg-gray-900 text-white hover:bg-gray-800"
                   }`}
                 >
-                  {done[index] ? "✓ Erledigt" : "Als erledigt markieren"}
+                  {done[index] ? `✓ ${t("exercise.done")}` : t("exercise.markDone")}
                 </button>
               </div>
             </div>
@@ -287,33 +289,33 @@ export default function Schreiben() {
             {showVersions === index && (
               <div className="mt-4 border-t border-gray-200 pt-4">
                 <h4 className="text-xs font-bold text-gray-600 mb-3">
-                  Gespeicherte Versionen ({versions[index]?.length || 0})
+                  {t("exercise.savedVersions", { count: versions[index]?.length || 0 })}
                 </h4>
                 {(!versions[index] || versions[index].length === 0) ? (
-                  <p className="text-xs text-gray-400">Noch keine Versionen gespeichert.</p>
+                  <p className="text-xs text-gray-400">{t("exercise.noVersions")}</p>
                 ) : (
                   <div className="space-y-2 max-h-60 overflow-y-auto">
                     {versions[index].map((v) => (
                       <div key={v._id} className="border border-gray-200 rounded-lg p-3 bg-gray-50">
                         <div className="flex items-center justify-between mb-1">
                           <span className="text-[10px] text-gray-500">
-                            {new Date(v.createdAt).toLocaleDateString("de-DE", {
+                            {new Date(v.createdAt).toLocaleDateString(i18n.language, {
                               day: "2-digit", month: "2-digit", year: "numeric",
                               hour: "2-digit", minute: "2-digit",
-                            })} · {v.wordCount} Wörter
+                            })} · {t("exercise.wordsCount", { count: v.wordCount })}
                           </span>
                           <div className="flex gap-1">
                             <button
                               onClick={() => loadVersion(index, v.text)}
                               className="text-[10px] text-blue-600 hover:underline cursor-pointer"
                             >
-                              Laden
+                              {t("exercise.load")}
                             </button>
                             <button
                               onClick={() => deleteVersion(index, v._id)}
                               className="text-[10px] text-red-500 hover:underline cursor-pointer"
                             >
-                              Löschen
+                              {t("common.delete")}
                             </button>
                           </div>
                         </div>

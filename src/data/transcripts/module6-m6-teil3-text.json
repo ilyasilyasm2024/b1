@@ -1,0 +1,157 @@
+{
+  "file": "module6/m6-teil3-text.mp3",
+  "text": " Sie sitzen beim Zahnarzt im Wartezimmer und hören, wie sich eine Frau und ein Mädchen über einen Kleidungskauf unterhalten. Ah, da bist du, Johanna. Setz dich, der Stuhl neben mir ist frei. Ah, bist du schon lange hier, Mama? Nein, ich bin auch eben erst gekommen. Was macht dein Zahn? Der tut echt weh. Die Schmerztabletten haben nicht wirklich geholfen. Das tut mir aber leid. Geduld, wir sind ja bald dran. Und, habt ihr was gefunden? Ja, ich war mit Vanessa in der neuen Boutique am Markt. Die hatten Kennenlern-Sonderangebote. Vanessa hat sich auch etwas gekauft, einen Rock. Nun zeig mal. Hier! Ist das nicht toll? Ja, schönes T-Shirt. Und es passt auch gut zu deiner weißen Hose. Was hast du dafür bezahlt? Nur 13 Euro. Und Vanessa hat für ihren Rock auch nur 20 Euro gezahlt. Die hatten echt gute Preise. Und die Qualität ist gar nicht schlecht. Aber sag mal, wann fängt denn morgen die Party an? Um sieben. Bei Oliver im Garten. Wir wollen grillen. Hoffentlich ist das Wetter schön. Naja, so richtig warm für eine Grillparty am Abend ist es ja eigentlich noch nicht. Du musst auf jeden Fall noch eine Jacke anziehen. Aber Mama, dann sieht man doch das neue T-Shirt gar nicht. Ohne Jacke gehst du nicht zu der Party. Du warst erst letzte Woche wieder erkältet. Na okay, ich kann ja meine schwarze Jeansjacke mitnehmen. Ja, die passt gut. Hm, ich überlege gerade. Hellblau? Hm. Was ist mit hellblau? Gefällt dir die Farbe nicht? Du hast doch gesagt, dass du das T-Shirt gut findest. Das T-Shirt ist schön und hellblau steht dir auch gut, im Sommer, wenn du ein bisschen braun bist. Jetzt bist du noch ganz blass. Kannst du das T-Shirt vielleicht umtauschen? Wie soll ich das T-Shirt denn umtauschen? Das war doch ein Sonderangebot. Sonderangebote kann man doch nicht umtauschen. Ach ja, richtig. Grün würde gut aussehen, gerade mit deiner blassen Haut. Und passt auch gut zu der weißen Hose und der Jeansjacke. Aber das müsste natürlich auch ein bisschen schick sein. So für die Party und so. Du meinst... Ja. Mama, du bist die Beste! Psst, nicht so laut. Wir sind doch beim Arzt. Du leihst mir wirklich dein grünes T-Shirt, dein neues? Mit den goldenen Kätzchen drauf? Aber am Montag brauche ich es. Natürlich. Und ich werde supergut aufpassen, dass ich es nicht schmutzig mache oder so. Mama, du bist die Allerbeste!",
+  "segments": [
+    {
+      "start": 0,
+      "end": 6.44,
+      "text": " Sie sitzen beim Zahnarzt im Wartezimmer und hören, wie sich eine Frau und ein Mädchen über einen Kleidungskauf unterhalten."
+    },
+    {
+      "start": 14.92,
+      "end": 18.82,
+      "text": " Ah, da bist du, Johanna. Setz dich, der Stuhl neben mir ist frei."
+    },
+    {
+      "start": 19.6,
+      "end": 22.4,
+      "text": " Ah, bist du schon lange hier, Mama?"
+    },
+    {
+      "start": 23.42,
+      "end": 27.38,
+      "text": " Nein, ich bin auch eben erst gekommen. Was macht dein Zahn?"
+    },
+    {
+      "start": 27.38,
+      "end": 32.6,
+      "text": " Der tut echt weh. Die Schmerztabletten haben nicht wirklich geholfen."
+    },
+    {
+      "start": 32.6,
+      "end": 39.86,
+      "text": " Das tut mir aber leid. Geduld, wir sind ja bald dran. Und, habt ihr was gefunden?"
+    },
+    {
+      "start": 39.86,
+      "end": 46.82,
+      "text": " Ja, ich war mit Vanessa in der neuen Boutique am Markt. Die hatten Kennenlern-Sonderangebote."
+    },
+    {
+      "start": 46.82,
+      "end": 51.78,
+      "text": " Vanessa hat sich auch etwas gekauft, einen Rock. Nun zeig mal."
+    },
+    {
+      "start": 51.78,
+      "end": 63.66,
+      "text": " Hier! Ist das nicht toll? Ja, schönes T-Shirt. Und es passt auch gut zu deiner weißen Hose."
+    },
+    {
+      "start": 63.66,
+      "end": 70.82,
+      "text": " Was hast du dafür bezahlt? Nur 13 Euro. Und Vanessa hat für ihren Rock auch nur 20 Euro"
+    },
+    {
+      "start": 70.82,
+      "end": 77.34,
+      "text": " gezahlt. Die hatten echt gute Preise. Und die Qualität ist gar nicht schlecht. Aber sag mal,"
+    },
+    {
+      "start": 77.34,
+      "end": 83.21999,
+      "text": " wann fängt denn morgen die Party an? Um sieben. Bei Oliver im Garten. Wir"
+    },
+    {
+      "start": 83.21999,
+      "end": 98.246506,
+      "text": " wollen grillen. Hoffentlich ist das Wetter schön. Naja, so richtig warm für eine Grillparty am Abend ist es ja eigentlich noch nicht. Du musst auf jeden Fall noch eine Jacke anziehen. Aber Mama, dann sieht man doch das neue T-Shirt gar nicht."
+    },
+    {
+      "start": 99.026505,
+      "end": 103.4465,
+      "text": " Ohne Jacke gehst du nicht zu der Party. Du warst erst letzte Woche wieder erkältet."
+    },
+    {
+      "start": 104.4265,
+      "end": 107.6465,
+      "text": " Na okay, ich kann ja meine schwarze Jeansjacke mitnehmen."
+    },
+    {
+      "start": 108.6265,
+      "end": 109.5465,
+      "text": " Ja, die passt gut."
+    },
+    {
+      "start": 110.8665,
+      "end": 113.026505,
+      "text": " Hm, ich überlege gerade."
+    },
+    {
+      "start": 114.1065,
+      "end": 114.5865,
+      "text": " Hellblau?"
+    },
+    {
+      "start": 115.7065,
+      "end": 116.2265,
+      "text": " Hm."
+    },
+    {
+      "start": 117.4065,
+      "end": 124.886505,
+      "text": " Was ist mit hellblau? Gefällt dir die Farbe nicht? Du hast doch gesagt, dass du das T-Shirt gut findest."
+    },
+    {
+      "start": 126.0065,
+      "end": 135.26651,
+      "text": " Das T-Shirt ist schön und hellblau steht dir auch gut, im Sommer, wenn du ein bisschen braun bist. Jetzt bist du noch ganz blass. Kannst du das T-Shirt vielleicht umtauschen?"
+    },
+    {
+      "start": 136.1465,
+      "end": 143.7265,
+      "text": " Wie soll ich das T-Shirt denn umtauschen? Das war doch ein Sonderangebot. Sonderangebote kann man doch nicht umtauschen."
+    },
+    {
+      "start": 143.7265,
+      "end": 157.20651,
+      "text": " Ach ja, richtig. Grün würde gut aussehen, gerade mit deiner blassen Haut. Und passt auch gut zu der weißen Hose und der Jeansjacke. Aber das müsste natürlich auch ein bisschen schick sein. So für die Party und so."
+    },
+    {
+      "start": 157.96649,
+      "end": 158.7265,
+      "text": " Du meinst..."
+    },
+    {
+      "start": 159.6465,
+      "end": 160.04651,
+      "text": " Ja."
+    },
+    {
+      "start": 161.1465,
+      "end": 162.76651,
+      "text": " Mama, du bist die Beste!"
+    },
+    {
+      "start": 164.3465,
+      "end": 167.76651,
+      "text": " Psst, nicht so laut. Wir sind doch beim Arzt."
+    },
+    {
+      "start": 167.76651,
+      "end": 173.8865,
+      "text": " Du leihst mir wirklich dein grünes T-Shirt, dein neues? Mit den goldenen Kätzchen drauf?"
+    },
+    {
+      "start": 173.8865,
+      "end": 179.9465,
+      "text": " Aber am Montag brauche ich es. Natürlich. Und ich werde supergut aufpassen,"
+    },
+    {
+      "start": 179.9465,
+      "end": 183.7865,
+      "text": " dass ich es nicht schmutzig mache oder so. Mama, du bist die Allerbeste!"
+    }
+  ],
+  "duration": 184.813000864
+}

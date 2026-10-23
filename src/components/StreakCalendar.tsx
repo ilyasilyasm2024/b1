@@ -1,9 +1,11 @@
 import { useState } from "react";
 import { createPortal } from "react-dom";
 import { useAuth } from "../context/AuthContext";
+import { useTranslation } from "react-i18next";
 
 export default function StreakCalendar() {
   const { user } = useAuth();
+  const { t, i18n } = useTranslation();
   const [isOpen, setIsOpen] = useState(false);
 
   if (!user) return null;
@@ -18,7 +20,9 @@ export default function StreakCalendar() {
 
   const daysInMonth = new Date(viewYear, viewMonth + 1, 0).getDate();
   const firstDayOfWeek = new Date(viewYear, viewMonth, 1).getDay(); // 0=Sun
-  const monthName = new Date(viewYear, viewMonth).toLocaleDateString("de-DE", { month: "long", year: "numeric" });
+  const monthName = new Date(viewYear, viewMonth).toLocaleDateString(i18n.language, { month: "long", year: "numeric" });
+  // Monday-first short weekday names in the UI language (2024-01-01 was a Monday)
+  const weekdays = Array.from({ length: 7 }, (_, i) => new Date(2024, 0, 1 + i).toLocaleDateString(i18n.language, { weekday: "short" }));
 
   const todayStr = today.toISOString().slice(0, 10);
 
@@ -38,7 +42,7 @@ export default function StreakCalendar() {
       <button
         onClick={() => setIsOpen(!isOpen)}
         className="text-xs bg-orange-100 text-orange-700 px-2 py-0.5 rounded-full font-bold hidden sm:inline-flex items-center gap-1 cursor-pointer hover:bg-orange-200 transition-colors"
-        title={`${streak} Tage in Folge — Kalender anzeigen`}
+        title={t("streak.badgeTitle", { count: streak })}
       >
         🔥 {streak}
       </button>
@@ -72,14 +76,14 @@ export default function StreakCalendar() {
             {/* Streak info */}
             <div className="text-center mb-3">
               <span className="text-2xl">🔥</span>
-              <p className="text-xs font-bold text-gray-800 mt-1">{streak} Tage in Folge</p>
-              <p className="text-[10px] text-gray-400">Insgesamt {loginDates.size} Tage aktiv</p>
+              <p className="text-xs font-bold text-gray-800 mt-1">{t("streak.inARow", { count: streak })}</p>
+              <p className="text-[10px] text-gray-400">{t("streak.totalActive", { count: loginDates.size })}</p>
             </div>
 
             {/* Day headers */}
             <div className="grid grid-cols-7 gap-1 mb-1">
-              {["Mo", "Di", "Mi", "Do", "Fr", "Sa", "So"].map((d) => (
-                <div key={d} className="text-center text-[9px] text-gray-400 font-medium">{d}</div>
+              {weekdays.map((d, i) => (
+                <div key={i} className="text-center text-[9px] text-gray-400 font-medium">{d}</div>
               ))}
             </div>
 
@@ -117,11 +121,11 @@ export default function StreakCalendar() {
             <div className="flex items-center justify-center gap-4 mt-4">
               <div className="flex items-center gap-1">
                 <div className="w-3 h-3 rounded-full bg-gray-900" />
-                <span className="text-[9px] text-gray-500">Aktiv</span>
+                <span className="text-[9px] text-gray-500">{t("streak.active")}</span>
               </div>
               <div className="flex items-center gap-1">
                 <div className="w-3 h-3 rounded-full border-2 border-gray-900" />
-                <span className="text-[9px] text-gray-500">Heute</span>
+                <span className="text-[9px] text-gray-500">{t("streak.today")}</span>
               </div>
             </div>
           </div>

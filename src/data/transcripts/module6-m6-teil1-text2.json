@@ -1,0 +1,62 @@
+{
+  "file": "module6/m6-teil1-text2.mp3",
+  "text": " Lesen Sie jetzt die Aufgaben 3 und 4. Dazu haben Sie 10 Sekunden Zeit. Sie hören eine automatische Telefonauskunft. Sie sind mit der automatischen Programmdurchsage des Österreichischen Akademietheaters in Wien verbunden. Unser Spielplan? unter 01 712 395 Wir empfehlen sich zu vergewissern ob keine des spielplans oder der anfangszeit eingetreten ist sie h jetzt den text noch einmal sie sind mit der automatischen programm durchsage des österreichischen akademie theaters in wien verbunden unser spielplan samstag 19 uhr 30 professor bernardi sonntag 15 uhr peter pan dienstag 19 uhr 30 professor bernardi mittwoch 19 uhr das weite land donnerstag 17 uhr und freitag 18 Uhr, Adventlesung, die Weihnachtsgeschichte. Telefonische Kartenbestellung unter 01 712 395. Wir empfehlen sich zu vergewissern, ob keine Änderung des Spielplans oder der Anfangszeit eingetreten ist.",
+  "segments": [
+    {
+      "start": 0,
+      "end": 6,
+      "text": " Lesen Sie jetzt die Aufgaben 3 und 4. Dazu haben Sie 10 Sekunden Zeit."
+    },
+    {
+      "start": 16,
+      "end": 19.4,
+      "text": " Sie hören eine automatische Telefonauskunft."
+    },
+    {
+      "start": 21.1,
+      "end": 27.06,
+      "text": " Sie sind mit der automatischen Programmdurchsage des Österreichischen Akademietheaters in Wien verbunden."
+    },
+    {
+      "start": 27.06,
+      "end": 57.04,
+      "text": " Unser Spielplan?"
+    },
+    {
+      "start": 57.059998,
+      "end": 73.6505,
+      "text": " unter 01 712 395 Wir empfehlen sich zu vergewissern ob keine des spielplans oder der anfangszeit eingetreten ist sie h jetzt den text noch einmal"
+    },
+    {
+      "start": 75.3905,
+      "end": 80.8105,
+      "text": " sie sind mit der automatischen programm durchsage des österreichischen akademie"
+    },
+    {
+      "start": 80.8105,
+      "end": 92.330505,
+      "text": " theaters in wien verbunden unser spielplan samstag 19 uhr 30 professor bernardi sonntag 15 uhr peter"
+    },
+    {
+      "start": 92.330505,
+      "end": 105.3505,
+      "text": " pan dienstag 19 uhr 30 professor bernardi mittwoch 19 uhr das weite land donnerstag 17 uhr und freitag"
+    },
+    {
+      "start": 105.3505,
+      "end": 116.9905,
+      "text": " 18 Uhr, Adventlesung, die Weihnachtsgeschichte. Telefonische Kartenbestellung unter 01 712 395."
+    },
+    {
+      "start": 117.8905,
+      "end": 122.5305,
+      "text": " Wir empfehlen sich zu vergewissern, ob keine Änderung des Spielplans oder der Anfangszeit"
+    },
+    {
+      "start": 122.5305,
+      "end": 123.55051,
+      "text": " eingetreten ist."
+    }
+  ],
+  "duration": 126.30099727999999
+}

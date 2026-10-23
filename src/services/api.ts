@@ -1,11 +1,21 @@
+import i18n from "../i18n";
+
 const API_BASE_URL = import.meta.env.VITE_API_URL || "http://localhost:3000";
 
 export interface ApiResponse<T = unknown> {
   data?: T;
   error?: string;
   errors?: string[];
+  /** Stable backend error code (e.g. "EMAIL_NOT_VERIFIED"), independent of the UI language */
+  code?: string;
   status?: number;
 }
+
+type Params = Record<string, unknown> | undefined;
+
+// The backend sends English text plus a code; show the code's translation, or the text if we have none.
+const translate = (ns: "apiErrors" | "apiMessages", code: unknown, fallback: string, params?: Params) =>
+  typeof code === "string" ? i18n.t(`${ns}.${code}`, { ...params, defaultValue: fallback }) : fallback;
 
 async function request<T>(
   endpoint: string,
@@ -31,16 +41,26 @@ async function request<T>(
     const data = await response.json();
 
     if (!response.ok) {
+      const errors: string[] | undefined = Array.isArray(data.errors)
+        ? data.errors.map((e: string, i: number) => translate("apiErrors", data.codes?.[i], e))
+        : undefined;
       return {
-        error: data.error || data.errors?.join(", ") || "Something went wrong",
-        errors: data.errors,
+        error: data.error
+          ? translate("apiErrors", data.code, data.error, data.params)
+          : errors?.join(", ") || i18n.t("apiErrors.SERVER_ERROR"),
+        errors,
+        code: data.code,
         status: response.status,
       };
     }
 
+    if (data && typeof data.message === "string" && data.messageCode) {
+      data.message = translate("apiMessages", data.messageCode, data.message, data.messageParams);
+    }
+
     return { data, status: response.status };
-  } catch (err) {
-    return { error: "Network error. Please check your connection.", status: 0 };
+  } catch {
+    return { error: i18n.t("apiErrors.NETWORK"), status: 0 };
   }
 }
 

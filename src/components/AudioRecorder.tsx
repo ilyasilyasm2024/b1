@@ -2,6 +2,7 @@ import { useState, useRef } from "react";
 import { useAuth } from "../context/AuthContext";
 import { useToast } from "./Toast";
 import { usePermissions } from "../context/Permissions";
+import { useTranslation } from "react-i18next";
 import { uploadAudioToCloudinary, sprechenService, type SprechenRecording } from "../services/sprechen";
 
 interface AudioRecorderProps {
@@ -12,6 +13,7 @@ interface AudioRecorderProps {
 export default function AudioRecorder({ moduleId, teil }: AudioRecorderProps) {
   const { user } = useAuth();
   const { showToast } = useToast();
+  const { t, i18n } = useTranslation();
   const [isRecording, setIsRecording] = useState(false);
   const [isPaused, setIsPaused] = useState(false);
   const [elapsed, setElapsed] = useState(0);
@@ -30,18 +32,18 @@ export default function AudioRecorder({ moduleId, teil }: AudioRecorderProps) {
 
   const startRecording = async () => {
     if (!user) {
-      showToast("Please sign in to record.", "error");
+      showToast(t("recorder.signInToRecord"), "error");
       console.log(isPaused)
       return;
     }
 
     if (!hasFeature("audioRecording")) {
-      showToast("Audio recording requires Gold plan or higher.", "error");
+      showToast(t("recorder.needsGold"), "error");
       return;
     }
 
     if (!canRecordSprechen(recordings.length)) {
-      showToast("Recording limit reached. Upgrade or delete old recordings.", "error");
+      showToast(t("recorder.limitReached"), "error");
       return;
     }
 
@@ -74,7 +76,7 @@ export default function AudioRecorder({ moduleId, teil }: AudioRecorderProps) {
         });
       }, 1000);
     } catch {
-      showToast("Microphone access denied.", "error");
+      showToast(t("recorder.micDenied"), "error");
     }
   };
 
@@ -101,17 +103,17 @@ export default function AudioRecorder({ moduleId, teil }: AudioRecorderProps) {
 
     const result = await uploadAudioToCloudinary(blob);
     if (!result) {
-      showToast("Upload failed.", "error");
+      showToast(t("recorder.uploadFailed"), "error");
       setUploading(false);
       return;
     }
 
     const res = await sprechenService.save(moduleId, teil, result.url, result.publicId, result.duration || elapsed);
     if (res.data) {
-      showToast("Recording saved ✓", "success");
+      showToast(`${t("recorder.saved")} ✓`, "success");
       setRecordings((prev) => [res.data!, ...prev]);
     } else {
-      showToast(res.error || "Failed to save recording.", "error");
+      showToast(res.error || t("recorder.saveFailed"), "error");
     }
     setUploading(false);
   };
@@ -134,7 +136,7 @@ export default function AudioRecorder({ moduleId, teil }: AudioRecorderProps) {
     const res = await sprechenService.delete(id);
     if (res.data) {
       setRecordings((prev) => prev.filter((r) => r._id !== id));
-      showToast("Recording deleted.", "success");
+      showToast(t("apiMessages.RECORDING_DELETED"), "success");
     }
   };
 
@@ -147,13 +149,13 @@ export default function AudioRecorder({ moduleId, teil }: AudioRecorderProps) {
   return (
     <div className="mt-6 border-t border-gray-200 pt-4">
       <div className="flex items-center justify-between mb-3">
-        <h4 className="text-xs font-bold text-gray-600">🎙️ Aufnahme</h4>
+        <h4 className="text-xs font-bold text-gray-600">🎙️ {t("recorder.title")}</h4>
         {user && (
           <button
             onClick={loadRecordings}
             className="text-[10px] text-blue-600 hover:underline cursor-pointer"
           >
-            {showRecordings ? "Ausblenden" : `Meine Aufnahmen (${recordings.length})`}
+            {showRecordings ? t("recorder.hide") : t("recorder.myRecordings", { count: recordings.length })}
           </button>
         )}
       </div>
@@ -163,7 +165,7 @@ export default function AudioRecorder({ moduleId, teil }: AudioRecorderProps) {
         {!hasFeature("audioRecording") ? (
           <div className="flex items-center gap-2 bg-gray-200 text-gray-500 px-4 py-2 rounded-lg text-xs font-medium">
             <span>🔒</span>
-            <span>Audio Recording</span>
+            <span>{t("recorder.audioRecording")}</span>
             <span className="bg-amber-100 text-amber-700 text-[8px] px-1.5 py-0.5 rounded-full font-bold">GOLD</span>
           </div>
         ) : !isRecording ? (
@@ -173,7 +175,7 @@ export default function AudioRecorder({ moduleId, teil }: AudioRecorderProps) {
             className="flex items-center gap-2 bg-red-600 text-white px-4 py-2 rounded-lg text-xs font-medium cursor-pointer hover:bg-red-700 disabled:opacity-50"
           >
             <span className="w-2.5 h-2.5 bg-white rounded-full" />
-            Aufnahme starten
+            {t("recorder.start")}
           </button>
         ) : (
           <button
@@ -181,7 +183,7 @@ export default function AudioRecorder({ moduleId, teil }: AudioRecorderProps) {
             className="flex items-center gap-2 bg-gray-900 text-white px-4 py-2 rounded-lg text-xs font-medium cursor-pointer hover:bg-gray-700"
           >
             <span className="w-2.5 h-2.5 bg-red-500 rounded-sm" />
-            Stoppen
+            {t("recorder.stop")}
           </button>
         )}
 
@@ -192,7 +194,7 @@ export default function AudioRecorder({ moduleId, teil }: AudioRecorderProps) {
         )}
 
         {uploading && (
-          <span className="text-xs text-gray-500">Wird hochgeladen...</span>
+          <span className="text-xs text-gray-500">{t("recorder.uploading")}</span>
         )}
       </div>
 
@@ -200,25 +202,25 @@ export default function AudioRecorder({ moduleId, teil }: AudioRecorderProps) {
       {showRecordings && (
         <div className="mt-4 space-y-2">
           {recordings.length === 0 ? (
-            <p className="text-xs text-gray-400">Noch keine Aufnahmen.</p>
+            <p className="text-xs text-gray-400">{t("recorder.empty")}</p>
           ) : (
             recordings.map((rec) => (
               <div key={rec._id} className="flex items-center gap-3 p-2 border border-gray-200 rounded-lg bg-gray-50">
                 <audio controls className="h-8 flex-1" src={rec.audioUrl} />
                 <span className="text-[10px] text-gray-500 shrink-0">
-                  {formatTime(rec.duration)} · {new Date(rec.createdAt).toLocaleDateString("de-DE", { day: "2-digit", month: "2-digit" })}
+                  {formatTime(rec.duration)} · {new Date(rec.createdAt).toLocaleDateString(i18n.language, { day: "2-digit", month: "2-digit" })}
                 </span>
                 <button
                   onClick={() => deleteRecording(rec._id)}
                   className="text-[10px] text-red-500 hover:underline cursor-pointer shrink-0"
                 >
-                  Löschen
+                  {t("common.delete")}
                 </button>
               </div>
             ))
           )}
           {recordings.length >= 5 && (
-            <p className="text-[10px] text-amber-600">Max. 5 Aufnahmen erreicht. Lösche eine, um eine neue zu speichern.</p>
+            <p className="text-[10px] text-amber-600">{t("apiErrors.MAX_RECORDINGS")}</p>
           )}
         </div>
       )}

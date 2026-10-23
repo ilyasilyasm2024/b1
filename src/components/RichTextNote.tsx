@@ -2,6 +2,7 @@ import { useRef, useEffect, useState } from "react";
 import { MdOutlinePushPin, MdPushPin } from "react-icons/md";
 import { MdDragIndicator } from "react-icons/md";
 import type { NoteDir } from "../services/notes";
+import { useTranslation } from "react-i18next";
 
 export interface LinkableNote {
   _id: string;
@@ -61,6 +62,7 @@ export default function RichTextNote({
   onDragOver,
   onDrop,
 }: RichTextNoteProps) {
+  const { t } = useTranslation();
   const editorRef = useRef<HTMLDivElement>(null);
   const [dirty, setDirty] = useState(false);
   const [saved, setSaved] = useState(false);
@@ -114,7 +116,7 @@ export default function RichTextNote({
           checked={selected}
           onChange={onToggleSelect}
           className="accent-blue-600 w-4 h-4 cursor-pointer shrink-0"
-          title="Auswählen"
+          title={t("richNote.select")}
         />
         {/* Pin (react-icons) */}
         <button
@@ -123,7 +125,7 @@ export default function RichTextNote({
           className={`p-0.5 rounded cursor-pointer shrink-0 transition-colors ${
             pinned ? "text-amber-500 hover:text-amber-600" : canPin ? "text-gray-300 hover:text-amber-500" : "text-gray-200 cursor-not-allowed"
           }`}
-          title={pinned ? "Anpinnen aufheben" : canPin ? "Anpinnen (max 5)" : "Max. 5 Pins erreicht"}
+          title={pinned ? t("richNote.unpin") : canPin ? t("richNote.pin") : t("richNote.maxPins")}
         >
           {pinned ? <MdPushPin className="w-5 h-5" /> : <MdOutlinePushPin className="w-5 h-5" />}
         </button>
@@ -131,7 +133,7 @@ export default function RichTextNote({
         <button
           onClick={onToggleCollapse}
           className="p-0.5 hover:bg-gray-100 rounded cursor-pointer shrink-0"
-          title={collapsed ? "Öffnen" : "Schließen"}
+          title={collapsed ? t("richNote.expand") : t("richNote.collapse")}
         >
           <svg
             className={`w-4 h-4 text-gray-400 transition-transform ${collapsed ? "" : "rotate-180"}`}
@@ -150,14 +152,14 @@ export default function RichTextNote({
             setDirty(true);
             setSaved(false);
           }}
-          placeholder="Titel..."
+          placeholder={t("richNote.titlePlaceholder")}
           className="flex-1 min-w-0 text-sm font-bold text-gray-800 placeholder-gray-400 focus:outline-none bg-transparent"
         />
         {pinned && collapsed && (
           <MdPushPin className="w-4 h-4 text-amber-500 shrink-0" />
         )}
         {collapsed && linkedNotes.length > 0 && (
-          <span className="shrink-0 text-[10px] text-gray-400 flex items-center gap-0.5" title={`${linkedNotes.length} verknüpft`}>
+          <span className="shrink-0 text-[10px] text-gray-400 flex items-center gap-0.5" title={t("richNote.linkedCount", { count: linkedNotes.length })}>
             <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13.828 10.172a4 4 0 010 5.656l-3 3a4 4 0 01-5.656-5.656l1.5-1.5m5.656-5.656l3-3a4 4 0 015.656 5.656l-1.5 1.5" />
             </svg>
@@ -170,23 +172,23 @@ export default function RichTextNote({
       <>
       {/* Toolbar */}
       <div className="flex items-center gap-1 px-2 py-1.5 border-t border-b border-gray-100 flex-wrap">
-        <ToolbarButton onClick={() => exec("bold")} title="Fett">
+        <ToolbarButton onClick={() => exec("bold")} title={t("richNote.bold")}>
           <span className="font-bold text-sm">B</span>
         </ToolbarButton>
-        <ToolbarButton onClick={() => exec("italic")} title="Kursiv">
+        <ToolbarButton onClick={() => exec("italic")} title={t("richNote.italic")}>
           <span className="italic text-sm">I</span>
         </ToolbarButton>
-        <ToolbarButton onClick={() => exec("underline")} title="Unterstrichen">
+        <ToolbarButton onClick={() => exec("underline")} title={t("richNote.underline")}>
           <span className="underline text-sm">U</span>
         </ToolbarButton>
-        <ToolbarButton onClick={() => exec("strikeThrough")} title="Durchgestrichen">
+        <ToolbarButton onClick={() => exec("strikeThrough")} title={t("richNote.strikethrough")}>
           <span className="line-through text-sm">S</span>
         </ToolbarButton>
 
         <div className="w-px h-4 bg-gray-200 mx-0.5" />
 
         {/* Text color */}
-        <label className="cursor-pointer flex items-center p-1 hover:bg-gray-100 rounded" title="Textfarbe">
+        <label className="cursor-pointer flex items-center p-1 hover:bg-gray-100 rounded" title={t("richNote.textColor")}>
           <span className="text-sm font-bold" style={{ color: "#dc2626" }}>A</span>
           <input
             type="color"
@@ -197,7 +199,7 @@ export default function RichTextNote({
         </label>
 
         {/* Highlight color */}
-        <label className="cursor-pointer flex items-center p-1 hover:bg-gray-100 rounded" title="Markieren">
+        <label className="cursor-pointer flex items-center p-1 hover:bg-gray-100 rounded" title={t("richNote.highlight")}>
           <span className="text-sm px-0.5 rounded" style={{ backgroundColor: "#fde68a" }}>H</span>
           <input
             type="color"
@@ -209,17 +211,17 @@ export default function RichTextNote({
 
         <div className="w-px h-4 bg-gray-200 mx-0.5" />
 
-        <ToolbarButton onClick={() => exec("insertUnorderedList")} title="Aufzählung">
+        <ToolbarButton onClick={() => exec("insertUnorderedList")} title={t("richNote.bulletList")}>
           <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h.01M4 12h.01M4 18h.01M8 6h12M8 12h12M8 18h12" />
           </svg>
         </ToolbarButton>
-        <ToolbarButton onClick={() => exec("insertOrderedList")} title="Nummerierte Liste">
+        <ToolbarButton onClick={() => exec("insertOrderedList")} title={t("richNote.numberedList")}>
           <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 6h13M7 12h13M7 18h13M3 6h.01M3 12h.01M3 18h.01" />
           </svg>
         </ToolbarButton>
-        <ToolbarButton onClick={() => exec("removeFormat")} title="Formatierung entfernen">
+        <ToolbarButton onClick={() => exec("removeFormat")} title={t("richNote.clearFormatting")}>
           <span className="text-xs">✕ᴬ</span>
         </ToolbarButton>
 
@@ -232,7 +234,7 @@ export default function RichTextNote({
             setDirty(true);
             setSaved(false);
           }}
-          title={dir === "rtl" ? "Links nach rechts (LTR)" : "Rechts nach links (RTL)"}
+          title={dir === "rtl" ? t("richNote.ltr") : t("richNote.rtl")}
         >
           {dir === "rtl" ? (
             <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -252,7 +254,7 @@ export default function RichTextNote({
         contentEditable
         dir={dir}
         onInput={handleInput}
-        data-placeholder="Ihre Notiz zur Prüfung..."
+        data-placeholder={t("richNote.contentPlaceholder")}
         className={`rich-note-editor min-h-[110px] px-3 py-2 text-sm text-gray-800 focus:outline-none ${dir === "rtl" ? "text-right" : "text-left"}`}
         suppressContentEditableWarning
       />
@@ -271,11 +273,11 @@ export default function RichTextNote({
                   <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13.828 10.172a4 4 0 010 5.656l-3 3a4 4 0 01-5.656-5.656l1.5-1.5m5.656-5.656l3-3a4 4 0 015.656 5.656l-1.5 1.5" />
                   </svg>
-                  <span className="truncate max-w-[120px]">{ln.title.trim() || "(ohne Titel)"}</span>
+                  <span className="truncate max-w-[120px]">{ln.title.trim() || t("richNote.untitled")}</span>
                   <button
                     onClick={() => onToggleLink(ln._id)}
                     className="hover:text-red-600 cursor-pointer"
-                    title="Verknüpfung entfernen"
+                    title={t("richNote.unlink")}
                   >
                     <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
@@ -288,7 +290,7 @@ export default function RichTextNote({
           {showLinkMenu && (
             <div className="border border-gray-200 rounded-lg max-h-40 overflow-y-auto">
               {availableToLink.length === 0 ? (
-                <p className="text-[11px] text-gray-400 p-2">Keine anderen Notizen zum Verknüpfen.</p>
+                <p className="text-[11px] text-gray-400 p-2">{t("richNote.nothingToLink")}</p>
               ) : (
                 availableToLink.map((opt) => (
                   <button
@@ -300,7 +302,7 @@ export default function RichTextNote({
                     className="w-full flex items-center gap-2 px-2 py-1.5 text-left text-xs hover:bg-gray-50 cursor-pointer"
                   >
                     <span className="w-3 h-3 rounded-sm shrink-0" style={{ backgroundColor: opt.color }} />
-                    <span className="truncate">{opt.title.trim() || "(ohne Titel)"}</span>
+                    <span className="truncate">{opt.title.trim() || t("richNote.untitled")}</span>
                   </button>
                 ))
               )}
@@ -315,22 +317,22 @@ export default function RichTextNote({
           <button
             onClick={onDelete}
             className="text-gray-400 hover:text-red-600 cursor-pointer flex items-center gap-1 text-xs"
-            title="Löschen"
+            title={t("common.delete")}
           >
             <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
             </svg>
-            Löschen
+            {t("common.delete")}
           </button>
           <button
             onClick={() => setShowLinkMenu((v) => !v)}
             className={`flex items-center gap-1 text-xs cursor-pointer ${showLinkMenu ? "text-blue-600" : "text-gray-400 hover:text-blue-600"}`}
-            title="Mit anderer Notiz verknüpfen"
+            title={t("richNote.linkTitle")}
           >
             <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13.828 10.172a4 4 0 010 5.656l-3 3a4 4 0 01-5.656-5.656l1.5-1.5m5.656-5.656l3-3a4 4 0 015.656 5.656l-1.5 1.5" />
             </svg>
-            Verknüpfen
+            {t("richNote.link")}
           </button>
         </div>
         <button
@@ -343,7 +345,7 @@ export default function RichTextNote({
               : "bg-gray-100 text-gray-500 hover:bg-gray-200"
           }`}
         >
-          {saved ? "✓ Gespeichert" : "Speichern"}
+          {saved ? `✓ ${t("common.saved")}` : t("common.save")}
         </button>
       </div>
       </>

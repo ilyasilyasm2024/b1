@@ -1,0 +1,72 @@
+{
+  "file": "module4/m4-teil1-text4.mp3",
+  "text": " Lesen Sie jetzt die Aufgaben 7 und 8. Dazu haben Sie 10 Sekunden Zeit. Sie hören eine Nachricht auf dem Anrufbeantworter. Hallo Viola, ich bin's Paula. Ich wollte mich nur erkundigen, wie dein Vorstellungsgespräch heute gelaufen ist. Weil ich in den nächsten ein, zwei Stunden verschiedene Einkäufe erledigen muss, versuche ich es dann später nochmal. Oder wenn du möchtest, kannst du mich heute Abend nach 20 Uhr erreichen. Dann bin ich wieder zu Hause. Natürlich auch morgen in der Firma. Sie hören jetzt den Text noch einmal. Hallo Viola, ich bin's Paula. Ich wollte mich nur erkundigen, wie dein Vorstellungsgespräch heute gelaufen ist. Weil ich in den nächsten ein, zwei Stunden verschiedene Einkäufe erledigen muss, versuche ich es dann später nochmal. Oder wenn du möchtest, kannst du mich heute Abend nach 20 Uhr erreichen. Dann bin ich wieder zu Hause. Natürlich auch morgen in der Firma.",
+  "segments": [
+    {
+      "start": 0,
+      "end": 5.8399997,
+      "text": " Lesen Sie jetzt die Aufgaben 7 und 8. Dazu haben Sie 10 Sekunden Zeit."
+    },
+    {
+      "start": 16.76,
+      "end": 19.74,
+      "text": " Sie hören eine Nachricht auf dem Anrufbeantworter."
+    },
+    {
+      "start": 22.199999,
+      "end": 28.5,
+      "text": " Hallo Viola, ich bin's Paula. Ich wollte mich nur erkundigen, wie dein Vorstellungsgespräch heute gelaufen ist."
+    },
+    {
+      "start": 28.5,
+      "end": 34.54,
+      "text": " Weil ich in den nächsten ein, zwei Stunden verschiedene Einkäufe erledigen muss, versuche ich es dann später nochmal."
+    },
+    {
+      "start": 35.48,
+      "end": 39.64,
+      "text": " Oder wenn du möchtest, kannst du mich heute Abend nach 20 Uhr erreichen."
+    },
+    {
+      "start": 40.36,
+      "end": 43.52,
+      "text": " Dann bin ich wieder zu Hause. Natürlich auch morgen in der Firma."
+    },
+    {
+      "start": 46.8,
+      "end": 49.239998,
+      "text": " Sie hören jetzt den Text noch einmal."
+    },
+    {
+      "start": 51.86,
+      "end": 53.84,
+      "text": " Hallo Viola, ich bin's Paula."
+    },
+    {
+      "start": 54.52,
+      "end": 58.04,
+      "text": " Ich wollte mich nur erkundigen, wie dein Vorstellungsgespräch heute gelaufen ist."
+    },
+    {
+      "start": 58.5,
+      "end": 64.1,
+      "text": " Weil ich in den nächsten ein, zwei Stunden verschiedene Einkäufe erledigen muss, versuche ich es dann später nochmal."
+    },
+    {
+      "start": 65.06,
+      "end": 69.2,
+      "text": " Oder wenn du möchtest, kannst du mich heute Abend nach 20 Uhr erreichen."
+    },
+    {
+      "start": 69.9,
+      "end": 70.84,
+      "text": " Dann bin ich wieder zu Hause."
+    },
+    {
+      "start": 71.6,
+      "end": 73.06,
+      "text": " Natürlich auch morgen in der Firma."
+    }
+  ],
+  "duration": 75.82900224
+}

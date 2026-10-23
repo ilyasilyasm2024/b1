@@ -2,11 +2,14 @@ import { useEffect } from "react";
 import { module8HoerenTeil4 } from "../../data/module8/hoerenTeil4";
 import { useProgress } from "../../context/ProgressContext";
 import { useAnswers } from "../../context/AnswersContext";
+import TranscriptToggle from "../TranscriptToggle";
+import { useTranslation } from "react-i18next";
 
 type Answer = "moderatorin" | "lena" | "simon" | null;
 const SECTION_ID = "m8-hoeren-teil4";
 
 export default function M8HoerenTeil4() {
+  const { t } = useTranslation();
   const data = module8HoerenTeil4;
   const { updateProgress } = useProgress();
   const { getAnswers, setAnswers, isSubmitted, setSubmitted } = useAnswers();
@@ -40,6 +43,22 @@ export default function M8HoerenTeil4() {
     <div className="max-w-4xl mx-auto p-6">
       <p className="text-gray-700 mb-4">{data.instruction}</p>
       <p className="text-gray-600 italic mb-6">{data.context}</p>
+
+      {/* Audio */}
+      <div className="mb-4">
+        <p className="text-xs font-medium text-gray-500 mb-1">{t("exercise.listenIntro")}</p>
+        <audio controls controlsList="nodownload" preload="none" className="w-full h-9 mb-2">
+          <source src="/horen/module8/m8-teil4-introduction.mp3" type="audio/mpeg" />
+        </audio>
+        <TranscriptToggle module="module8" fileName="m8-teil4-introduction" />
+      </div>
+      <div className="mb-6">
+        <p className="text-xs font-medium text-gray-500 mb-1">{t("exercise.listenDiscussion")}</p>
+        <audio controls controlsList="nodownload" preload="none" className="w-full h-9">
+          <source src="/horen/module8/m8-teil4-text.mp3" type="audio/mpeg" />
+        </audio>
+        <TranscriptToggle module="module8" fileName="m8-teil4-text" />
+      </div>
 
       {/* Example */}
       <div className="mb-4 p-4 bg-gray-50 rounded-lg border border-gray-200">
@@ -119,18 +138,18 @@ export default function M8HoerenTeil4() {
             onClick={handleSubmit}
             className="bg-blue-600 text-white px-6 py-3 rounded-lg font-semibold hover:bg-blue-700 cursor-pointer"
           >
-            Auswerten
+            {t("exercise.check")}
           </button>
         ) : (
           <>
             <div className="bg-white border border-gray-200 rounded-lg px-4 py-3 font-semibold">
-              Ergebnis: {score} / {data.questions.length}
+              {t("exercise.result")}: {score} / {data.questions.length}
             </div>
             <button
               onClick={handleReset}
               className="bg-gray-600 text-white px-6 py-3 rounded-lg font-semibold hover:bg-gray-700 cursor-pointer"
             >
-              Nochmal versuchen
+              {t("exercise.tryAgain")}
             </button>
           </>
         )}

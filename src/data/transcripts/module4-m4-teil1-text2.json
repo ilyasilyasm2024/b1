@@ -1,0 +1,82 @@
+{
+  "file": "module4/m4-teil1-text2.mp3",
+  "text": " Lesen Sie jetzt die Aufgaben 3 und 4. Dazu haben Sie 10 Sekunden Zeit. Sie hören eine Durchsage am Hauptbahnhof. Achtung, Achtung! Eine Durchsage für Reisende nach München. Der D-Zug 212 aus Berlin Richtung München über Nürnberg hat voraussichtlich 35 Minuten Verspätung. Der Zug fährt auf Gleis 5 ein und hat circa 20 Minuten Aufenthalt. Geplante Weiterfahrt 17.25 Uhr. Geschätzte Ankunftszeit München Hauptbahnhof 23.55 Uhr. Ich wiederhole. Sie hören jetzt den Text noch einmal. Achtung, Achtung! Eine Durchsage für Reisende nach München. Der D-Zug 212 aus Berlin Richtung München über Nürnberg hat voraussichtlich 35 Minuten Verspätung. Der Zug fährt auf Gleis 5 ein und hat ca. 20 Minuten Aufenthalt. Geplante Weiterfahrt 17.25 Uhr. Geschätzte Ankunftszeit München Hauptbahnhof 23.55 Uhr. Ich wiederhole.",
+  "segments": [
+    {
+      "start": 0,
+      "end": 6.18,
+      "text": " Lesen Sie jetzt die Aufgaben 3 und 4. Dazu haben Sie 10 Sekunden Zeit."
+    },
+    {
+      "start": 15.82,
+      "end": 18.72,
+      "text": " Sie hören eine Durchsage am Hauptbahnhof."
+    },
+    {
+      "start": 22,
+      "end": 26.08,
+      "text": " Achtung, Achtung! Eine Durchsage für Reisende nach München."
+    },
+    {
+      "start": 26.08,
+      "end": 33.44,
+      "text": " Der D-Zug 212 aus Berlin Richtung München über Nürnberg hat voraussichtlich 35 Minuten Verspätung."
+    },
+    {
+      "start": 34.34,
+      "end": 38.079998,
+      "text": " Der Zug fährt auf Gleis 5 ein und hat circa 20 Minuten Aufenthalt."
+    },
+    {
+      "start": 39.16,
+      "end": 42.1,
+      "text": " Geplante Weiterfahrt 17.25 Uhr."
+    },
+    {
+      "start": 42.739998,
+      "end": 47.079998,
+      "text": " Geschätzte Ankunftszeit München Hauptbahnhof 23.55 Uhr."
+    },
+    {
+      "start": 48.04,
+      "end": 48.72,
+      "text": " Ich wiederhole."
+    },
+    {
+      "start": 50,
+      "end": 52.36,
+      "text": " Sie hören jetzt den Text noch einmal."
+    },
+    {
+      "start": 56.079998,
+      "end": 60.079998,
+      "text": " Achtung, Achtung! Eine Durchsage für Reisende nach München."
+    },
+    {
+      "start": 60.559998,
+      "end": 67.42,
+      "text": " Der D-Zug 212 aus Berlin Richtung München über Nürnberg hat voraussichtlich 35 Minuten Verspätung."
+    },
+    {
+      "start": 68.38,
+      "end": 72.659996,
+      "text": " Der Zug fährt auf Gleis 5 ein und hat ca. 20 Minuten Aufenthalt."
+    },
+    {
+      "start": 73.14,
+      "end": 76.079994,
+      "text": " Geplante Weiterfahrt 17.25 Uhr."
+    },
+    {
+      "start": 76.759995,
+      "end": 81.659996,
+      "text": " Geschätzte Ankunftszeit München Hauptbahnhof 23.55 Uhr."
+    },
+    {
+      "start": 82,
+      "end": 82.7,
+      "text": " Ich wiederhole."
+    }
+  ],
+  "duration": 83.916996608
+}

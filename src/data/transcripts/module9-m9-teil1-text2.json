@@ -1,0 +1,67 @@
+{
+  "file": "module9/m9-teil1-text2.mp3",
+  "text": " Lesen Sie jetzt die Aufgaben 3 und 4. Dazu haben Sie 10 Sekunden Zeit. Sie hören eine Durchsage im Kaufhaus. Verehrte Kundschaft, wir bitten um Ihre Aufmerksamkeit. In der Herrenabteilung in der dritten Etage unseres Bekleidungshauses wurde an der Kassa nahe beim Aufzug ein Mobiltelefon der Marke Nokia gefunden. Das Handy kann an der Sammelkasse im Erdgeschoss abgeholt werden. Ich wiederhole. Sie hören jetzt den Text noch einmal. Verehrte Kundschaft, wir bitten um Ihre Aufmerksamkeit. In der Herrenabteilung in der dritten Etage unseres Bekleidungshauses wurde an der Kassa nahe beim Aufzug ein Mobiltelefon der Marke Nokia gefunden. Das Handy kann an der Sammelkassa im Erdgeschoss abgeholt werden. Ich wiederhole.",
+  "segments": [
+    {
+      "start": 0,
+      "end": 5.7799997,
+      "text": " Lesen Sie jetzt die Aufgaben 3 und 4. Dazu haben Sie 10 Sekunden Zeit."
+    },
+    {
+      "start": 15.62,
+      "end": 18.44,
+      "text": " Sie hören eine Durchsage im Kaufhaus."
+    },
+    {
+      "start": 24.92,
+      "end": 28.74,
+      "text": " Verehrte Kundschaft, wir bitten um Ihre Aufmerksamkeit."
+    },
+    {
+      "start": 28.74,
+      "end": 39.84,
+      "text": " In der Herrenabteilung in der dritten Etage unseres Bekleidungshauses wurde an der Kassa nahe beim Aufzug ein Mobiltelefon der Marke Nokia gefunden."
+    },
+    {
+      "start": 40.899998,
+      "end": 44.96,
+      "text": " Das Handy kann an der Sammelkasse im Erdgeschoss abgeholt werden."
+    },
+    {
+      "start": 45.8,
+      "end": 46.72,
+      "text": " Ich wiederhole."
+    },
+    {
+      "start": 49.32,
+      "end": 52.1,
+      "text": " Sie hören jetzt den Text noch einmal."
+    },
+    {
+      "start": 58.739998,
+      "end": 62.519997,
+      "text": " Verehrte Kundschaft, wir bitten um Ihre Aufmerksamkeit."
+    },
+    {
+      "start": 63.239998,
+      "end": 67.64,
+      "text": " In der Herrenabteilung in der dritten Etage unseres Bekleidungshauses"
+    },
+    {
+      "start": 67.64,
+      "end": 73.619995,
+      "text": " wurde an der Kassa nahe beim Aufzug ein Mobiltelefon der Marke Nokia gefunden."
+    },
+    {
+      "start": 74.68,
+      "end": 78.72,
+      "text": " Das Handy kann an der Sammelkassa im Erdgeschoss abgeholt werden."
+    },
+    {
+      "start": 79.56,
+      "end": 80.46,
+      "text": " Ich wiederhole."
+    }
+  ],
+  "duration": 82.885001216
+}

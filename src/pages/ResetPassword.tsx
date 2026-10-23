@@ -1,9 +1,11 @@
 import { useState, type FormEvent } from "react";
 import { Link, useSearchParams } from "react-router-dom";
 import { authService } from "../services/auth";
+import { useTranslation } from "react-i18next";
 
 export default function ResetPassword() {
   const [searchParams] = useSearchParams();
+  const { t } = useTranslation();
   const token = searchParams.get("token") || "";
 
   const [password, setPassword] = useState("");
@@ -19,12 +21,12 @@ export default function ResetPassword() {
     setSuccess("");
 
     if (password !== confirmPassword) {
-      setError("Passwörter stimmen nicht überein");
+      setError(t("common.passwordsMismatch"));
       return;
     }
 
     if (password.length < 6) {
-      setError("Passwort muss mindestens 6 Zeichen lang sein");
+      setError(t("common.passwordTooShort"));
       return;
     }
 
@@ -35,7 +37,7 @@ export default function ResetPassword() {
     if (res.data) {
       setSuccess(res.data.message);
     } else {
-      setError(res.error || "Something went wrong");
+      setError(res.error || t("apiErrors.SERVER_ERROR"));
     }
 
     setIsLoading(false);
@@ -46,12 +48,12 @@ export default function ResetPassword() {
       <div className="min-h-screen bg-gray-50 flex items-center justify-center px-4">
         <div className="w-full max-w-md text-center">
           <div className="bg-white rounded-xl border border-gray-200 shadow-sm p-6">
-            <p className="text-red-600 text-sm mb-4">Ungültiger oder fehlender Reset-Token.</p>
+            <p className="text-red-600 text-sm mb-4">{t("auth.reset.invalidToken")}</p>
             <Link
               to="/forgot-password"
               className="inline-block bg-gray-900 text-white px-6 py-2.5 rounded-lg text-sm font-medium hover:bg-gray-800 transition-colors"
             >
-              Neuen Link anfordern
+              {t("auth.reset.requestNew")}
             </Link>
           </div>
         </div>
@@ -63,8 +65,8 @@ export default function ResetPassword() {
     <div className="min-h-screen bg-gray-50 flex items-center justify-center px-4">
       <div className="w-full max-w-md">
         <div className="text-center mb-8">
-          <h1 className="text-3xl font-bold text-gray-900">Neues Passwort</h1>
-          <p className="text-gray-500 mt-2">Lege ein neues Passwort für dein Konto fest.</p>
+          <h1 className="text-3xl font-bold text-gray-900">{t("auth.reset.title")}</h1>
+          <p className="text-gray-500 mt-2">{t("auth.reset.subtitle")}</p>
         </div>
 
         <div className="bg-white rounded-xl border border-gray-200 shadow-sm p-6">
@@ -81,20 +83,20 @@ export default function ResetPassword() {
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
                 </svg>
               </div>
-              <h2 className="text-lg font-bold text-gray-900 mb-2">Passwort geändert!</h2>
+              <h2 className="text-lg font-bold text-gray-900 mb-2">{t("auth.reset.success")}</h2>
               <p className="text-sm text-gray-600 mb-6">{success}</p>
               <Link
                 to="/login"
                 className="inline-block bg-gray-900 text-white px-6 py-2.5 rounded-lg text-sm font-medium hover:bg-gray-800 transition-colors"
               >
-                Zur Anmeldung
+                {t("common.toLogin")}
               </Link>
             </div>
           ) : (
             <form onSubmit={handleSubmit} className="space-y-4">
               <div>
                 <label htmlFor="password" className="block text-sm font-medium text-gray-700 mb-1">
-                  Neues Passwort
+                  {t("auth.reset.newPassword")}
                 </label>
                 <div className="relative">
                   <input
@@ -112,7 +114,7 @@ export default function ResetPassword() {
                     type="button"
                     onClick={() => setShowPassword(!showPassword)}
                     className="absolute right-2.5 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600 cursor-pointer"
-                    aria-label={showPassword ? "Passwort verbergen" : "Passwort anzeigen"}
+                    aria-label={showPassword ? t("common.hidePassword") : t("common.showPassword")}
                   >
                     {showPassword ? (
                       <svg className="w-4.5 h-4.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -126,12 +128,12 @@ export default function ResetPassword() {
                     )}
                   </button>
                 </div>
-                <p className="text-xs text-gray-400 mt-1">Mindestens 6 Zeichen</p>
+                <p className="text-xs text-gray-400 mt-1">{t("common.passwordHint")}</p>
               </div>
 
               <div>
                 <label htmlFor="confirmPassword" className="block text-sm font-medium text-gray-700 mb-1">
-                  Passwort bestätigen
+                  {t("common.confirmPassword")}
                 </label>
                 <input
                   id="confirmPassword"
@@ -151,7 +153,7 @@ export default function ResetPassword() {
                 disabled={isLoading}
                 className="w-full bg-gray-900 text-white py-2.5 rounded-lg font-medium text-sm hover:bg-gray-800 transition-colors disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer"
               >
-                {isLoading ? "Wird gespeichert..." : "Passwort speichern"}
+                {isLoading ? t("common.saving") : t("auth.reset.submit")}
               </button>
             </form>
           )}

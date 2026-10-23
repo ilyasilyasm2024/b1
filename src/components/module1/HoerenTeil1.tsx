@@ -3,6 +3,7 @@ import { module1HoerenTeil1 } from "../../data/module1/hoerenTeil1";
 import { useProgress } from "../../context/ProgressContext";
 import { useAnswers } from "../../context/AnswersContext";
 import TranscriptToggle from "../TranscriptToggle";
+import { useTranslation } from "react-i18next";
 
 type RFAnswer = "richtig" | "falsch" | null;
 type MCAnswer = "a" | "b" | "c" | null;
@@ -11,6 +12,7 @@ const RF_SECTION = "m1-hoeren-teil1-rf";
 const MC_SECTION = "m1-hoeren-teil1-mc";
 
 export default function HoerenTeil1() {
+  const { t } = useTranslation();
   const data = module1HoerenTeil1;
   const { updateProgress } = useProgress();
   const { getAnswers, setAnswers, isSubmitted, setSubmitted } = useAnswers();
@@ -63,8 +65,8 @@ export default function HoerenTeil1() {
 
       {/* Introduction audio */}
       <div className="mb-4">
-        <p className="text-xs font-medium text-gray-500 mb-1">Einleitung anhören:</p>
-        <audio controls controlsList="nodownload" className="w-full h-9">
+        <p className="text-xs font-medium text-gray-500 mb-1">{t("exercise.listenIntro")}</p>
+        <audio controls controlsList="nodownload" preload="none" className="w-full h-9">
           <source src="/horen/module1/teil1-introduction.mp3" type="audio/mpeg" />
         </audio>
         <TranscriptToggle module="module1" fileName="teil1-introduction" />
@@ -73,7 +75,7 @@ export default function HoerenTeil1() {
       {/* Example */}
       <div className="mb-6 p-4 bg-gray-50 rounded-lg border border-gray-200">
         <p className="text-sm text-gray-500 font-semibold mb-2">Beispiel</p>
-        <audio controls controlsList="nodownload" className="w-full h-8 mb-2">
+        <audio controls controlsList="nodownload" preload="none" className="w-full h-8 mb-2">
           <source src="/horen/module1/teil1-beispiel.mp3" type="audio/mpeg" />
         </audio>
         <TranscriptToggle module="module1" fileName="teil1-beispiel" />
@@ -119,7 +121,7 @@ export default function HoerenTeil1() {
               <h4 className="font-bold text-sm text-gray-500 mb-2">
                 Text {text.id}
               </h4>
-              <audio controls controlsList="nodownload" className="w-full h-8 mb-1">
+              <audio controls controlsList="nodownload" preload="none" className="w-full h-8 mb-1">
                 <source src={`/horen/module1/model1-tail1-text${text.id}.mp3`} type="audio/mpeg" />
               </audio>
               <TranscriptToggle module="module1" fileName={`model1-tail1-text${text.id}`} />
@@ -236,18 +238,18 @@ export default function HoerenTeil1() {
             onClick={handleSubmit}
             className="bg-blue-600 text-white px-6 py-3 rounded-lg font-semibold hover:bg-blue-700 cursor-pointer"
           >
-            Auswerten
+            {t("exercise.check")}
           </button>
         ) : (
           <>
             <div className="bg-white border border-gray-200 rounded-lg px-4 py-3 font-semibold">
-              Ergebnis: {score} / {totalQuestions}
+              {t("exercise.result")}: {score} / {totalQuestions}
             </div>
             <button
               onClick={handleReset}
               className="bg-gray-600 text-white px-6 py-3 rounded-lg font-semibold hover:bg-gray-700 cursor-pointer"
             >
-              Nochmal versuchen
+              {t("exercise.tryAgain")}
             </button>
           </>
         )}

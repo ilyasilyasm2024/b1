@@ -3,11 +3,13 @@ import { module1Sprechen } from "../../data/module1/sprechen";
 import { useProgress } from "../../context/ProgressContext";
 import { useAnswers } from "../../context/AnswersContext";
 import AudioRecorder from "../AudioRecorder";
+import { useTranslation } from "react-i18next";
 
 type TabKey = "teil1" | "teil2a" | "teil2b" | "teil3";
 const SECTION_ID = "m1-sprechen";
 
 export default function Sprechen() {
+  const { t } = useTranslation();
   const data = module1Sprechen;
   const { updateProgress } = useProgress();
   const { getDone, setDone: setGlobalDone } = useAnswers();
@@ -87,8 +89,7 @@ export default function Sprechen() {
 
           <div className="mt-6 bg-blue-50 border border-blue-200 rounded-lg p-4">
             <p className="text-sm text-blue-800">
-              💡 Tipp: Üben Sie diesen Teil mit einem Lernpartner. Machen Sie
-              Vorschläge und reagieren Sie auf die Vorschläge des anderen.
+              💡 {t("exercise.tipPartnerDiscuss")}
             </p>
           </div>
 
@@ -101,7 +102,7 @@ export default function Sprechen() {
                   : "bg-gray-900 text-white hover:bg-gray-800"
               }`}
             >
-              {done.teil1 ? "✓ Erledigt" : "Als erledigt markieren"}
+              {done.teil1 ? `✓ ${t("exercise.done")}` : t("exercise.markDone")}
             </button>
           </div>
 
@@ -142,7 +143,7 @@ export default function Sprechen() {
                   : "bg-gray-900 text-white hover:bg-gray-800"
               }`}
             >
-              {done.teil2a ? "✓ Erledigt" : "Als erledigt markieren"}
+              {done.teil2a ? `✓ ${t("exercise.done")}` : t("exercise.markDone")}
             </button>
           </div>
 
@@ -183,7 +184,7 @@ export default function Sprechen() {
                   : "bg-gray-900 text-white hover:bg-gray-800"
               }`}
             >
-              {done.teil2b ? "✓ Erledigt" : "Als erledigt markieren"}
+              {done.teil2b ? `✓ ${t("exercise.done")}` : t("exercise.markDone")}
             </button>
           </div>
 
@@ -210,8 +211,7 @@ export default function Sprechen() {
 
           <div className="mt-6 bg-blue-50 border border-blue-200 rounded-lg p-4">
             <p className="text-sm text-blue-800">
-              💡 Tipp: Üben Sie diesen Teil mit einem Lernpartner. Geben Sie
-              Feedback zur Präsentation und stellen Sie Fragen.
+              💡 {t("exercise.tipPartnerFeedback")}
             </p>
           </div>
 
@@ -224,7 +224,7 @@ export default function Sprechen() {
                   : "bg-gray-900 text-white hover:bg-gray-800"
               }`}
             >
-              {done.teil3 ? "✓ Erledigt" : "Als erledigt markieren"}
+              {done.teil3 ? `✓ ${t("exercise.done")}` : t("exercise.markDone")}
             </button>
           </div>
 

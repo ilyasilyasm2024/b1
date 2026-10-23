@@ -15,6 +15,7 @@ import Module12 from "./components/Module12";
 import Module13 from "./components/Module13";
 import Module14 from "./components/Module14";
 import Module15 from "./components/Module15";
+import NewModule1 from "./components/NewModule1";
 import Timer from "./components/Timer";
 import VocabularyPanel from "./components/Vocabulary";
 import NotesPanel from "./components/NotesPanel";
@@ -35,6 +36,8 @@ import GuidedTour from "./components/GuidedTour";
 import ComingSoon from "./components/ComingSoon";
 import GlobalChat from "./components/GlobalChat";
 import StreakCalendar from "./components/StreakCalendar";
+import LanguageSwitcher from "./components/LanguageSwitcher";
+import { useTranslation } from "react-i18next";
 
 function AppContent() {
   const [openModules, setOpenModules] = useState<Record<string, boolean>>({});
@@ -42,6 +45,7 @@ function AppContent() {
   const [notesOpen, setNotesOpen] = useState(false);
   const [chatOpen, setChatOpen] = useState(false);
   const { user, logout } = useAuth();
+  const { t } = useTranslation();
   const { getModuleProgress } = useProgress();
   const { plan } = usePermissions();
   const m1Progress = getModuleProgress("m1");
@@ -59,6 +63,7 @@ function AppContent() {
   const m13Progress = getModuleProgress("m13");
   const m14Progress = getModuleProgress("m14");
   const m15Progress = getModuleProgress("m15");
+  const nm1Progress = getModuleProgress("nm1");
 
   const toggleModule = (key: string) => {
     // All Modelltests require a signed-in account.
@@ -79,27 +84,28 @@ function AppContent() {
               <button
                 onClick={() => setNotesOpen(true)}
                 className="bg-white border border-gray-200 rounded-lg px-2.5 py-1.5 shadow-sm flex items-center gap-1.5 cursor-pointer hover:bg-gray-50 transition-colors shrink-0"
-                title="Meine Notizen"
+                title={t("app.myNotes")}
                 data-tour="notes-btn"
               >
                 <svg className="w-4 h-4 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
                 </svg>
-                <span className="text-xs font-medium text-gray-700 hidden sm:inline">Notizen</span>
+                <span className="text-xs font-medium text-gray-700 hidden sm:inline">{t("app.notes")}</span>
               </button>
             )}
             <button
               onClick={() => setVocabOpen(true)}
               className="bg-white border border-gray-200 rounded-lg px-2.5 py-1.5 shadow-sm flex items-center gap-1.5 cursor-pointer hover:bg-gray-50 transition-colors shrink-0"
-              title="Meine Vokabeln"
+              title={t("app.myVocabulary")}
               data-tour="vocab-btn"
             >
               <svg className="w-4 h-4 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
               </svg>
-              <span className="text-xs font-medium text-gray-700 hidden sm:inline">Vokabeln</span>
+              <span className="text-xs font-medium text-gray-700 hidden sm:inline">{t("app.vocabulary")}</span>
             </button>
             <ThemePicker />
+            <LanguageSwitcher />
           </div>
 
           <div data-tour="timer">
@@ -111,7 +117,7 @@ function AppContent() {
             {user ? (
               <>
                 <span className="text-xs text-gray-500 hidden sm:inline">
-                  Hallo, {user.firstName}
+                  {t("app.hello", { name: user.firstName })}
                 </span>
                 {user.streak > 0 && (
                   <StreakCalendar />
@@ -119,12 +125,12 @@ function AppContent() {
                 <button
                   onClick={logout}
                   className="bg-white border border-gray-200 rounded-lg px-2.5 py-1.5 shadow-sm flex items-center gap-1.5 cursor-pointer hover:bg-gray-50 transition-colors"
-                  title="Abmelden"
+                  title={t("common.signOut")}
                 >
                   <svg className="w-4 h-4 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
                   </svg>
-                  <span className="text-xs font-medium text-gray-700 hidden sm:inline">Abmelden</span>
+                  <span className="text-xs font-medium text-gray-700 hidden sm:inline">{t("common.signOut")}</span>
                 </button>
               </>
             ) : (
@@ -133,13 +139,13 @@ function AppContent() {
                   to="/login"
                   className="bg-gray-900 text-white rounded-lg px-3 py-1.5 text-xs font-medium hover:bg-gray-800 transition-colors"
                 >
-                  Anmelden
+                  {t("common.signIn")}
                 </Link>
                 <Link
                   to="/signup"
                   className="bg-white border border-gray-200 rounded-lg px-3 py-1.5 text-xs font-medium text-gray-700 hover:bg-gray-50 transition-colors hidden sm:inline-block"
                 >
-                  Registrieren
+                  {t("common.signUp")}
                 </Link>
               </>
             )}
@@ -166,7 +172,7 @@ function AppContent() {
         {/* Header */}
         <div className="text-center mb-8">
           <h1 className="text-3xl font-bold text-gray-900 mb-1">
-            B1 Prüfungsvorbereitung
+            {t("app.title")}
             <span className={`ml-2 inline-block text-[10px] font-semibold px-2 py-0.5 rounded-full align-middle ${
               plan === "beta" ? "bg-amber-100 text-amber-800" :
               plan === "free" ? "bg-gray-100 text-gray-600" :
@@ -181,7 +187,7 @@ function AppContent() {
           </h1>
           <p className="text-gray-500 text-sm">Zertifikat B1 neu</p>
           <p className="text-gray-400 text-[10px] mt-1">
-            v0.0.1-beta · testing mode ·{" "}
+            v0.0.1-beta · {t("app.testingMode")} ·{" "}
             {/* <Link to="/pricing" className="text-blue-500 hover:underline">Pricing</Link> */}
           </p>
         </div>
@@ -223,7 +229,7 @@ function AppContent() {
                   <div className="text-left">
                     <span className="text-sm font-semibold text-gray-800 block">Modelltest 1</span>
                     <span className="text-[10px] text-gray-400">
-                      {m1Progress.answered}/{m1Progress.total} Fragen
+                      {t("app.questionsCount", { answered: m1Progress.answered, total: m1Progress.total })}
                     </span>
                   </div>
                 </div>
@@ -265,7 +271,7 @@ function AppContent() {
                   </div>
                   <div className="text-left">
                     <span className="text-sm font-semibold text-gray-800 block">Modelltest 2</span>
-                    <span className="text-[10px] text-gray-400">{m2Progress.answered}/{m2Progress.total} Fragen</span>
+                    <span className="text-[10px] text-gray-400">{t("app.questionsCount", { answered: m2Progress.answered, total: m2Progress.total })}</span>
                   </div>
                 </div>
                 <svg
@@ -304,7 +310,7 @@ function AppContent() {
                   </div>
                   <div className="text-left">
                     <span className="text-sm font-semibold text-gray-800 block">Modelltest 3</span>
-                    <span className="text-[10px] text-gray-400">{m3Progress.answered}/{m3Progress.total} Fragen</span>
+                    <span className="text-[10px] text-gray-400">{t("app.questionsCount", { answered: m3Progress.answered, total: m3Progress.total })}</span>
                   </div>
                 </div>
                 <svg
@@ -343,7 +349,7 @@ function AppContent() {
                   </div>
                   <div className="text-left">
                     <span className="text-sm font-semibold text-gray-800 block">Modelltest 4</span>
-                    <span className="text-[10px] text-gray-400">{m4Progress.answered}/{m4Progress.total} Fragen</span>
+                    <span className="text-[10px] text-gray-400">{t("app.questionsCount", { answered: m4Progress.answered, total: m4Progress.total })}</span>
                   </div>
                 </div>
                 <svg
@@ -382,7 +388,7 @@ function AppContent() {
                   </div>
                   <div className="text-left">
                     <span className="text-sm font-semibold text-gray-800 block">Modelltest 5</span>
-                    <span className="text-[10px] text-gray-400">{m5Progress.answered}/{m5Progress.total} Fragen</span>
+                    <span className="text-[10px] text-gray-400">{t("app.questionsCount", { answered: m5Progress.answered, total: m5Progress.total })}</span>
                   </div>
                 </div>
                 <svg
@@ -421,7 +427,7 @@ function AppContent() {
                   </div>
                   <div className="text-left">
                     <span className="text-sm font-semibold text-gray-800 block">Modelltest 6</span>
-                    <span className="text-[10px] text-gray-400">{m6Progress.answered}/{m6Progress.total} Fragen</span>
+                    <span className="text-[10px] text-gray-400">{t("app.questionsCount", { answered: m6Progress.answered, total: m6Progress.total })}</span>
                   </div>
                 </div>
                 <svg
@@ -460,7 +466,7 @@ function AppContent() {
                   </div>
                   <div className="text-left">
                     <span className="text-sm font-semibold text-gray-800 block">Modelltest 7</span>
-                    <span className="text-[10px] text-gray-400">{m7Progress.answered}/{m7Progress.total} Fragen</span>
+                    <span className="text-[10px] text-gray-400">{t("app.questionsCount", { answered: m7Progress.answered, total: m7Progress.total })}</span>
                   </div>
                 </div>
                 <svg
@@ -499,7 +505,7 @@ function AppContent() {
                   </div>
                   <div className="text-left">
                     <span className="text-sm font-semibold text-gray-800 block">Modelltest 8</span>
-                    <span className="text-[10px] text-gray-400">{m8Progress.answered}/{m8Progress.total} Fragen</span>
+                    <span className="text-[10px] text-gray-400">{t("app.questionsCount", { answered: m8Progress.answered, total: m8Progress.total })}</span>
                   </div>
                 </div>
                 <svg
@@ -538,7 +544,7 @@ function AppContent() {
                   </div>
                   <div className="text-left">
                     <span className="text-sm font-semibold text-gray-800 block">Modelltest 9</span>
-                    <span className="text-[10px] text-gray-400">{m9Progress.answered}/{m9Progress.total} Fragen</span>
+                    <span className="text-[10px] text-gray-400">{t("app.questionsCount", { answered: m9Progress.answered, total: m9Progress.total })}</span>
                   </div>
                 </div>
                 <svg
@@ -577,7 +583,7 @@ function AppContent() {
                   </div>
                   <div className="text-left">
                     <span className="text-sm font-semibold text-gray-800 block">Modelltest 10</span>
-                    <span className="text-[10px] text-gray-400">{m10Progress.answered}/{m10Progress.total} Fragen</span>
+                    <span className="text-[10px] text-gray-400">{t("app.questionsCount", { answered: m10Progress.answered, total: m10Progress.total })}</span>
                   </div>
                 </div>
                 <svg
@@ -616,7 +622,7 @@ function AppContent() {
                   </div>
                   <div className="text-left">
                     <span className="text-sm font-semibold text-gray-800 block">Modelltest 11</span>
-                    <span className="text-[10px] text-gray-400">{m11Progress.answered}/{m11Progress.total} Fragen</span>
+                    <span className="text-[10px] text-gray-400">{t("app.questionsCount", { answered: m11Progress.answered, total: m11Progress.total })}</span>
                   </div>
                 </div>
                 <svg
@@ -655,7 +661,7 @@ function AppContent() {
                   </div>
                   <div className="text-left">
                     <span className="text-sm font-semibold text-gray-800 block">Modelltest 12</span>
-                    <span className="text-[10px] text-gray-400">{m12Progress.answered}/{m12Progress.total} Fragen</span>
+                    <span className="text-[10px] text-gray-400">{t("app.questionsCount", { answered: m12Progress.answered, total: m12Progress.total })}</span>
                   </div>
                 </div>
                 <svg
@@ -694,7 +700,7 @@ function AppContent() {
                   </div>
                   <div className="text-left">
                     <span className="text-sm font-semibold text-gray-800 block">Modelltest 13</span>
-                    <span className="text-[10px] text-gray-400">{m13Progress.answered}/{m13Progress.total} Fragen</span>
+                    <span className="text-[10px] text-gray-400">{t("app.questionsCount", { answered: m13Progress.answered, total: m13Progress.total })}</span>
                   </div>
                 </div>
                 <svg
@@ -733,7 +739,7 @@ function AppContent() {
                   </div>
                   <div className="text-left">
                     <span className="text-sm font-semibold text-gray-800 block">Modelltest 14</span>
-                    <span className="text-[10px] text-gray-400">{m14Progress.answered}/{m14Progress.total} Fragen</span>
+                    <span className="text-[10px] text-gray-400">{t("app.questionsCount", { answered: m14Progress.answered, total: m14Progress.total })}</span>
                   </div>
                 </div>
                 <svg
@@ -772,7 +778,7 @@ function AppContent() {
                   </div>
                   <div className="text-left">
                     <span className="text-sm font-semibold text-gray-800 block">Modelltest 15</span>
-                    <span className="text-[10px] text-gray-400">{m15Progress.answered}/{m15Progress.total} Fragen</span>
+                    <span className="text-[10px] text-gray-400">{t("app.questionsCount", { answered: m15Progress.answered, total: m15Progress.total })}</span>
                   </div>
                 </div>
                 <svg
@@ -786,6 +792,45 @@ function AppContent() {
             {openModules["m15"] && (
               <div className="border-t border-gray-100 px-4 py-4">
                 <Module15 />
+              </div>
+            )}
+          </div>
+
+          {/* New Module 1 — rewritten, original content (Lesen only so far) */}
+          <div className="rounded-xl border border-gray-200 bg-white overflow-hidden shadow-sm">
+            <button
+              onClick={() => toggleModule("nm1")}
+              className="w-full px-6 py-4 cursor-pointer hover:bg-gray-50 transition-colors"
+            >
+              <div className="flex items-center justify-between">
+                <div className="flex items-center gap-3">
+                  <div className="relative w-10 h-10 shrink-0">
+                    <svg className="w-10 h-10 -rotate-90" viewBox="0 0 40 40">
+                      <circle cx="20" cy="20" r="17" fill="none" stroke="#e5e7eb" strokeWidth="3" />
+                      <circle cx="20" cy="20" r="17" fill="none" stroke="#3b82f6" strokeWidth="3" strokeLinecap="round"
+                        strokeDasharray={`${2 * Math.PI * 17}`}
+                        strokeDashoffset={`${2 * Math.PI * 17 * (1 - nm1Progress.percent / 100)}`}
+                        className="transition-all duration-700 ease-out"
+                      />
+                    </svg>
+                    <span className="absolute inset-0 flex items-center justify-center text-xs font-bold text-gray-900">N</span>
+                  </div>
+                  <div className="text-left">
+                    <span className="text-sm font-semibold text-gray-800 block">{t("app.newModelltest")}</span>
+                    <span className="text-[10px] text-gray-400">{t("app.questionsCount", { answered: nm1Progress.answered, total: nm1Progress.total })}</span>
+                  </div>
+                </div>
+                <svg
+                  className={`w-4 h-4 text-gray-400 transition-transform duration-200 ${openModules["nm1"] ? "rotate-180" : ""}`}
+                  fill="none" stroke="currentColor" viewBox="0 0 24 24"
+                >
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+                </svg>
+              </div>
+            </button>
+            {openModules["nm1"] && (
+              <div className="border-t border-gray-100 px-4 py-4">
+                <NewModule1 />
               </div>
             )}
           </div>

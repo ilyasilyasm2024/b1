@@ -1,6 +1,7 @@
 import { createContext, useContext, useState, useEffect, useCallback, useRef, type ReactNode } from "react";
 import { notesService, type NoteBackend, type NoteType, type UpdateNoteData } from "../services/notes";
 import { useAuth } from "./AuthContext";
+import i18n from "../i18n";
 
 interface NotesContextType {
   notes: NoteBackend[];
@@ -51,7 +52,7 @@ export function NotesProvider({ children }: { children: ReactNode }) {
     if (res.data) {
       setNotes(res.data);
     } else {
-      setError(res.error || "Notizen konnten nicht geladen werden.");
+      setError(res.error || i18n.t("notes.loadFailed"));
     }
     setIsLoading(false);
   }, [user, token]);
@@ -77,7 +78,7 @@ export function NotesProvider({ children }: { children: ReactNode }) {
     if (res.data) {
       setNotes((prev) => [res.data as NoteBackend, ...prev]);
     } else {
-      setError(res.error || "Notiz konnte nicht erstellt werden.");
+      setError(res.error || i18n.t("notes.createFailed"));
     }
   };
 
@@ -225,7 +226,7 @@ export function NotesProvider({ children }: { children: ReactNode }) {
     const deleted = ids.filter((id) => !failed.has(id));
     setNotes((prev) => prev.filter((n) => failed.has(n._id) || !ids.includes(n._id)));
     pruneLinks(deleted);
-    if (failed.size > 0) setError("Einige Notizen konnten nicht gelöscht werden.");
+    if (failed.size > 0) setError(i18n.t("notes.someDeleteFailed"));
   };
 
   return (

@@ -1,0 +1,42 @@
+{
+  "file": "module13/m13-t1-introduction.mp3",
+  "text": " Modelltest 13 Teil 1 Sie hören nun fünf kurze Texte. Sie hören jeden Text zweimal. Zu jedem Text lösen Sie zwei Aufgaben. Wählen Sie bei jeder Aufgabe die richtige Lösung. Lesen Sie zuerst das Beispiel. Dazu haben Sie zehn Sekunden Zeit.",
+  "segments": [
+    {
+      "start": 0,
+      "end": 3.3999999,
+      "text": " Modelltest 13 Teil 1"
+    },
+    {
+      "start": 3.3999999,
+      "end": 6.74,
+      "text": " Sie hören nun fünf kurze Texte."
+    },
+    {
+      "start": 7.54,
+      "end": 9.36,
+      "text": " Sie hören jeden Text zweimal."
+    },
+    {
+      "start": 10.599999,
+      "end": 13.059999,
+      "text": " Zu jedem Text lösen Sie zwei Aufgaben."
+    },
+    {
+      "start": 14.2,
+      "end": 17.18,
+      "text": " Wählen Sie bei jeder Aufgabe die richtige Lösung."
+    },
+    {
+      "start": 19.039999,
+      "end": 20.779999,
+      "text": " Lesen Sie zuerst das Beispiel."
+    },
+    {
+      "start": 21.68,
+      "end": 23.859999,
+      "text": " Dazu haben Sie zehn Sekunden Zeit."
+    }
+  ],
+  "duration": 24.44499968
+}

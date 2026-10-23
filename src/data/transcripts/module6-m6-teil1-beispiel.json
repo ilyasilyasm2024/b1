@@ -1,0 +1,82 @@
+{
+  "file": "module6/m6-teil1-beispiel.mp3",
+  "text": " Sie hören eine Durchsage im Supermarkt. roten Tomaten aus Griechenland in der 500 Gramm Packung für 1,49 genau das richtige für Sie. Außerdem im Angebot grüne Salatköpfe, das Stück 45 Cent aus Italien. Ideal für eine kalorienarme Diät. Und schließlich ein Top-Angebot aus dem eigenen Land. Äpfel, das Kilo für nur 1,89. Verzehren Sie sie mit oder ohne Schale. Sie tun in jedem Fall etwas Sie hören jetzt den Text noch einmal Das Kilo nur 2,99. Oder mögen Sie lieber Gemüse? Dann sind die reifen roten Tomaten aus Griechenland in der 500-Gramm-Packung für 1,49 genau das Richtige für Sie. Außerdem im Angebot grüne Salatköpfe. Das Stück 45 Cent aus Italien. Ideal für eine kalorienarme Diät. Und schließlich ein Top-Angebot aus dem eigenen Land. Äpfel. Das Kilo für nur 1,89. Verzehren Sie sie mit oder ohne Schale. Sie tun in jedem Fall etwas Gutes für Ihre Gesundheit.",
+  "segments": [
+    {
+      "start": 0,
+      "end": 2.46,
+      "text": " Sie hören eine Durchsage im Supermarkt."
+    },
+    {
+      "start": 30,
+      "end": 35.7,
+      "text": " roten Tomaten aus Griechenland in der 500 Gramm Packung für 1,49 genau das richtige für Sie."
+    },
+    {
+      "start": 36.72,
+      "end": 43.34,
+      "text": " Außerdem im Angebot grüne Salatköpfe, das Stück 45 Cent aus Italien. Ideal für eine"
+    },
+    {
+      "start": 43.34,
+      "end": 49.56,
+      "text": " kalorienarme Diät. Und schließlich ein Top-Angebot aus dem eigenen Land. Äpfel,"
+    },
+    {
+      "start": 49.94,
+      "end": 57.059998,
+      "text": " das Kilo für nur 1,89. Verzehren Sie sie mit oder ohne Schale. Sie tun in jedem Fall etwas"
+    },
+    {
+      "start": 57.059998,
+      "end": 65.3865,
+      "text": " Sie hören jetzt den Text noch einmal"
+    },
+    {
+      "start": 88.0065,
+      "end": 90.026505,
+      "text": " Das Kilo nur 2,99."
+    },
+    {
+      "start": 90.7265,
+      "end": 92.6865,
+      "text": " Oder mögen Sie lieber Gemüse?"
+    },
+    {
+      "start": 93.1865,
+      "end": 99.8665,
+      "text": " Dann sind die reifen roten Tomaten aus Griechenland in der 500-Gramm-Packung für 1,49 genau das Richtige für Sie."
+    },
+    {
+      "start": 100.8665,
+      "end": 103.2265,
+      "text": " Außerdem im Angebot grüne Salatköpfe."
+    },
+    {
+      "start": 103.6465,
+      "end": 105.886505,
+      "text": " Das Stück 45 Cent aus Italien."
+    },
+    {
+      "start": 106.4665,
+      "end": 108.7265,
+      "text": " Ideal für eine kalorienarme Diät."
+    },
+    {
+      "start": 109.406494,
+      "end": 112.626495,
+      "text": " Und schließlich ein Top-Angebot aus dem eigenen Land."
+    },
+    {
+      "start": 113.3065,
+      "end": 116.0865,
+      "text": " Äpfel. Das Kilo für nur 1,89."
+    },
+    {
+      "start": 116.0865,
+      "end": 122.6465,
+      "text": " Verzehren Sie sie mit oder ohne Schale. Sie tun in jedem Fall etwas Gutes für Ihre Gesundheit."
+    }
+  ],
+  "duration": 126.012998304
+}

@@ -2,11 +2,13 @@ import { useState, type FormEvent } from "react";
 import { Link, useNavigate, useSearchParams } from "react-router-dom";
 import { authService } from "../services/auth";
 import { useAuth } from "../context/AuthContext";
+import { useTranslation } from "react-i18next";
 
 export default function Login() {
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
   const { login } = useAuth();
+  const { t } = useTranslation();
 
   const [identifier, setIdentifier] = useState("");
   const [password, setPassword] = useState("");
@@ -31,10 +33,9 @@ export default function Login() {
       const redirect = searchParams.get("redirect") || "/";
       navigate(redirect);
     } else {
-      const errMsg = res.error || "Login failed";
-      setError(errMsg);
+      setError(res.error || t("auth.login.failed"));
       // Show resend option if it's a verification issue
-      setNeedsVerification(errMsg.toLowerCase().includes("verify"));
+      setNeedsVerification(res.code === "EMAIL_NOT_VERIFIED");
     }
 
     setIsLoading(false);
@@ -42,7 +43,7 @@ export default function Login() {
 
   const handleResendVerification = async () => {
     if (!identifier) {
-      setError("Please enter your email or username above to resend the verification email.");
+      setError(t("auth.login.resendNeedsIdentifier"));
       return;
     }
     setIsResending(true);
@@ -55,7 +56,7 @@ export default function Login() {
       setError("");
       setNeedsVerification(false);
     } else {
-      setError(res.error || "Failed to resend verification email");
+      setError(res.error || t("auth.login.resendFailed"));
     }
 
     setIsResending(false);
@@ -65,9 +66,9 @@ export default function Login() {
     <div className="min-h-screen bg-gray-50 flex items-center justify-center px-4">
       <div className="w-full max-w-md">
         <div className="text-center mb-8">
-          <h1 className="text-3xl font-bold text-gray-900">Willkommen zurück</h1>
+          <h1 className="text-3xl font-bold text-gray-900">{t("auth.login.title")}</h1>
           <p className="text-gray-500 mt-2">
-            Melde dich an, um deine B1-Vorbereitung fortzusetzen
+            {t("auth.login.subtitle")}
           </p>
         </div>
 
@@ -78,7 +79,7 @@ export default function Login() {
               {needsVerification && (
                 <>
                   <p className="mt-2 text-[10px] text-red-600">
-                    📧 Tip: Please also check your spam folder!
+                    {t("auth.login.spamTip")}
                   </p>
                   <button
                     type="button"
@@ -86,7 +87,7 @@ export default function Login() {
                     disabled={isResending}
                     className="mt-1 text-xs font-medium text-red-800 underline hover:text-red-900 cursor-pointer disabled:opacity-50"
                   >
-                    {isResending ? "Wird gesendet..." : "Bestätigungs-E-Mail erneut senden"}
+                    {isResending ? t("common.sending") : t("auth.login.resend")}
                   </button>
                 </>
               )}
@@ -105,7 +106,7 @@ export default function Login() {
           <form onSubmit={handleSubmit} className="space-y-4">
             <div>
               <label htmlFor="identifier" className="block text-sm font-medium text-gray-700 mb-1">
-                E-Mail oder Benutzername
+                {t("auth.login.identifier")}
               </label>
               <input
                 id="identifier"
@@ -116,13 +117,13 @@ export default function Login() {
                 minLength={3}
                 maxLength={128}
                 className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-gray-900 focus:border-transparent text-sm"
-                placeholder="dein@email.de oder benutzername"
+                placeholder={t("auth.login.identifierPlaceholder")}
               />
             </div>
 
             <div>
               <label htmlFor="password" className="block text-sm font-medium text-gray-700 mb-1">
-                Passwort
+                {t("common.password")}
               </label>
               <div className="relative">
                 <input
@@ -139,7 +140,7 @@ export default function Login() {
                   type="button"
                   onClick={() => setShowPassword(!showPassword)}
                   className="absolute right-2.5 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600 cursor-pointer"
-                  aria-label={showPassword ? "Passwort verbergen" : "Passwort anzeigen"}
+                  aria-label={showPassword ? t("common.hidePassword") : t("common.showPassword")}
                 >
                   {showPassword ? (
                     <svg className="w-4.5 h-4.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -160,26 +161,26 @@ export default function Login() {
               disabled={isLoading}
               className="w-full bg-gray-900 text-white py-2.5 rounded-lg font-medium text-sm hover:bg-gray-800 transition-colors disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer"
             >
-              {isLoading ? "Anmelden..." : "Anmelden"}
+              {isLoading ? t("auth.login.submitting") : t("common.signIn")}
             </button>
           </form>
 
           <div className="mt-4 text-right">
             <Link to="/forgot-password" className="text-xs text-gray-500 hover:text-gray-700 hover:underline">
-              Passwort vergessen?
+              {t("auth.login.forgotPassword")}
             </Link>
           </div>
 
           <div className="mt-4 text-center text-sm text-gray-600">
-            Noch kein Konto?{" "}
+            {t("auth.login.noAccount")}{" "}
             <Link to="/signup" className="font-medium text-gray-900 hover:underline">
-              Registrieren
+              {t("common.signUp")}
             </Link>
           </div>
 
           <div className="mt-3 text-center">
             <Link to="/" className="text-xs text-gray-400 hover:text-gray-600 hover:underline">
-              Ohne Anmeldung fortfahren →
+              {t("common.continueWithoutAccount")}
             </Link>
           </div>
         </div>

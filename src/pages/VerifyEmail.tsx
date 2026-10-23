@@ -1,17 +1,21 @@
 import { useEffect, useState } from "react";
 import { Link, useSearchParams } from "react-router-dom";
 import { authService } from "../services/auth";
+import { useTranslation } from "react-i18next";
 
 export default function VerifyEmail() {
   const [searchParams] = useSearchParams();
+  const { t } = useTranslation();
   const token = searchParams.get("token") || "";
   const [status, setStatus] = useState<"loading" | "success" | "error">("loading");
   const [message, setMessage] = useState("");
+  // Fallback i18n key, translated at render time so switching language never re-runs the verification
+  const [messageKey, setMessageKey] = useState("");
 
   useEffect(() => {
     if (!token) {
       setStatus("error");
-      setMessage("Verification token is missing.");
+      setMessageKey("auth.verify.missingToken");
       return;
     }
 
@@ -21,7 +25,8 @@ export default function VerifyEmail() {
         setMessage(res.data.message);
       } else {
         setStatus("error");
-        setMessage(res.error || "Verification failed.");
+        if (res.error) setMessage(res.error);
+        else setMessageKey("auth.verify.failedMessage");
       }
     });
   }, [token]);
@@ -35,8 +40,8 @@ export default function VerifyEmail() {
               <div className="mx-auto w-14 h-14 bg-gray-100 rounded-full flex items-center justify-center mb-4">
                 <div className="animate-spin rounded-full h-7 w-7 border-2 border-gray-900 border-t-transparent"></div>
               </div>
-              <h2 className="text-lg font-bold text-gray-900 mb-2">E-Mail wird bestätigt...</h2>
-              <p className="text-sm text-gray-500">Bitte warten.</p>
+              <h2 className="text-lg font-bold text-gray-900 mb-2">{t("auth.verify.verifying")}</h2>
+              <p className="text-sm text-gray-500">{t("auth.verify.wait")}</p>
             </>
           )}
 
@@ -47,13 +52,13 @@ export default function VerifyEmail() {
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
                 </svg>
               </div>
-              <h2 className="text-lg font-bold text-gray-900 mb-2">E-Mail bestätigt!</h2>
-              <p className="text-sm text-gray-600 mb-6">{message}</p>
+              <h2 className="text-lg font-bold text-gray-900 mb-2">{t("auth.verify.success")}</h2>
+              <p className="text-sm text-gray-600 mb-6">{message || (messageKey && t(messageKey))}</p>
               <Link
                 to="/login"
                 className="inline-block bg-gray-900 text-white px-6 py-2.5 rounded-lg text-sm font-medium hover:bg-gray-800 transition-colors"
               >
-                Zur Anmeldung
+                {t("common.toLogin")}
               </Link>
             </>
           )}
@@ -65,17 +70,17 @@ export default function VerifyEmail() {
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
                 </svg>
               </div>
-              <h2 className="text-lg font-bold text-gray-900 mb-2">Bestätigung fehlgeschlagen</h2>
-              <p className="text-sm text-red-600 mb-6">{message}</p>
+              <h2 className="text-lg font-bold text-gray-900 mb-2">{t("auth.verify.failed")}</h2>
+              <p className="text-sm text-red-600 mb-6">{message || (messageKey && t(messageKey))}</p>
               <div className="space-y-3">
                 <Link
                   to="/login"
                   className="inline-block bg-gray-900 text-white px-6 py-2.5 rounded-lg text-sm font-medium hover:bg-gray-800 transition-colors"
                 >
-                  Zur Anmeldung
+                  {t("common.toLogin")}
                 </Link>
                 <p className="text-xs text-gray-400">
-                  Du kannst dort eine neue Bestätigungs-E-Mail anfordern.
+                  {t("auth.verify.requestNewHint")}
                 </p>
               </div>
             </>

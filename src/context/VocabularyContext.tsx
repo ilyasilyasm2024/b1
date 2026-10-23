@@ -3,6 +3,7 @@ import { vocabularyService } from "../services/vocabulary";
 import { useAuth } from "./AuthContext";
 import { useToast } from "../components/Toast";
 import { usePermissions } from "./Permissions";
+import i18n from "../i18n";
 
 export interface VocabItem {
   id: string;
@@ -57,12 +58,12 @@ export function VocabularyProvider({ children }: { children: ReactNode }) {
 
   const addWord = async (word: string, translation: string, context?: string) => {
     if (!user || !token) {
-      showToast("Bitte melde dich an oder registriere dich, um Vokabeln zu speichern.", "error");
+      showToast(i18n.t("vocab.loginRequiredText"), "error");
       return;
     }
 
     if (!canAddVocabulary(vocab.length)) {
-      showToast("Vocabulary limit reached. Upgrade your plan for more.", "error");
+      showToast(i18n.t("vocab.limitReached"), "error");
       return;
     }
 
@@ -81,17 +82,17 @@ export function VocabularyProvider({ children }: { children: ReactNode }) {
         addedAt: new Date(res.data.createdAt).getTime(),
       };
       setVocab((prev) => [newItem, ...prev]);
-      showToast("Vokabel gespeichert", "success");
+      showToast(i18n.t("vocab.saved"), "success");
     } else if (res.status === 401) {
-      showToast("Bitte melde dich an oder registriere dich, um Vokabeln zu speichern.", "error");
+      showToast(i18n.t("vocab.loginRequiredText"), "error");
     } else {
-      showToast(res.error || "Fehler beim Speichern", "error");
+      showToast(res.error || i18n.t("vocab.saveFailed"), "error");
     }
   };
 
   const removeWord = async (id: string) => {
     if (!user || !token) {
-      showToast("Bitte melde dich an, um Vokabeln zu verwalten.", "error");
+      showToast(i18n.t("vocab.loginToManage"), "error");
       return;
     }
 
@@ -99,11 +100,11 @@ export function VocabularyProvider({ children }: { children: ReactNode }) {
 
     if (res.data) {
       setVocab((prev) => prev.filter((item) => item.id !== id));
-      showToast("Vokabel gelöscht", "success");
+      showToast(i18n.t("apiMessages.VOCABULARY_DELETED"), "success");
     } else if (res.status === 401) {
-      showToast("Bitte melde dich an, um Vokabeln zu verwalten.", "error");
+      showToast(i18n.t("vocab.loginToManage"), "error");
     } else {
-      showToast(res.error || "Fehler beim Löschen", "error");
+      showToast(res.error || i18n.t("vocab.deleteFailed"), "error");
     }
   };
 

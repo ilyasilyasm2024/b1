@@ -1,0 +1,177 @@
+{
+  "file": "module14/m14-teil3-text.mp3",
+  "text": " Sie fahren mit der Straßenbahn und hören, wie sich zwei Jugendliche über die Ferien unterhalten. Los, jetzt zeig schon deine Fotos von den Ferien. Ja, warte. Ich muss erst mein Handy aus der Tasche holen. Wo ist es denn nur? Ah, ja, hier. Die Fotos sind nicht so super, mein Handy ist schon alt. Aber meine Eltern haben mir zum Geburtstag kein neues schenken wollen. Jetzt hör endlich auf, über dein Handy zu reden und zeig mir die Fotos. Ihr wart wieder in Griechenland? Natürlich, auf der Halkidiki, wie jedes Jahr. Wie, habt ihr ein Ferienhaus da? Ja, und deshalb fahren wir jedes Jahr dorthin. Warum? Gefällt es dir dort nicht? Naja, eigentlich ist es ja ganz schön dort, aber jedes Jahr? Ich würde lieber mal woanders hinfahren, etwas anderes sehen. Verstehe. Aber zeig jetzt mal die Fotos. Das ist euer Ferienhaus? Mhm. Und das ist der Strand? Echt klasse! Und das? Warte mal, nicht so schnell! Wer war denn das? Niemand. Wieso niemand? Nun zeig schon und sag, wer ist das? Und warum hast du ein Foto von ihm? Ähm, das ist, ähm, Andreas. Andreas? Ja, der hat mit meinem großen Bruder Tennis gespielt. Und du findest ihn toll? Erzähl! Ja, ich finde ihn toll, aber er hat schon eine Freundin. Mit mir hat er nicht einmal geredet. Und das Foto habe ich von meinem Bruder. Zufrieden? Okay, okay. Ist ja schon gut. Tut mir leid. Ja, okay. Jetzt zeig mal deine Fotos. Du weißt ja, wir waren in Österreich. Hier sind wir an der Saarlach zum Rafting. Und hier wandern wir und hier steigen wir auf den... Ach, ich weiß nicht mehr, wie der Berg heißt. Was? Und das alles mit deinen Eltern? Ja, mit meinen Eltern und meiner Schwester. Sind deine Eltern so aktiv und so sportlich? Ja, meine Eltern sind immer aktiv und sportlich. Und meine Schwester auch. Was hast du denn? Das ist doch fantastisch! Echt mal was anderes! Meine Eltern liegen immer nur am Strand oder beschäftigen sich mit dem Garten oder sitzen auf der Terrasse und lesen. Wir machen nicht mal einen Ausflug. Also, ich würde ganz gerne mal in den Ferien nur am Strand liegen und V. Lenzen.",
+  "segments": [
+    {
+      "start": 0,
+      "end": 5.16,
+      "text": " Sie fahren mit der Straßenbahn und hören, wie sich zwei Jugendliche über die Ferien unterhalten."
+    },
+    {
+      "start": 9.8,
+      "end": 12.5,
+      "text": " Los, jetzt zeig schon deine Fotos von den Ferien."
+    },
+    {
+      "start": 12.88,
+      "end": 18.4,
+      "text": " Ja, warte. Ich muss erst mein Handy aus der Tasche holen. Wo ist es denn nur?"
+    },
+    {
+      "start": 19.619999,
+      "end": 24.3,
+      "text": " Ah, ja, hier. Die Fotos sind nicht so super, mein Handy ist schon alt."
+    },
+    {
+      "start": 24.82,
+      "end": 27.98,
+      "text": " Aber meine Eltern haben mir zum Geburtstag kein neues schenken wollen."
+    },
+    {
+      "start": 28.72,
+      "end": 31.96,
+      "text": " Jetzt hör endlich auf, über dein Handy zu reden und zeig mir die Fotos."
+    },
+    {
+      "start": 32.3,
+      "end": 33.44,
+      "text": " Ihr wart wieder in Griechenland?"
+    },
+    {
+      "start": 34.3,
+      "end": 37.36,
+      "text": " Natürlich, auf der Halkidiki, wie jedes Jahr."
+    },
+    {
+      "start": 38.42,
+      "end": 40.36,
+      "text": " Wie, habt ihr ein Ferienhaus da?"
+    },
+    {
+      "start": 41.219997,
+      "end": 44.36,
+      "text": " Ja, und deshalb fahren wir jedes Jahr dorthin."
+    },
+    {
+      "start": 45.219997,
+      "end": 47.04,
+      "text": " Warum? Gefällt es dir dort nicht?"
+    },
+    {
+      "start": 47.559998,
+      "end": 51.26,
+      "text": " Naja, eigentlich ist es ja ganz schön dort, aber jedes Jahr?"
+    },
+    {
+      "start": 51.98,
+      "end": 55.16,
+      "text": " Ich würde lieber mal woanders hinfahren, etwas anderes sehen."
+    },
+    {
+      "start": 55.16,
+      "end": 60.92,
+      "text": " Verstehe. Aber zeig jetzt mal die Fotos. Das ist euer Ferienhaus?"
+    },
+    {
+      "start": 60.92,
+      "end": 66.92,
+      "text": " Mhm. Und das ist der Strand? Echt klasse! Und das?"
+    },
+    {
+      "start": 66.92,
+      "end": 70.08,
+      "text": " Warte mal, nicht so schnell! Wer war denn das?"
+    },
+    {
+      "start": 70.08,
+      "end": 75.4,
+      "text": " Niemand. Wieso niemand? Nun zeig schon und sag,"
+    },
+    {
+      "start": 75.4,
+      "end": 78.68,
+      "text": " wer ist das? Und warum hast du ein Foto von ihm?"
+    },
+    {
+      "start": 78.68,
+      "end": 91.2825,
+      "text": " Ähm, das ist, ähm, Andreas. Andreas? Ja, der hat mit meinem großen Bruder Tennis gespielt."
+    },
+    {
+      "start": 91.2825,
+      "end": 93.8025,
+      "text": " Und du findest ihn toll? Erzähl!"
+    },
+    {
+      "start": 93.8025,
+      "end": 99.862495,
+      "text": " Ja, ich finde ihn toll, aber er hat schon eine Freundin. Mit mir hat er nicht einmal geredet."
+    },
+    {
+      "start": 99.862495,
+      "end": 103.1625,
+      "text": " Und das Foto habe ich von meinem Bruder. Zufrieden?"
+    },
+    {
+      "start": 103.1625,
+      "end": 106.4025,
+      "text": " Okay, okay. Ist ja schon gut. Tut mir leid."
+    },
+    {
+      "start": 107.4025,
+      "end": 110.722496,
+      "text": " Ja, okay. Jetzt zeig mal deine Fotos."
+    },
+    {
+      "start": 111.682495,
+      "end": 115.6225,
+      "text": " Du weißt ja, wir waren in Österreich. Hier sind wir an der Saarlach zum Rafting."
+    },
+    {
+      "start": 116.322495,
+      "end": 124.4025,
+      "text": " Und hier wandern wir und hier steigen wir auf den... Ach, ich weiß nicht mehr, wie der Berg heißt."
+    },
+    {
+      "start": 124.9425,
+      "end": 127.8425,
+      "text": " Was? Und das alles mit deinen Eltern?"
+    },
+    {
+      "start": 127.8425,
+      "end": 131.0025,
+      "text": " Ja, mit meinen Eltern und meiner Schwester."
+    },
+    {
+      "start": 131.52249,
+      "end": 134.36249,
+      "text": " Sind deine Eltern so aktiv und so sportlich?"
+    },
+    {
+      "start": 134.36249,
+      "end": 140.5025,
+      "text": " Ja, meine Eltern sind immer aktiv und sportlich. Und meine Schwester auch."
+    },
+    {
+      "start": 140.5025,
+      "end": 147.86249,
+      "text": " Was hast du denn? Das ist doch fantastisch! Echt mal was anderes! Meine Eltern liegen immer nur"
+    },
+    {
+      "start": 147.86249,
+      "end": 154.9425,
+      "text": " am Strand oder beschäftigen sich mit dem Garten oder sitzen auf der Terrasse und lesen. Wir machen"
+    },
+    {
+      "start": 154.9425,
+      "end": 160.9025,
+      "text": " nicht mal einen Ausflug. Also, ich würde ganz gerne mal in den Ferien nur am Strand liegen und"
+    },
+    {
+      "start": 160.9025,
+      "end": 161.5025,
+      "text": " V. Lenzen."
+    }
+  ],
+  "duration": 167.605000608
+}

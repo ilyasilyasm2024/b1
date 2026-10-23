@@ -1,0 +1,72 @@
+{
+  "file": "module13/m13-teil1-text3.mp3",
+  "text": " Lesen Sie jetzt die Aufgaben 5 und 6. Dazu haben Sie 10 Sekunden Zeit. Sie hören eine Durchsage auf dem Flughafen. Letzter Aufruf für alle noch fehlenden Passagiere. Der Lufthansa-Flug 123 nach Frankfurt startet in wenigen Minuten. Bitte kommen Sie umgehend zum Flugsteig A09. Wir bitten die Passagiere Siebert und Johansen. Ich wiederhole, Passagiere Siebert und Johansen, gebucht mit Air Berlin 456 nach Köln. Bitte begeben Sie sich noch einmal zum Check-in-Schalter der Air Berlin. Sie hören jetzt den Text noch einmal. Letzter Aufruf für alle noch fehlenden Passagiere. Der Lufthansa-Flug 123 nach Frankfurt startet in wenigen Minuten. Bitte kommen Sie umgehend zum Flugsteig A09. Wir bitten die Passagiere Siebert und Johannsen. Ich wiederhole, Passagiere Siebert und Johannsen, gebucht mit Air Berlin 456 nach Köln. Bitte begeben Sie sich noch einmal zum Check-in-Schalter der Air Berlin.",
+  "segments": [
+    {
+      "start": 0,
+      "end": 5.7999997,
+      "text": " Lesen Sie jetzt die Aufgaben 5 und 6. Dazu haben Sie 10 Sekunden Zeit."
+    },
+    {
+      "start": 14.88,
+      "end": 17.84,
+      "text": " Sie hören eine Durchsage auf dem Flughafen."
+    },
+    {
+      "start": 23.74,
+      "end": 27.14,
+      "text": " Letzter Aufruf für alle noch fehlenden Passagiere."
+    },
+    {
+      "start": 27.14,
+      "end": 36.94,
+      "text": " Der Lufthansa-Flug 123 nach Frankfurt startet in wenigen Minuten. Bitte kommen Sie umgehend zum Flugsteig A09."
+    },
+    {
+      "start": 41.54,
+      "end": 53.44,
+      "text": " Wir bitten die Passagiere Siebert und Johansen. Ich wiederhole, Passagiere Siebert und Johansen, gebucht mit Air Berlin 456 nach Köln."
+    },
+    {
+      "start": 53.44,
+      "end": 58.12,
+      "text": " Bitte begeben Sie sich noch einmal zum Check-in-Schalter der Air Berlin."
+    },
+    {
+      "start": 62.62,
+      "end": 65.4,
+      "text": " Sie hören jetzt den Text noch einmal."
+    },
+    {
+      "start": 72.22,
+      "end": 75.54,
+      "text": " Letzter Aufruf für alle noch fehlenden Passagiere."
+    },
+    {
+      "start": 76.24,
+      "end": 81.4,
+      "text": " Der Lufthansa-Flug 123 nach Frankfurt startet in wenigen Minuten."
+    },
+    {
+      "start": 81.4,
+      "end": 85.36,
+      "text": " Bitte kommen Sie umgehend zum Flugsteig A09."
+    },
+    {
+      "start": 90,
+      "end": 94.06,
+      "text": " Wir bitten die Passagiere Siebert und Johannsen."
+    },
+    {
+      "start": 94.74,
+      "end": 101.880005,
+      "text": " Ich wiederhole, Passagiere Siebert und Johannsen, gebucht mit Air Berlin 456 nach Köln."
+    },
+    {
+      "start": 102.58,
+      "end": 106.46,
+      "text": " Bitte begeben Sie sich noch einmal zum Check-in-Schalter der Air Berlin."
+    }
+  ],
+  "duration": 109.789003776
+}

@@ -1,0 +1,202 @@
+{
+  "file": "module8/m8-teil3-text.mp3",
+  "text": " Sie sitzen im Kino und hören, wie sich ein Junge und ein Mädchen über Gewichtsprobleme unterhalten. Sag mal, Hannes, du hast heute Mittag schon wieder nichts gegessen. Was ist denn los? Mama macht sich schon Sorgen. Lara, sei doch still. Der Film fängt gleich an. Es hat ja noch nicht einmal die Werbung angefangen. Los, erzähl! Also, wenn du es unbedingt wissen willst, ich mache seit Sonntag Diät. Sonntag? Wieso seit Sonntag? Wieso, seit Sonntag? Wieso? Was war denn Sonntag? Ich hab's! Samstag auf deiner Geburtstagsfeier. Da hat dieses blöde Mädchen, die so getan hat, als wäre sie ein Superstar… Jasmin. Ach ja, Jasmin heißt die. Wie ein Superstar! Habt ihr keinen grünen Tee? Uh, diese Würstchen sind aber fett! Lara! Und dann hat diese Jasmin gesagt, dass es auch dir nicht schaden würde, ein bisschen auf deine Figur zu achten. Du? Zu dick? Da muss ich ja lachen! Die Jasmin ist normalerweise nicht so. Jasmin ist nett. Oh Gott, du bist in Jasmin verliebt! Nein, nicht verliebt. Aber Jasmin ist wirklich Das ist wirklich nett. Also doch verliebt. Und jetzt machst du Diät. Wegen Jasmin. Naja, zu dick bin ich vielleicht nicht, aber ein paar Kilo abnehmen könnte ich schon. Im Winter habe ich kaum Sport gemacht und meine Jeans sind mir ziemlich eng. Aber da brauchst du doch keine Diät zu machen. Mach lieber regelmäßig Sport und außerdem... nichts essen ist keine Diät. Das ist ungesund. Wenn du Diät machen willst, dann iss weniger Pizza und lieber mal einen Salat. Dann schon lieber Sport. Aber Fußball mache ich schon so lange. Das macht keinen richtigen Spaß mehr. Verstehe. Da gibt es keine Mädchen. Lara, du bist echt doof! Hannes, was hast du denn? Ist doch ganz normal, dass du Mädchen kennenlernen willst. Was glaubst du, warum ich jetzt nicht mehr Ballett mache, sondern Tennis? Du kannst ja mal mitkommen zum Tennis. Vielleicht gefällt es dir ja. Da sind viele nette Mädchen. Jungs natürlich auch. Und die Mädchen sind sicher netter als diese Jasmin. Was gefällt dir eigentlich an ihr? Na, ich weiß nicht. Sie ist lustig, sie spielt auch Computerspiele und sie ist eine gute Schülerin und hilft auch den anderen und sie sieht gut aus. Was? Die ist doch viel zu dünn, wie diese Models. Und überhaupt! Jetzt sei doch endlich still, der Film fängt an.",
+  "segments": [
+    {
+      "start": 0,
+      "end": 4.9,
+      "text": " Sie sitzen im Kino und hören, wie sich ein Junge und ein Mädchen über Gewichtsprobleme"
+    },
+    {
+      "start": 4.9,
+      "end": 5.9,
+      "text": " unterhalten."
+    },
+    {
+      "start": 5.9,
+      "end": 10.94,
+      "text": " Sag mal, Hannes, du hast heute Mittag schon wieder nichts gegessen."
+    },
+    {
+      "start": 10.94,
+      "end": 12.34,
+      "text": " Was ist denn los?"
+    },
+    {
+      "start": 12.34,
+      "end": 14.259999,
+      "text": " Mama macht sich schon Sorgen."
+    },
+    {
+      "start": 14.259999,
+      "end": 15.5,
+      "text": " Lara, sei doch still."
+    },
+    {
+      "start": 15.5,
+      "end": 17.18,
+      "text": " Der Film fängt gleich an."
+    },
+    {
+      "start": 17.18,
+      "end": 19.5,
+      "text": " Es hat ja noch nicht einmal die Werbung angefangen."
+    },
+    {
+      "start": 19.5,
+      "end": 20.5,
+      "text": " Los, erzähl!"
+    },
+    {
+      "start": 20.5,
+      "end": 25.5,
+      "text": " Also, wenn du es unbedingt wissen willst, ich mache seit Sonntag Diät."
+    },
+    {
+      "start": 25.5,
+      "end": 26.5,
+      "text": " Sonntag?"
+    },
+    {
+      "start": 26.5,
+      "end": 27.5,
+      "text": " Wieso seit Sonntag?"
+    },
+    {
+      "start": 27.5,
+      "end": 28.5,
+      "text": " Wieso, seit Sonntag?"
+    },
+    {
+      "start": 28.5,
+      "end": 38.62,
+      "text": " Wieso? Was war denn Sonntag? Ich hab's! Samstag auf deiner Geburtstagsfeier. Da hat dieses blöde"
+    },
+    {
+      "start": 38.62,
+      "end": 42.34,
+      "text": " Mädchen, die so getan hat, als wäre sie ein Superstar…"
+    },
+    {
+      "start": 42.34,
+      "end": 45.96,
+      "text": " Jasmin. Ach ja, Jasmin heißt die. Wie ein Superstar!"
+    },
+    {
+      "start": 45.96,
+      "end": 49.62,
+      "text": " Habt ihr keinen grünen Tee? Uh, diese Würstchen sind aber fett!"
+    },
+    {
+      "start": 49.62,
+      "end": 53.34,
+      "text": " Lara! Und dann hat diese Jasmin gesagt,"
+    },
+    {
+      "start": 53.34,
+      "end": 56.899998,
+      "text": " dass es auch dir nicht schaden würde, ein bisschen auf deine Figur zu achten."
+    },
+    {
+      "start": 56.899998,
+      "end": 60.019997,
+      "text": " Du? Zu dick? Da muss ich ja lachen!"
+    },
+    {
+      "start": 60.019997,
+      "end": 63.199997,
+      "text": " Die Jasmin ist normalerweise nicht so. Jasmin ist nett."
+    },
+    {
+      "start": 63.199997,
+      "end": 68.36,
+      "text": " Oh Gott, du bist in Jasmin verliebt! Nein, nicht verliebt. Aber Jasmin ist wirklich"
+    },
+    {
+      "start": 68.36,
+      "end": 87.1225,
+      "text": " Das ist wirklich nett. Also doch verliebt. Und jetzt machst du Diät. Wegen Jasmin. Naja, zu dick bin ich vielleicht nicht, aber ein paar Kilo abnehmen könnte ich schon. Im Winter habe ich kaum Sport gemacht und meine Jeans sind mir ziemlich eng. Aber da brauchst du doch keine Diät zu machen. Mach lieber regelmäßig Sport und außerdem..."
+    },
+    {
+      "start": 87.1225,
+      "end": 92.0225,
+      "text": " nichts essen ist keine Diät. Das ist ungesund. Wenn du Diät machen willst,"
+    },
+    {
+      "start": 92.0225,
+      "end": 94.3625,
+      "text": " dann iss weniger Pizza und lieber mal einen Salat."
+    },
+    {
+      "start": 94.3625,
+      "end": 101.1425,
+      "text": " Dann schon lieber Sport. Aber Fußball mache ich schon so lange. Das macht keinen richtigen Spaß"
+    },
+    {
+      "start": 101.1425,
+      "end": 107.5625,
+      "text": " mehr. Verstehe. Da gibt es keine Mädchen. Lara, du bist echt doof!"
+    },
+    {
+      "start": 107.5625,
+      "end": 113.5625,
+      "text": " Hannes, was hast du denn? Ist doch ganz normal, dass du Mädchen kennenlernen willst. Was glaubst"
+    },
+    {
+      "start": 113.5625,
+      "end": 118.4225,
+      "text": " du, warum ich jetzt nicht mehr Ballett mache, sondern Tennis? Du kannst ja mal mitkommen zum"
+    },
+    {
+      "start": 118.4225,
+      "end": 124.2425,
+      "text": " Tennis. Vielleicht gefällt es dir ja. Da sind viele nette Mädchen. Jungs natürlich auch."
+    },
+    {
+      "start": 124.2425,
+      "end": 128.2425,
+      "text": " Und die Mädchen sind sicher netter als diese Jasmin."
+    },
+    {
+      "start": 128.2425,
+      "end": 131.3625,
+      "text": " Was gefällt dir eigentlich an ihr?"
+    },
+    {
+      "start": 131.3625,
+      "end": 134.7425,
+      "text": " Na, ich weiß nicht."
+    },
+    {
+      "start": 134.7425,
+      "end": 141.4025,
+      "text": " Sie ist lustig, sie spielt auch Computerspiele und sie ist eine gute Schülerin und hilft"
+    },
+    {
+      "start": 141.4025,
+      "end": 144.3625,
+      "text": " auch den anderen und sie sieht gut aus."
+    },
+    {
+      "start": 144.3625,
+      "end": 145.3625,
+      "text": " Was?"
+    },
+    {
+      "start": 145.3625,
+      "end": 148.4825,
+      "text": " Die ist doch viel zu dünn, wie diese Models."
+    },
+    {
+      "start": 148.4825,
+      "end": 149.4825,
+      "text": " Und überhaupt!"
+    },
+    {
+      "start": 149.4825,
+      "end": 152.10251,
+      "text": " Jetzt sei doch endlich still, der Film fängt an."
+    }
+  ],
+  "duration": 152.484997024
+}

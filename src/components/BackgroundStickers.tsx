@@ -1,5 +1,6 @@
 import { useRef } from "react";
 import { useTheme, type Sticker } from "../context/ThemeContext";
+import { useTranslation } from "react-i18next";
 
 /**
  * Renders decorative background stickers that users can drag to personalize
@@ -34,6 +35,7 @@ function DraggableSticker({
   onMove: (x: number, y: number) => void;
   onRemove: () => void;
 }) {
+  const { t } = useTranslation();
   const dragState = useRef<{ startX: number; startY: number; originX: number; originY: number } | null>(null);
 
   const handlePointerDown = (e: React.PointerEvent) => {
@@ -85,7 +87,7 @@ function DraggableSticker({
           onRemove();
         }}
         className="absolute -top-2 -right-2 w-4 h-4 bg-red-500 text-white rounded-full text-[8px] flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity cursor-pointer"
-        title="Entfernen"
+        title={t("theme.removeSticker")}
       >
         ×
       </button>

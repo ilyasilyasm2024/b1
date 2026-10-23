@@ -12,6 +12,7 @@ import { useAuth } from "../context/AuthContext";
 import { usePermissions } from "../context/Permissions";
 import { useAIUsage } from "../context/AIUsageContext";
 import ConfirmModal from "./ConfirmModal";
+import { Trans, useTranslation } from "react-i18next";
 
 export type { VocabItem } from "../context/VocabularyContext";
 export { useVocabulary } from "../context/VocabularyContext";
@@ -24,6 +25,7 @@ interface VocabularyPanelProps {
 export default function VocabularyPanel({ isOpen, onClose }: VocabularyPanelProps) {
   const { vocab, addWord, removeWord, clearAll } = useVocabulary();
   const { user } = useAuth();
+  const { t } = useTranslation();
   const [newWord, setNewWord] = useState("");
   const [newTranslation, setNewTranslation] = useState("");
   const [newContext, setNewContext] = useState("");
@@ -60,7 +62,7 @@ export default function VocabularyPanel({ isOpen, onClose }: VocabularyPanelProp
       try {
         const result = await verifyGermanWord(newWord);
         if (!result.isGerman) {
-          setWordWarning(`„${newWord}" scheint kein deutsches Wort zu sein.`);
+          setWordWarning(t("vocab.notGerman", { word: newWord }));
           setWordSuggestion(result.suggestion || "");
           setIsVerifying(false);
           return;
@@ -117,7 +119,7 @@ export default function VocabularyPanel({ isOpen, onClose }: VocabularyPanelProp
   const handleAITranslate = async () => {
     if (!newWord) return;
     if (!canUseAI(todayUsage)) {
-      alert("AI daily limit reached. Upgrade for unlimited AI.");
+      alert(t("vocab.aiLimitReached"));
       return;
     }
     setAiLoading("translate");
@@ -126,7 +128,7 @@ export default function VocabularyPanel({ isOpen, onClose }: VocabularyPanelProp
       setNewTranslation(result);
       incrementAI();
     } catch {
-      alert("Fehler bei der Übersetzung. Bitte API-Key prüfen.");
+      alert(t("vocab.translateFailed"));
     }
     setAiLoading(null);
   };
@@ -134,11 +136,11 @@ export default function VocabularyPanel({ isOpen, onClose }: VocabularyPanelProp
   const handleAIExample = async () => {
     if (!newWord) return;
     if (!hasFeature("contextSentences")) {
-      alert("AI example sentences require Gold plan or higher.");
+      alert(t("vocab.exampleNeedsGold"));
       return;
     }
     if (!canUseAI(todayUsage)) {
-      alert("AI daily limit reached. Upgrade for unlimited AI.");
+      alert(t("vocab.aiLimitReached"));
       return;
     }
     setAiLoading("example");
@@ -147,7 +149,7 @@ export default function VocabularyPanel({ isOpen, onClose }: VocabularyPanelProp
       setNewContext(result);
       incrementAI();
     } catch {
-      alert("Fehler beim Generieren. Bitte API-Key prüfen.");
+      alert(t("vocab.generateFailed"));
     }
     setAiLoading(null);
   };
@@ -170,14 +172,16 @@ export default function VocabularyPanel({ isOpen, onClose }: VocabularyPanelProp
         {/* Header */}
         <div className="flex items-center justify-between px-5 py-4 border-b border-gray-200">
           <div>
-            <h2 className="text-lg font-bold text-gray-800">Meine Vokabeln</h2>
+            <h2 className="text-lg font-bold text-gray-800">{t("app.myVocabulary")}</h2>
             <p className="text-xs text-gray-500">
-              {vocab.length}{limits.vocabularyCapacity !== -1 ? `/${limits.vocabularyCapacity}` : ""} Wörter gespeichert
+              {t("vocab.savedCount", { count: vocab.length, saved: `${vocab.length}${limits.vocabularyCapacity !== -1 ? `/${limits.vocabularyCapacity}` : ""}` })}
             </p>
           </div>
           <button
             onClick={onClose}
             className="p-2 hover:bg-gray-100 rounded-lg cursor-pointer"
+            title={t("common.close")}
+            aria-label={t("common.close")}
           >
             <svg className="w-5 h-5 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
@@ -192,14 +196,14 @@ export default function VocabularyPanel({ isOpen, onClose }: VocabularyPanelProp
               type="text"
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
-              placeholder="Suchen..."
+              placeholder={t("common.search")}
               className="flex-1 border border-gray-300 rounded-lg px-3 py-1.5 text-sm focus:outline-none focus:ring-2 focus:ring-blue-200"
             />
             <button
               onClick={handleNewClick}
               className="bg-black text-white px-3 py-1.5 rounded-lg text-sm font-medium cursor-pointer hover:bg-gray-800"
             >
-              + Neu
+              + {t("vocab.new")}
             </button>
           </div>
 
@@ -212,10 +216,10 @@ export default function VocabularyPanel({ isOpen, onClose }: VocabularyPanelProp
                 </svg>
                 <div>
                   <p className="text-sm font-medium text-amber-800">
-                    Anmeldung erforderlich
+                    {t("vocab.loginRequired")}
                   </p>
                   <p className="text-xs text-amber-700 mt-1">
-                    Um Vokabeln zu speichern, musst du dich anmelden oder ein Konto erstellen.
+                    {t("vocab.loginRequiredText")}
                   </p>
                 </div>
               </div>
@@ -225,21 +229,21 @@ export default function VocabularyPanel({ isOpen, onClose }: VocabularyPanelProp
                   onClick={onClose}
                   className="flex-1 bg-gray-900 text-white text-center py-2 rounded-lg text-xs font-medium hover:bg-gray-800 transition-colors"
                 >
-                  Anmelden
+                  {t("common.signIn")}
                 </Link>
                 <Link
                   to="/signup"
                   onClick={onClose}
                   className="flex-1 bg-white border border-gray-300 text-gray-700 text-center py-2 rounded-lg text-xs font-medium hover:bg-gray-50 transition-colors"
                 >
-                  Registrieren
+                  {t("common.signUp")}
                 </Link>
               </div>
               <button
                 onClick={() => setShowAuthPrompt(false)}
                 className="text-xs text-gray-500 hover:text-gray-700 cursor-pointer"
               >
-                Schließen
+                {t("common.close")}
               </button>
             </div>
           )}
@@ -251,7 +255,7 @@ export default function VocabularyPanel({ isOpen, onClose }: VocabularyPanelProp
                 type="text"
                 value={newWord}
                 onChange={(e) => setNewWord(e.target.value)}
-                placeholder="Wort (Deutsch)"
+                placeholder={t("vocab.wordPlaceholder")}
                 maxLength={150}
                 className="w-full border border-gray-300 rounded px-3 py-1.5 text-sm focus:outline-none focus:ring-2 focus:ring-blue-200"
               />
@@ -262,7 +266,7 @@ export default function VocabularyPanel({ isOpen, onClose }: VocabularyPanelProp
                   type="text"
                   value={newTranslation}
                   onChange={(e) => setNewTranslation(e.target.value)}
-                  placeholder="Übersetzung"
+                  placeholder={t("vocab.translationPlaceholder")}
                   maxLength={150}
                   className="flex-1 border border-gray-300 rounded px-3 py-1.5 text-sm focus:outline-none focus:ring-2 focus:ring-blue-200"
                 />
@@ -278,7 +282,7 @@ export default function VocabularyPanel({ isOpen, onClose }: VocabularyPanelProp
                   onClick={handleAITranslate}
                   disabled={!newWord || aiLoading !== null || !isApiKeyConfigured()}
                   className="bg-blue-600 text-white px-2.5 py-1.5 rounded text-[10px] font-medium cursor-pointer hover:bg-blue-700 disabled:opacity-40 disabled:cursor-not-allowed flex items-center gap-1"
-                  title={!isApiKeyConfigured() ? "API-Key nicht konfiguriert" : "KI-Übersetzung"}
+                  title={!isApiKeyConfigured() ? t("vocab.apiKeyMissing") : t("vocab.aiTranslate")}
                 >
                   {aiLoading === "translate" ? (
                     <span className="animate-spin">⟳</span>
@@ -294,7 +298,7 @@ export default function VocabularyPanel({ isOpen, onClose }: VocabularyPanelProp
                   type="text"
                   value={newContext}
                   onChange={(e) => setNewContext(e.target.value)}
-                  placeholder="Kontext / Beispielsatz (optional)"
+                  placeholder={t("vocab.contextPlaceholder")}
                   maxLength={150}
                   className="flex-1 border border-gray-300 rounded px-3 py-1.5 text-sm focus:outline-none focus:ring-2 focus:ring-blue-200"
                 />
@@ -304,31 +308,31 @@ export default function VocabularyPanel({ isOpen, onClose }: VocabularyPanelProp
                   className={`px-2.5 py-1.5 rounded text-[10px] font-medium cursor-pointer disabled:opacity-40 disabled:cursor-not-allowed flex items-center gap-1 ${
                     hasFeature("contextSentences") ? "bg-purple-600 text-white hover:bg-purple-700" : "bg-gray-300 text-gray-500"
                   }`}
-                  title={!hasFeature("contextSentences") ? "🔒 Gold plan required" : !isApiKeyConfigured() ? "API-Key nicht konfiguriert" : "Beispielsatz generieren"}
+                  title={!hasFeature("contextSentences") ? `🔒 ${t("vocab.goldRequired")}` : !isApiKeyConfigured() ? t("vocab.apiKeyMissing") : t("vocab.generateExample")}
                 >
                   {aiLoading === "example" ? (
                     <span className="animate-spin">⟳</span>
                   ) : hasFeature("contextSentences") ? (
-                    "Beispiel"
+                    t("vocab.example")
                   ) : (
-                    "🔒 Beispiel"
+                    `🔒 ${t("vocab.example")}`
                   )}
                 </button>
               </div>
 
               {!isApiKeyConfigured() && (
                 <p className="text-[9px] text-amber-600">
-                  ⚠️ AI-Funktionen erfordern einen API-Key in der .env Datei (VITE_GROQ_API_KEY). Bitte den Dev-Server neu starten nach Änderungen.
+                  ⚠️ {t("vocab.apiKeyHint")}
                 </p>
               )}
 
               {limits.aiTranslationsPerDay !== -1 ? (
                 <p className={`text-[9px] ${todayUsage >= limits.aiTranslationsPerDay ? "text-red-500" : "text-gray-400"}`}>
-                  🤖 AI: {todayUsage}/{limits.aiTranslationsPerDay} today
+                  🤖 {t("vocab.aiUsageToday", { used: todayUsage, limit: limits.aiTranslationsPerDay })}
                 </p>
               ) : (
                 <p className="text-[9px] text-gray-400">
-                  🤖 AI: {todayUsage} used today (unlimited)
+                  🤖 {t("vocab.aiUsageUnlimited", { used: todayUsage })}
                 </p>
               )}
 
@@ -338,13 +342,13 @@ export default function VocabularyPanel({ isOpen, onClose }: VocabularyPanelProp
                   disabled={!newWord || !newTranslation || isVerifying}
                   className="bg-emerald-600 text-white px-4 py-1.5 rounded text-xs font-medium cursor-pointer hover:bg-emerald-700 disabled:opacity-50 disabled:cursor-not-allowed"
                 >
-                  {isVerifying ? "Prüfe..." : "Speichern"}
+                  {isVerifying ? t("vocab.checking") : t("common.save")}
                 </button>
                 <button
                   onClick={() => { setShowForm(false); setWordWarning(""); setWordSuggestion(""); }}
                   className="text-gray-500 px-4 py-1.5 rounded text-xs font-medium cursor-pointer hover:bg-gray-200"
                 >
-                  Abbrechen
+                  {t("common.cancel")}
                 </button>
               </div>
 
@@ -359,7 +363,7 @@ export default function VocabularyPanel({ isOpen, onClose }: VocabularyPanelProp
                   </div>
                   {wordSuggestion && (
                     <p className="text-xs text-orange-700">
-                      Meintest du: <strong>„{wordSuggestion}"</strong>?
+                      <Trans i18nKey="vocab.didYouMean" values={{ word: wordSuggestion }} components={{ b: <strong /> }} />
                     </p>
                   )}
                   <div className="flex gap-2">
@@ -368,14 +372,14 @@ export default function VocabularyPanel({ isOpen, onClose }: VocabularyPanelProp
                         onClick={handleUseSuggestion}
                         className="bg-orange-600 text-white px-3 py-1 rounded text-[10px] font-medium cursor-pointer hover:bg-orange-700"
                       >
-                        Vorschlag übernehmen
+                        {t("vocab.useSuggestion")}
                       </button>
                     )}
                     <button
                       onClick={handleAddAnyway}
                       className="bg-gray-200 text-gray-700 px-3 py-1 rounded text-[10px] font-medium cursor-pointer hover:bg-gray-300"
                     >
-                      Trotzdem speichern
+                      {t("vocab.saveAnyway")}
                     </button>
                   </div>
                 </div>
@@ -390,12 +394,12 @@ export default function VocabularyPanel({ isOpen, onClose }: VocabularyPanelProp
             <div className="text-center py-10">
               <p className="text-gray-400 text-sm">
                 {vocab.length === 0
-                  ? "Noch keine Vokabeln gespeichert."
-                  : "Keine Ergebnisse."}
+                  ? t("vocab.empty")
+                  : t("common.noResults")}
               </p>
               {vocab.length === 0 && (
                 <p className="text-gray-400 text-xs mt-1">
-                  Klicken Sie auf "+ Neu" um ein Wort hinzuzufügen.
+                  {t("vocab.emptyHint")}
                 </p>
               )}
             </div>
@@ -418,7 +422,7 @@ export default function VocabularyPanel({ isOpen, onClose }: VocabularyPanelProp
                             speechSynthesis.speak(utterance);
                           }}
                           className="p-0.5 hover:bg-gray-100 rounded cursor-pointer"
-                          title="Wort vorlesen"
+                          title={t("vocab.readWord")}
                         >
                           <svg className="w-3.5 h-3.5 text-blue-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15.536 8.464a5 5 0 010 7.072m2.828-9.9a9 9 0 010 12.728M5.586 15H4a1 1 0 01-1-1v-4a1 1 0 011-1h1.586l4.707-4.707C10.923 3.663 12 4.109 12 5v14c0 .891-1.077 1.337-1.707.707L5.586 15z" />
@@ -439,7 +443,7 @@ export default function VocabularyPanel({ isOpen, onClose }: VocabularyPanelProp
                               speechSynthesis.speak(utterance);
                             }}
                             className="p-0.5 hover:bg-gray-100 rounded cursor-pointer shrink-0"
-                            title="Beispiel vorlesen"
+                            title={t("vocab.readExample")}
                           >
                             <svg className="w-3 h-3 text-purple-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15.536 8.464a5 5 0 010 7.072m2.828-9.9a9 9 0 010 12.728M5.586 15H4a1 1 0 01-1-1v-4a1 1 0 011-1h1.586l4.707-4.707C10.923 3.663 12 4.109 12 5v14c0 .891-1.077 1.337-1.707.707L5.586 15z" />
@@ -451,7 +455,7 @@ export default function VocabularyPanel({ isOpen, onClose }: VocabularyPanelProp
                     <button
                       onClick={() => handleDeleteClick(item.id, item.word)}
                       className="opacity-0 group-hover:opacity-100 p-1 hover:bg-red-50 rounded cursor-pointer transition-opacity"
-                      title="Löschen"
+                      title={t("common.delete")}
                     >
                       <svg className="w-3.5 h-3.5 text-red-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
@@ -490,15 +494,15 @@ export default function VocabularyPanel({ isOpen, onClose }: VocabularyPanelProp
                   <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
                   </svg>
-                  Export (.xlsx)
+                  {t("vocab.export")} (.xlsx)
                 </button>
                 <label className="flex-1 flex items-center justify-center gap-1.5 border border-gray-300 rounded-lg px-3 py-1.5 text-xs font-medium text-gray-700 cursor-pointer hover:bg-gray-50"
-                  title="Excel-Datei mit Spalten: Wort | Übersetzung | Kontext (optional)"
+                  title={t("vocab.importTitle")}
                 >
                   <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12" />
                   </svg>
-                  Import (.xlsx)
+                  {t("vocab.import")} (.xlsx)
                   <input
                     type="file"
                     accept=".xlsx,.xls"
@@ -520,7 +524,7 @@ export default function VocabularyPanel({ isOpen, onClose }: VocabularyPanelProp
                               }
                             }
                           } catch {
-                            alert("Fehler beim Importieren der Datei.");
+                            alert(t("vocab.importFailed"));
                           }
                         });
                       };
@@ -534,30 +538,30 @@ export default function VocabularyPanel({ isOpen, onClose }: VocabularyPanelProp
               {/* Clear all + info */}
               {/* Import format guide */}
               <div className="bg-gray-50 rounded p-2 border border-gray-100">
-                <p className="text-[9px] text-gray-500 font-medium mb-1">📋 Import-Format (.xlsx):</p>
+                <p className="text-[9px] text-gray-500 font-medium mb-1">📋 {t("vocab.importFormat")}</p>
                 <div className="text-[9px] text-gray-400 font-mono">
                   <span className="text-gray-600">Wort</span> | <span className="text-gray-600">Übersetzung</span> | <span className="text-gray-600">Kontext</span>
                 </div>
-                <p className="text-[8px] text-gray-400 mt-0.5">z.B. "der Schüler | الطالب | Der Schüler lernt Deutsch."</p>
+                <p className="text-[8px] text-gray-400 mt-0.5">{t("vocab.importExample")}</p>
               </div>
 
               <div className="flex justify-between items-center">
                 <span className="text-[10px] text-gray-400">
-                  Synchronisiert mit deinem Konto
+                  {t("vocab.synced")}
                 </span>
                 {vocab.length > 0 && (
                   <button
                     onClick={clearAll}
                     className="text-[10px] text-red-500 hover:text-red-700 cursor-pointer font-medium"
                   >
-                    Alle löschen
+                    {t("vocab.deleteAll")}
                   </button>
                 )}
               </div>
             </>
           ) : (
             <p className="text-xs text-gray-400 text-center py-1">
-              Melde dich an, um Vokabeln zu speichern, exportieren und importieren.
+              {t("vocab.loginToSave")}
             </p>
           )}
         </div>
@@ -566,10 +570,9 @@ export default function VocabularyPanel({ isOpen, onClose }: VocabularyPanelProp
       {/* Confirmation Modal: Add */}
       <ConfirmModal
         isOpen={confirmAdd}
-        title="Vokabel hinzufügen"
-        message={`Möchtest du „${newWord}" wirklich speichern?`}
-        confirmText="Speichern"
-        cancelText="Abbrechen"
+        title={t("vocab.addTitle")}
+        message={t("vocab.addConfirm", { word: newWord })}
+        confirmText={t("common.save")}
         onConfirm={confirmAddWord}
         onCancel={() => setConfirmAdd(false)}
       />
@@ -577,10 +580,9 @@ export default function VocabularyPanel({ isOpen, onClose }: VocabularyPanelProp
       {/* Confirmation Modal: Delete */}
       <ConfirmModal
         isOpen={!!confirmDeleteId}
-        title="Vokabel löschen"
-        message={`Möchtest du „${confirmDeleteWord}" wirklich löschen? Diese Aktion kann nicht rückgängig gemacht werden.`}
-        confirmText="Löschen"
-        cancelText="Abbrechen"
+        title={t("vocab.deleteTitle")}
+        message={t("vocab.deleteConfirm", { word: confirmDeleteWord })}
+        confirmText={t("common.delete")}
         variant="danger"
         onConfirm={confirmDelete}
         onCancel={() => { setConfirmDeleteId(null); setConfirmDeleteWord(""); }}

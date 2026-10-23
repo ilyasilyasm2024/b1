@@ -1,0 +1,57 @@
+{
+  "file": "module3/m3-teil1-text4.mp3",
+  "text": " Lesen Sie jetzt die Aufgaben 7 und 8. Dazu haben Sie 10 Sekunden Zeit. Sie hören eine automatische Telefonauskunft. hier zahnarztpraxis dr mannheim die praxis ist zurzeit wegen der sommerpause geschlossen sprechzeiten ab 1 9 montags bis donnerstags von 17 uhr bis 21 uhr 30 freitags und samstags geschlossen. Termine nur nach telefonischer Vereinbarung. Im Notfall wählen Sie 041 63 781. Sie hören jetzt den Text noch einmal. Hier Zahnarztpraxis Dr. Mannheim. Die Praxis ist zurzeit wegen der Sommerpause geschlossen. Sprechzeiten ab 1.9. montags bis donnerstags von 17 Uhr bis 21.30 Uhr, freitags und samstags geschlossen. Termine nur nach telefonischer Vereinbarung. Im Notfall wählen Sie 04163781.",
+  "segments": [
+    {
+      "start": 0,
+      "end": 5.9,
+      "text": " Lesen Sie jetzt die Aufgaben 7 und 8. Dazu haben Sie 10 Sekunden Zeit."
+    },
+    {
+      "start": 14.88,
+      "end": 18.24,
+      "text": " Sie hören eine automatische Telefonauskunft."
+    },
+    {
+      "start": 18.24,
+      "end": 31.08,
+      "text": " hier zahnarztpraxis dr mannheim die praxis ist zurzeit wegen der sommerpause geschlossen"
+    },
+    {
+      "start": 31.08,
+      "end": 39.42,
+      "text": " sprechzeiten ab 1 9 montags bis donnerstags von 17 uhr bis 21 uhr 30 freitags und samstags"
+    },
+    {
+      "start": 39.42,
+      "end": 49.32,
+      "text": " geschlossen. Termine nur nach telefonischer Vereinbarung. Im Notfall wählen Sie 041 63 781."
+    },
+    {
+      "start": 49.32,
+      "end": 55.739998,
+      "text": " Sie hören jetzt den Text noch einmal."
+    },
+    {
+      "start": 55.739998,
+      "end": 69.14,
+      "text": " Hier Zahnarztpraxis Dr. Mannheim. Die Praxis ist zurzeit wegen der Sommerpause"
+    },
+    {
+      "start": 69.14,
+      "end": 76.76,
+      "text": " geschlossen. Sprechzeiten ab 1.9. montags bis donnerstags von 17 Uhr bis 21.30 Uhr,"
+    },
+    {
+      "start": 76.76,
+      "end": 83.84,
+      "text": " freitags und samstags geschlossen. Termine nur nach telefonischer Vereinbarung. Im Notfall wählen Sie"
+    },
+    {
+      "start": 83.84,
+      "end": 87.9,
+      "text": " 04163781."
+    }
+  ],
+  "duration": 91.285004288
+}

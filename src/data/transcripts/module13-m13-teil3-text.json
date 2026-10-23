@@ -1,0 +1,157 @@
+{
+  "file": "module13/m13-teil3-text.mp3",
+  "text": " Sie stehen an einer Bushaltestelle in Wien und hören, wie sich ein Mann und eine Frau über eine Klassenreise unterhalten. Servus, Herr Brunner. Ich bin die Mutter von der Viktoria aus der Matura-Klasse. Ja, grüß Gott, Frau Riegler. Wie geht es Ihnen? Wie gut, dass ich Sie treffe. Viktoria hat mir erzählt, dass Sie angefangen haben, mit den Schülern zusammen die Klassenreise zu planen. Ganz richtig. Aber sagen Sie mal, Viktoria hat mir erzählt, dass Sie etwas in Österreich suchen. Etwas, wo man bequem mit dem Zug hinfahren kann. Oder vielleicht sogar eine Radtour? Ja, da sind wir noch am überlegen. Die Schüler haben schon viele interessante Vorschläge gemacht. Aber Herr Brunner, die Klasse ist doch letztes Jahr nach Budapest gefahren. Und dann jetzt eine Radtour? Das ist ja noch nicht endgültig mit der Radtour. Aber das ist doch die letzte Klassenreise. Das letzte Jahr in der Schule. Und für alle sind doch Englisch und Französisch Pflicht. Da müssen Sie auf jeden Fall mit der Klasse nach Paris oder London fahren. Tja, Paris oder London wäre nicht schlecht, aber... Wir waren letztes Jahr mit der Viktoria in London. Sie war begeistert. Es gibt dort vieles, was für Jugendliche interessant ist. Nicht nur Museen und so. Ich weiß, Frau Riegler, aber so eine Reise ins Ausland ist ziemlich teuer. Also ich war auf meiner letzten Klassenreise in Paris. Das war toll. Wir haben so viel Spaß gehabt. Alle. Auch die Mitschüler, die ich nicht so gemocht habe. Tja, und viele habe ich seit damals nie wieder gesehen. Schade eigentlich. Ich habe noch Fotos von der Klassenreise. Ich möchte, dass Viktoria das auch erlebt. Ja, das möchte ich auch. Und das möchten auch die Schüler. Und warum schlagen Sie dann nicht eine Klassenreise nach Paris oder London vor? Habe ich ja. Aber die Klasse hat dagegen gestimmt. Dagegen gestimmt? Davon hat mir Viktoria gar nichts erzählt. Aber warum denn? Tja, Frau Riegler, nicht alle Familien können es sich leisten, ihren Kindern eine Auslandsreise zu bezahlen. Aber Sie haben doch gesagt, dass alle wollen, dass das eine wirklich schöne Klassenreise wird. Ja, eine Klassenreise, auf der Sie alle ein letztes Mal zusammen verreisen. Aber eben alle zusammen. Nicht nur die, die es sich leisten können. Ja, das finde ich ja eigentlich ganz gut. Ich auch. Kommen Sie. Das ist jetzt unser Bus.",
+  "segments": [
+    {
+      "start": 0,
+      "end": 6.54,
+      "text": " Sie stehen an einer Bushaltestelle in Wien und hören, wie sich ein Mann und eine Frau über eine Klassenreise unterhalten."
+    },
+    {
+      "start": 11.7,
+      "end": 17.52,
+      "text": " Servus, Herr Brunner. Ich bin die Mutter von der Viktoria aus der Matura-Klasse."
+    },
+    {
+      "start": 18.14,
+      "end": 21.08,
+      "text": " Ja, grüß Gott, Frau Riegler. Wie geht es Ihnen?"
+    },
+    {
+      "start": 21.72,
+      "end": 23.359999,
+      "text": " Wie gut, dass ich Sie treffe."
+    },
+    {
+      "start": 23.9,
+      "end": 28.68,
+      "text": " Viktoria hat mir erzählt, dass Sie angefangen haben, mit den Schülern zusammen die Klassenreise zu planen."
+    },
+    {
+      "start": 28.68,
+      "end": 29.800001,
+      "text": " Ganz richtig."
+    },
+    {
+      "start": 30.5,
+      "end": 35.88,
+      "text": " Aber sagen Sie mal, Viktoria hat mir erzählt, dass Sie etwas in Österreich suchen."
+    },
+    {
+      "start": 36.32,
+      "end": 40.58,
+      "text": " Etwas, wo man bequem mit dem Zug hinfahren kann. Oder vielleicht sogar eine Radtour?"
+    },
+    {
+      "start": 41.24,
+      "end": 46.3,
+      "text": " Ja, da sind wir noch am überlegen. Die Schüler haben schon viele interessante Vorschläge gemacht."
+    },
+    {
+      "start": 46.64,
+      "end": 52.68,
+      "text": " Aber Herr Brunner, die Klasse ist doch letztes Jahr nach Budapest gefahren. Und dann jetzt eine Radtour?"
+    },
+    {
+      "start": 53.28,
+      "end": 55.7,
+      "text": " Das ist ja noch nicht endgültig mit der Radtour."
+    },
+    {
+      "start": 55.7,
+      "end": 60.519997,
+      "text": " Aber das ist doch die letzte Klassenreise. Das letzte Jahr in der Schule."
+    },
+    {
+      "start": 61.499996,
+      "end": 63.799995,
+      "text": " Und für alle sind doch Englisch und Französisch Pflicht."
+    },
+    {
+      "start": 64.14,
+      "end": 68.38,
+      "text": " Da müssen Sie auf jeden Fall mit der Klasse nach Paris oder London fahren."
+    },
+    {
+      "start": 69.159996,
+      "end": 72.799995,
+      "text": " Tja, Paris oder London wäre nicht schlecht, aber..."
+    },
+    {
+      "start": 72.799995,
+      "end": 76.439995,
+      "text": " Wir waren letztes Jahr mit der Viktoria in London. Sie war begeistert."
+    },
+    {
+      "start": 76.71999,
+      "end": 89.8385,
+      "text": " Es gibt dort vieles, was für Jugendliche interessant ist. Nicht nur Museen und so. Ich weiß, Frau Riegler, aber so eine Reise ins Ausland ist ziemlich teuer. Also ich war auf meiner letzten Klassenreise in Paris."
+    },
+    {
+      "start": 90.218506,
+      "end": 95.718506,
+      "text": " Das war toll. Wir haben so viel Spaß gehabt. Alle. Auch die Mitschüler, die ich nicht"
+    },
+    {
+      "start": 95.718506,
+      "end": 101.6985,
+      "text": " so gemocht habe. Tja, und viele habe ich seit damals nie wieder gesehen. Schade eigentlich."
+    },
+    {
+      "start": 102.6985,
+      "end": 107.7985,
+      "text": " Ich habe noch Fotos von der Klassenreise. Ich möchte, dass Viktoria das auch erlebt."
+    },
+    {
+      "start": 108.2985,
+      "end": 111.1785,
+      "text": " Ja, das möchte ich auch. Und das möchten auch die Schüler."
+    },
+    {
+      "start": 111.358505,
+      "end": 115.0185,
+      "text": " Und warum schlagen Sie dann nicht eine Klassenreise nach Paris oder London vor?"
+    },
+    {
+      "start": 115.2985,
+      "end": 118.2385,
+      "text": " Habe ich ja. Aber die Klasse hat dagegen gestimmt."
+    },
+    {
+      "start": 118.9785,
+      "end": 124.9785,
+      "text": " Dagegen gestimmt? Davon hat mir Viktoria gar nichts erzählt. Aber warum denn?"
+    },
+    {
+      "start": 125.6785,
+      "end": 132.2985,
+      "text": " Tja, Frau Riegler, nicht alle Familien können es sich leisten, ihren Kindern eine Auslandsreise zu bezahlen."
+    },
+    {
+      "start": 132.2985,
+      "end": 137.3585,
+      "text": " Aber Sie haben doch gesagt, dass alle wollen, dass das eine wirklich schöne Klassenreise wird."
+    },
+    {
+      "start": 137.3585,
+      "end": 142.4585,
+      "text": " Ja, eine Klassenreise, auf der Sie alle ein letztes Mal zusammen verreisen."
+    },
+    {
+      "start": 143.1185,
+      "end": 147.6985,
+      "text": " Aber eben alle zusammen. Nicht nur die, die es sich leisten können."
+    },
+    {
+      "start": 150.0185,
+      "end": 152.9185,
+      "text": " Ja, das finde ich ja eigentlich ganz gut."
+    },
+    {
+      "start": 153.3385,
+      "end": 157.1185,
+      "text": " Ich auch. Kommen Sie. Das ist jetzt unser Bus."
+    }
+  ],
+  "duration": 167.197003424
+}

@@ -1,0 +1,57 @@
+{
+  "file": "module10/m10-teil1-text3.mp3",
+  "text": " Lesen Sie jetzt die Aufgaben 5 und 6. Dazu haben Sie 10 Sekunden Zeit. Sie hören eine Durchsage am Bahnhof. Meine Damen und Herren, auf Gleis 7b fährt ein der Regionalexpress nach Heilbronn Hauptbahnhof über Eberberg. Abfahrt 13.34 Uhr. Nächster Halt ist Heidelberg Hauptbahnhof. Voraussichtliche Ankunftszeit 14.07 Uhr. Ich wiederhole. Der Regionalexpress nach Heilbronn Hauptbahnhof über Eberberg fährt auf Gleis 7b ein und fährt um 13.34 Uhr ab. Nächster Halt ist Heidelberg Hauptbahnhof. Voraussichtliche Ankunftszeit 14.07 Uhr. Bitte Vorsicht bei der Einfahrt. Sie hören jetzt den Text noch einmal. Meine Damen und Herren, auf Gleis 7b fährt ein der Regionalexpress nach Heilbronn Hauptbahnhof über Eberberg. Abfahrt 13.34 Uhr. Nächster Halt ist Heidelberg Hauptbahnhof. Voraussichtliche Ankunftszeit 14.07 Uhr. Ich wiederhole. Der Regionalexpress nach Heilbronn Hauptbahnhof über Eberberg fährt auf Gleis 7b ein und fährt um 13.34 Uhr ab. Nächster Halt ist Heidelberg Hauptbahnhof. Voraussichtliche Ankunftszeit 14.07 Uhr. Bitte Vorsicht bei der Einfahrt.",
+  "segments": [
+    {
+      "start": 0,
+      "end": 5.7999997,
+      "text": " Lesen Sie jetzt die Aufgaben 5 und 6. Dazu haben Sie 10 Sekunden Zeit."
+    },
+    {
+      "start": 15.96,
+      "end": 18.8,
+      "text": " Sie hören eine Durchsage am Bahnhof."
+    },
+    {
+      "start": 18.8,
+      "end": 31.48,
+      "text": " Meine Damen und Herren, auf Gleis 7b fährt ein der Regionalexpress nach Heilbronn Hauptbahnhof über Eberberg."
+    },
+    {
+      "start": 32.079998,
+      "end": 41.18,
+      "text": " Abfahrt 13.34 Uhr. Nächster Halt ist Heidelberg Hauptbahnhof. Voraussichtliche Ankunftszeit 14.07 Uhr."
+    },
+    {
+      "start": 41.18,
+      "end": 52.46,
+      "text": " Ich wiederhole. Der Regionalexpress nach Heilbronn Hauptbahnhof über Eberberg fährt auf Gleis 7b ein und fährt um 13.34 Uhr ab."
+    },
+    {
+      "start": 53.14,
+      "end": 61.56,
+      "text": " Nächster Halt ist Heidelberg Hauptbahnhof. Voraussichtliche Ankunftszeit 14.07 Uhr. Bitte Vorsicht bei der Einfahrt."
+    },
+    {
+      "start": 65.4,
+      "end": 68.28,
+      "text": " Sie hören jetzt den Text noch einmal."
+    },
+    {
+      "start": 71.18,
+      "end": 91.08,
+      "text": " Meine Damen und Herren, auf Gleis 7b fährt ein der Regionalexpress nach Heilbronn Hauptbahnhof über Eberberg. Abfahrt 13.34 Uhr. Nächster Halt ist Heidelberg Hauptbahnhof. Voraussichtliche Ankunftszeit 14.07 Uhr."
+    },
+    {
+      "start": 91.08,
+      "end": 102.34,
+      "text": " Ich wiederhole. Der Regionalexpress nach Heilbronn Hauptbahnhof über Eberberg fährt auf Gleis 7b ein und fährt um 13.34 Uhr ab."
+    },
+    {
+      "start": 102.99999,
+      "end": 111.399994,
+      "text": " Nächster Halt ist Heidelberg Hauptbahnhof. Voraussichtliche Ankunftszeit 14.07 Uhr. Bitte Vorsicht bei der Einfahrt."
+    }
+  ],
+  "duration": 114.541002752
+}

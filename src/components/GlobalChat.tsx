@@ -1,6 +1,7 @@
 import { useState, useRef, useEffect, useCallback } from "react";
 import { useAuth } from "../context/AuthContext";
 import { usePermissions } from "../context/Permissions";
+import { useTranslation } from "react-i18next";
 
 const CHAT_WS_URL = import.meta.env.VITE_CHAT_WS_URL || "ws://localhost:4000";
 
@@ -18,6 +19,7 @@ interface GlobalChatProps {
 
 export default function GlobalChat({ isOpen, onClose }: GlobalChatProps) {
   const { user } = useAuth();
+  const { t, i18n } = useTranslation();
   const [messages, setMessages] = useState<ChatMessage[]>([]);
   const [input, setInput] = useState("");
   const [connected, setConnected] = useState(false);
@@ -88,7 +90,7 @@ export default function GlobalChat({ isOpen, onClose }: GlobalChatProps) {
     if (!input.trim() || !user || !wsRef.current || wsRef.current.readyState !== WebSocket.OPEN) return;
 
     if (!canSendChat(messagesSent)) {
-      alert(`Chat limit reached (${limits.chatMessages} messages). Upgrade for more.`);
+      alert(t("chat.limitReached", { limit: limits.chatMessages }));
       return;
     }
 
@@ -120,11 +122,11 @@ export default function GlobalChat({ isOpen, onClose }: GlobalChatProps) {
         <div className="flex items-center justify-between px-4 py-3 border-b border-gray-200 bg-gray-50">
           <div>
             <h2 className="text-sm font-bold text-gray-800 flex items-center gap-1.5">
-              💬 Global Chat
+              💬 {t("chat.title")}
               <span className={`text-[9px] px-1.5 py-0.5 rounded-full font-medium ${
                 connected ? "bg-gray-200 text-gray-700" : "bg-red-100 text-red-600"
               }`}>
-                {connected ? "Online" : "Offline"}
+                {connected ? t("chat.online") : t("chat.offline")}
               </span>
             </h2>
             <p className="text-[10px] text-gray-500">
@@ -145,7 +147,7 @@ export default function GlobalChat({ isOpen, onClose }: GlobalChatProps) {
         <div className="flex-1 overflow-y-auto px-4 py-3 space-y-3">
           {messages.length === 0 && (
             <div className="text-center py-8">
-              <p className="text-gray-400 text-xs">Noch keine Nachrichten. Sei der Erste! 🎉</p>
+              <p className="text-gray-400 text-xs">{t("chat.empty")}</p>
             </div>
           )}
           {messages.map((msg) => {
@@ -165,7 +167,7 @@ export default function GlobalChat({ isOpen, onClose }: GlobalChatProps) {
                     {msg.text}
                   </div>
                   <p className={`text-[8px] text-gray-400 mt-0.5 ${isMe ? "text-right" : ""}`}>
-                    {new Date(msg.timestamp).toLocaleTimeString("de-DE", { hour: "2-digit", minute: "2-digit" })}
+                    {new Date(msg.timestamp).toLocaleTimeString(i18n.language, { hour: "2-digit", minute: "2-digit" })}
                   </p>
                 </div>
               </div>
@@ -184,7 +186,7 @@ export default function GlobalChat({ isOpen, onClose }: GlobalChatProps) {
                 setInput((prev) => prev + ch);
               }}
               className="w-7 h-7 text-xs font-bold border border-gray-200 rounded bg-white hover:bg-gray-100 cursor-pointer transition-colors"
-              title={`${ch} kopieren & einfügen`}
+              title={t("chat.insertChar", { char: ch })}
             >
               {ch}
             </button>
@@ -202,12 +204,14 @@ export default function GlobalChat({ isOpen, onClose }: GlobalChatProps) {
                 onKeyDown={handleKeyDown}
                 maxLength={200}
                 className="flex-1 border border-gray-300 rounded-lg px-3 py-2 text-xs focus:outline-none focus:ring-2 focus:ring-gray-300"
-                placeholder={connected ? "Nachricht schreiben..." : "Verbindung wird hergestellt..."}
+                placeholder={connected ? t("chat.placeholder") : t("chat.connecting")}
                 disabled={!connected}
               />
               <button
                 onClick={handleSend}
                 disabled={!input.trim() || !connected}
+                title={t("chat.send")}
+                aria-label={t("chat.send")}
                 className="bg-gray-900 text-white px-3 py-2 rounded-lg text-xs font-medium cursor-pointer hover:bg-gray-800 disabled:opacity-40 disabled:cursor-not-allowed"
               >
                 ↑
@@ -215,7 +219,7 @@ export default function GlobalChat({ isOpen, onClose }: GlobalChatProps) {
             </div>
           ) : (
             <p className="text-xs text-gray-400 text-center">
-              Melde dich an, um im Chat zu schreiben.
+              {t("chat.loginToWrite")}
             </p>
           )}
         </div>

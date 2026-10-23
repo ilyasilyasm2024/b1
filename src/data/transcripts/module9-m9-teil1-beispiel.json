@@ -1,0 +1,67 @@
+{
+  "file": "module9/m9-teil1-beispiel.mp3",
+  "text": " Sie hören eine automatische Telefonauskunft. Sie sind mit dem Informationsdienst der Festhalle im Dorf Hügelheim verbunden. Am Freitag den 18. und Samstag den 19.03. findet jeweils ab 19.30 Uhr der 35. Dorfabend in unserem Haus statt. Einlass ab 18.30 Uhr. Eintrittskarten für beide Abende sind am Dienstag, den 15. März, ab 18 Uhr an der Abendkasse erhältlich. Der Erlös des Dorfabends ist für die Vereins- und Jugendarbeit im Dorfe bestimmt. Sie hören jetzt den Text noch einmal. Sie sind mit dem Informationsdienst der Festhalle im Dorf Hügelheim verbunden. Am Freitag, den 18. und Samstag, den 19.03. findet jeweils ab 19.30 Uhr der 35. Dorfabend in unserem Haus statt. Einlass ab 18.30 Uhr. Eintrittskarten für beide Abende sind am Dienstag, den 15. März, ab 18 Uhr an der Abendkasse erhältlich. Der Erlös des Dorfabends ist für die Vereins- und Jugendarbeit im Dorfe bestimmt.",
+  "segments": [
+    {
+      "start": 0,
+      "end": 2.76,
+      "text": " Sie hören eine automatische Telefonauskunft."
+    },
+    {
+      "start": 8.86,
+      "end": 13.7,
+      "text": " Sie sind mit dem Informationsdienst der Festhalle im Dorf Hügelheim verbunden."
+    },
+    {
+      "start": 14.58,
+      "end": 23.92,
+      "text": " Am Freitag den 18. und Samstag den 19.03. findet jeweils ab 19.30 Uhr der 35. Dorfabend in unserem Haus statt."
+    },
+    {
+      "start": 24.539999,
+      "end": 26.359999,
+      "text": " Einlass ab 18.30 Uhr."
+    },
+    {
+      "start": 27.22,
+      "end": 34.079998,
+      "text": " Eintrittskarten für beide Abende sind am Dienstag, den 15. März, ab 18 Uhr an der Abendkasse erhältlich."
+    },
+    {
+      "start": 34.78,
+      "end": 39.12,
+      "text": " Der Erlös des Dorfabends ist für die Vereins- und Jugendarbeit im Dorfe bestimmt."
+    },
+    {
+      "start": 42.579998,
+      "end": 45.3,
+      "text": " Sie hören jetzt den Text noch einmal."
+    },
+    {
+      "start": 45.3,
+      "end": 56.92,
+      "text": " Sie sind mit dem Informationsdienst der Festhalle im Dorf Hügelheim verbunden."
+    },
+    {
+      "start": 57.82,
+      "end": 67.14,
+      "text": " Am Freitag, den 18. und Samstag, den 19.03. findet jeweils ab 19.30 Uhr der 35. Dorfabend in unserem Haus statt."
+    },
+    {
+      "start": 67.76,
+      "end": 69.58,
+      "text": " Einlass ab 18.30 Uhr."
+    },
+    {
+      "start": 70.44,
+      "end": 77.3,
+      "text": " Eintrittskarten für beide Abende sind am Dienstag, den 15. März, ab 18 Uhr an der Abendkasse erhältlich."
+    },
+    {
+      "start": 78,
+      "end": 82.32,
+      "text": " Der Erlös des Dorfabends ist für die Vereins- und Jugendarbeit im Dorfe bestimmt."
+    }
+  ],
+  "duration": 85.645000704
+}

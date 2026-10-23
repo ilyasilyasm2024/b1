@@ -1,6 +1,7 @@
 import { useState, useEffect, useRef, useCallback } from "react";
 import { loadTranscript, type Transcript, type TranscriptSegment } from "../services/transcripts";
 import { usePermissions } from "../context/Permissions";
+import { useTranslation } from "react-i18next";
 
 interface TranscriptToggleProps {
   /** e.g. "module1" */
@@ -18,6 +19,7 @@ interface TranscriptToggleProps {
  * with playback and allows clicking a segment to seek.
  */
 export default function TranscriptToggle({ module, fileName, audioRef }: TranscriptToggleProps) {
+  const { t } = useTranslation();
   const { hasFeature } = usePermissions();
   const [open, setOpen] = useState(false);
   const [transcript, setTranscript] = useState<Transcript | null>(null);
@@ -136,7 +138,7 @@ export default function TranscriptToggle({ module, fileName, audioRef }: Transcr
           <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
           </svg>
-          Transkript (Platinum+)
+          {t("transcript.locked")}
         </span>
       ) : (
       <button
@@ -146,7 +148,7 @@ export default function TranscriptToggle({ module, fileName, audioRef }: Transcr
         <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
         </svg>
-        {open ? "Transkript ausblenden" : "Transkript anzeigen"}
+        {open ? t("transcript.hide") : t("transcript.show")}
       </button>
       )}
 
@@ -155,8 +157,8 @@ export default function TranscriptToggle({ module, fileName, audioRef }: Transcr
           ref={containerRef}
           className="mt-2 border border-gray-200 rounded-lg bg-gray-50 overflow-hidden"
         >
-          {loading && <p className="text-xs text-gray-400 p-3">Laden...</p>}
-          {error && <p className="text-xs text-red-500 p-3">Transkript nicht verfügbar.</p>}
+          {loading && <p className="text-xs text-gray-400 p-3">{t("common.loading")}</p>}
+          {error && <p className="text-xs text-red-500 p-3">{t("transcript.unavailable")}</p>}
           {transcript && transcript.segments.length > 0 ? (
             <>
               {/* Mode switcher */}
@@ -169,7 +171,7 @@ export default function TranscriptToggle({ module, fileName, audioRef }: Transcr
                       : "bg-gray-200 text-gray-600 hover:bg-gray-300"
                   }`}
                 >
-                  Nur aktuell
+                  {t("transcript.currentOnly")}
                 </button>
                 <button
                   onClick={() => setViewMode("full")}
@@ -179,7 +181,7 @@ export default function TranscriptToggle({ module, fileName, audioRef }: Transcr
                       : "bg-gray-200 text-gray-600 hover:bg-gray-300"
                   }`}
                 >
-                  Volltext
+                  {t("transcript.fullText")}
                 </button>
               </div>
 
@@ -192,7 +194,7 @@ export default function TranscriptToggle({ module, fileName, audioRef }: Transcr
                     if (!seg) {
                       return (
                         <p className="text-xs text-gray-400 italic text-center">
-                          Audio abspielen, um das Transkript zu sehen...
+                          {t("transcript.playToSee")}
                         </p>
                       );
                     }

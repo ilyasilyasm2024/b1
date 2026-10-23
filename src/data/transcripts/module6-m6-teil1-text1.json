@@ -1,0 +1,52 @@
+{
+  "file": "module6/m6-teil1-text1.mp3",
+  "text": " Lesen Sie jetzt die Aufgaben 1 und 2. Dazu haben Sie 10 Sekunden Zeit. Sie hören eine Durchsage am Bahnhof. Bahnsteig 10 Sie hören jetzt den Text noch einmal. Achtung Bahnsteig 10. E-N 490 Hans Halbers nach Hamburg-Altona über Passau, Nürnberg und Hannover mit einem Zugteil Auto im Reisezug fährt ab. Der Schlafwagen und der Liegewagen befinden sich im vorderen Zugteil. Dieser Zug hält bis Linz Hauptbahnhof, in Wien-Hütteldorf, St. Pölten Hauptbahnhof und am Stetten. Bitte einsteigen. Vorsicht, Türen schließen automatisch. Wir wünschen gute Reise.",
+  "segments": [
+    {
+      "start": 0,
+      "end": 6,
+      "text": " Lesen Sie jetzt die Aufgaben 1 und 2. Dazu haben Sie 10 Sekunden Zeit."
+    },
+    {
+      "start": 15.2,
+      "end": 18.02,
+      "text": " Sie hören eine Durchsage am Bahnhof."
+    },
+    {
+      "start": 18.02,
+      "end": 28.68,
+      "text": " Bahnsteig 10"
+    },
+    {
+      "start": 48.02,
+      "end": 62.44,
+      "text": " Sie hören jetzt den Text noch einmal."
+    },
+    {
+      "start": 69.54,
+      "end": 71.56,
+      "text": " Achtung Bahnsteig 10."
+    },
+    {
+      "start": 71.56,
+      "end": 81.28,
+      "text": " E-N 490 Hans Halbers nach Hamburg-Altona über Passau, Nürnberg und Hannover mit einem Zugteil Auto im Reisezug fährt ab."
+    },
+    {
+      "start": 81.979996,
+      "end": 85.96,
+      "text": " Der Schlafwagen und der Liegewagen befinden sich im vorderen Zugteil."
+    },
+    {
+      "start": 86.579994,
+      "end": 93.119995,
+      "text": " Dieser Zug hält bis Linz Hauptbahnhof, in Wien-Hütteldorf, St. Pölten Hauptbahnhof und am Stetten."
+    },
+    {
+      "start": 93.7,
+      "end": 99.32,
+      "text": " Bitte einsteigen. Vorsicht, Türen schließen automatisch. Wir wünschen gute Reise."
+    }
+  ],
+  "duration": 102.013001728
+}

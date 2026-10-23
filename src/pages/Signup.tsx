@@ -1,9 +1,11 @@
 import { useState, useEffect, type FormEvent } from "react";
 import { Link, useSearchParams } from "react-router-dom";
 import { authService, type ReferralValidation } from "../services/auth";
+import { Trans, useTranslation } from "react-i18next";
 
 export default function Signup() {
   const [searchParams] = useSearchParams();
+  const { t } = useTranslation();
 
   const [form, setForm] = useState({
     username: "",
@@ -43,7 +45,7 @@ export default function Signup() {
     setSuccess("");
 
     if (form.password !== form.confirmPassword) {
-      setError("Passwörter stimmen nicht überein");
+      setError(t("common.passwordsMismatch"));
       return;
     }
 
@@ -62,7 +64,7 @@ export default function Signup() {
       setSuccess(res.data.message);
       setEmailSent(true);
     } else {
-      setError(res.error || "Registrierung fehlgeschlagen");
+      setError(res.error || t("auth.signup.failed"));
     }
 
     setIsLoading(false);
@@ -72,9 +74,9 @@ export default function Signup() {
     <div className="min-h-screen bg-gray-50 flex items-center justify-center px-4 py-8">
       <div className="w-full max-w-md">
         <div className="text-center mb-8">
-          <h1 className="text-3xl font-bold text-gray-900">Konto erstellen</h1>
+          <h1 className="text-3xl font-bold text-gray-900">{t("auth.signup.title")}</h1>
           <p className="text-gray-500 mt-2">
-            Starte deine B1-Prüfungsvorbereitung
+            {t("auth.signup.subtitle")}
           </p>
         </div>
 
@@ -87,18 +89,18 @@ export default function Signup() {
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
                 </svg>
               </div>
-              <h2 className="text-lg font-bold text-gray-900 mb-2">E-Mail gesendet!</h2>
+              <h2 className="text-lg font-bold text-gray-900 mb-2">{t("common.emailSent")}</h2>
               <p className="text-sm text-gray-600 mb-1">
                 {success}
               </p>
               <p className="text-xs text-gray-500 mb-6">
-                Bitte überprüfe dein Postfach (auch den Spam-Ordner) und klicke auf den Bestätigungslink.
+                {t("auth.signup.checkInbox")}
               </p>
               <Link
                 to="/login"
                 className="inline-block bg-gray-900 text-white px-6 py-2.5 rounded-lg text-sm font-medium hover:bg-gray-800 transition-colors"
               >
-                Zur Anmeldung
+                {t("common.toLogin")}
               </Link>
             </div>
           ) : (
@@ -121,9 +123,11 @@ export default function Signup() {
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
               </svg>
               <span>
-                <strong>{referral.discountPercent}% Rabatt</strong> mit dem Code{" "}
-                <strong>{referral.referralCode}</strong>
-                {referral.influencerName ? ` (empfohlen von ${referral.influencerName})` : ""} wird beim Abo angewendet.
+                <Trans
+                  i18nKey={referral.influencerName ? "auth.signup.referralBy" : "auth.signup.referral"}
+                  values={{ percent: referral.discountPercent, code: referral.referralCode, name: referral.influencerName }}
+                  components={{ b: <strong /> }}
+                />
               </span>
             </div>
           )}
@@ -132,7 +136,7 @@ export default function Signup() {
             <div className="grid grid-cols-2 gap-3">
               <div>
                 <label htmlFor="firstName" className="block text-sm font-medium text-gray-700 mb-1">
-                  Vorname
+                  {t("auth.signup.firstName")}
                 </label>
                 <input
                   id="firstName"
@@ -143,12 +147,12 @@ export default function Signup() {
                   minLength={2}
                   maxLength={50}
                   className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-gray-900 focus:border-transparent text-sm"
-                  placeholder="Max"
+                  placeholder={t("auth.signup.firstNamePlaceholder")}
                 />
               </div>
               <div>
                 <label htmlFor="lastName" className="block text-sm font-medium text-gray-700 mb-1">
-                  Nachname
+                  {t("auth.signup.lastName")}
                 </label>
                 <input
                   id="lastName"
@@ -159,14 +163,14 @@ export default function Signup() {
                   minLength={2}
                   maxLength={50}
                   className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-gray-900 focus:border-transparent text-sm"
-                  placeholder="Mustermann"
+                  placeholder={t("auth.signup.lastNamePlaceholder")}
                 />
               </div>
             </div>
 
             <div>
               <label htmlFor="username" className="block text-sm font-medium text-gray-700 mb-1">
-                Benutzername
+                {t("auth.signup.username")}
               </label>
               <input
                 id="username"
@@ -178,14 +182,14 @@ export default function Signup() {
                 maxLength={30}
                 pattern="[a-zA-Z0-9]+"
                 className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-gray-900 focus:border-transparent text-sm"
-                placeholder="maxmuster"
+                placeholder={t("auth.signup.usernamePlaceholder")}
               />
-              <p className="text-xs text-gray-400 mt-1">Nur Buchstaben und Zahlen, 3–30 Zeichen</p>
+              <p className="text-xs text-gray-400 mt-1">{t("auth.signup.usernameHint")}</p>
             </div>
 
             <div>
               <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-1">
-                E-Mail
+                {t("auth.signup.email")}
               </label>
               <input
                 id="email"
@@ -195,13 +199,13 @@ export default function Signup() {
                 required
                 maxLength={128}
                 className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-gray-900 focus:border-transparent text-sm"
-                placeholder="max@beispiel.de"
+                placeholder={t("auth.signup.emailPlaceholder")}
               />
             </div>
 
             <div>
               <label htmlFor="password" className="block text-sm font-medium text-gray-700 mb-1">
-                Passwort
+                {t("common.password")}
               </label>
               <div className="relative">
                 <input
@@ -219,7 +223,7 @@ export default function Signup() {
                   type="button"
                   onClick={() => setShowPassword(!showPassword)}
                   className="absolute right-2.5 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600 cursor-pointer"
-                  aria-label={showPassword ? "Passwort verbergen" : "Passwort anzeigen"}
+                  aria-label={showPassword ? t("common.hidePassword") : t("common.showPassword")}
                 >
                   {showPassword ? (
                     <svg className="w-4.5 h-4.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -233,12 +237,12 @@ export default function Signup() {
                   )}
                 </button>
               </div>
-              <p className="text-xs text-gray-400 mt-1">Mindestens 6 Zeichen</p>
+              <p className="text-xs text-gray-400 mt-1">{t("common.passwordHint")}</p>
             </div>
 
             <div>
               <label htmlFor="confirmPassword" className="block text-sm font-medium text-gray-700 mb-1">
-                Passwort bestätigen
+                {t("common.confirmPassword")}
               </label>
               <div className="relative">
                 <input
@@ -256,7 +260,7 @@ export default function Signup() {
                   type="button"
                   onClick={() => setShowConfirmPassword(!showConfirmPassword)}
                   className="absolute right-2.5 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600 cursor-pointer"
-                  aria-label={showConfirmPassword ? "Passwort verbergen" : "Passwort anzeigen"}
+                  aria-label={showConfirmPassword ? t("common.hidePassword") : t("common.showPassword")}
                 >
                   {showConfirmPassword ? (
                     <svg className="w-4.5 h-4.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -277,20 +281,20 @@ export default function Signup() {
               disabled={isLoading}
               className="w-full bg-gray-900 text-white py-2.5 rounded-lg font-medium text-sm hover:bg-gray-800 transition-colors disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer"
             >
-              {isLoading ? "Registrierung..." : "Registrieren"}
+              {isLoading ? t("auth.signup.submitting") : t("common.signUp")}
             </button>
           </form>
 
           <div className="mt-6 text-center text-sm text-gray-600">
-            Bereits ein Konto?{" "}
+            {t("auth.signup.haveAccount")}{" "}
             <Link to="/login" className="font-medium text-gray-900 hover:underline">
-              Anmelden
+              {t("common.signIn")}
             </Link>
           </div>
 
           <div className="mt-3 text-center">
             <Link to="/" className="text-xs text-gray-400 hover:text-gray-600 hover:underline">
-              Ohne Anmeldung fortfahren →
+              {t("common.continueWithoutAccount")}
             </Link>
           </div>
           </>

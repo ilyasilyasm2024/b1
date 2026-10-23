@@ -5,10 +5,12 @@ import { useAnswers } from "../../context/AnswersContext";
 import { useAuth } from "../../context/AuthContext";
 import { usePermissions } from "../../context/Permissions";
 import { suggestNextWords, isApiKeyConfigured } from "../../services/ai";
+import { useTranslation } from "react-i18next";
 
 const SECTION_ID = "m10-schreiben";
 
 export default function M10Schreiben() {
+  const { t } = useTranslation();
   const data = module10Schreiben;
   const { updateProgress } = useProgress();
   const { getAnswers, setAnswers } = useAnswers();
@@ -21,7 +23,7 @@ export default function M10Schreiben() {
   const savedTexts: string[] = (getAnswers<string>(SECTION_ID) ?? Array(data.aufgaben.length).fill("")) as string[];
 
   useEffect(() => {
-    const completed = savedTexts.filter((t) => t.trim().length > 0).length;
+    const completed = savedTexts.filter((text) => text.trim().length > 0).length;
     updateProgress(SECTION_ID, completed, data.aufgaben.length);
   }, [savedTexts, data.aufgaben.length, updateProgress]);
 
@@ -117,7 +119,7 @@ export default function M10Schreiben() {
             value={currentText}
             onChange={(e) => handleTextChange(e.target.value)}
             onKeyDown={(e) => { if (e.key === "Tab" && suggestion) { e.preventDefault(); acceptSuggestion(); } }}
-            placeholder="Schreiben Sie hier Ihren Text..."
+            placeholder={t("exercise.writePlaceholder")}
             className="w-full h-48 border border-gray-300 rounded-lg p-4 text-sm resize-y focus:outline-none focus:ring-2 focus:ring-black focus:border-transparent"
           />
           {suggestion && (
@@ -128,7 +130,7 @@ export default function M10Schreiben() {
             </div>
           )}
           <div className="absolute bottom-3 right-3 text-xs text-gray-400">
-            {wordCount} / {currentTask.wordCount} Wörter
+            {t("exercise.wordsOfTarget", { count: wordCount, target: currentTask.wordCount })}
           </div>
         </div>
 
@@ -143,7 +145,7 @@ export default function M10Schreiben() {
             />
           </div>
           <span className={`text-xs font-medium ${wordCount >= currentTask.wordCount ? "text-green-600" : "text-gray-500"}`}>
-            {wordCount >= currentTask.wordCount ? "✓ Ziel erreicht" : `${currentTask.wordCount - wordCount} Wörter fehlen`}
+            {wordCount >= currentTask.wordCount ? `✓ ${t("exercise.goalReached")}` : t("exercise.wordsMissing", { count: currentTask.wordCount - wordCount })}
           </span>
         </div>
       </div>

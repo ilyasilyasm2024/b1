@@ -1,0 +1,62 @@
+{
+  "file": "module3/m3-teil1-text1.mp3",
+  "text": " Lesen Sie jetzt die Aufgaben 1 und 2. Dazu haben Sie 10 Sekunden Zeit. Sie hören eine Durchsage auf dem Flughafen. Achtung, Achtung! Passagiere des Lufthansa-Fluges LH 539 nach München werden gebeten, nicht am Schalter 53, sondern am Schalter 45 einzuchecken. Ich wiederhole, Check-in für die Passagiere nach München, Flugnummer LH 539 am Schalter 45. Ebenfalls geben wir die verspätete Ankunft der EasyJet aus London, Flugnummer 215, bekannt. Wegen Nebels wird die Maschine voraussichtlich mit zwei Stunden Verspätung um 19.45 Uhr landen. Sie hören jetzt den Text noch einmal. Achtung, Achtung! Passagiere des Lufthansa-Fluges LH 539 nach München werden gebeten, nicht am Schalter 53, sondern am Schalter 45 einzuchecken. Ich wiederhole, Check-in für die Passagiere nach München, Flugnummer LH 539 am Schalter 45. Ebenfalls geben wir die verspätete Ankunft der EasyJet aus London, Flugnummer 215 bekannt. Wegen Nebels wird die Maschine voraussichtlich mit zwei Stunden Verspätung um 19.45 Uhr landen.",
+  "segments": [
+    {
+      "start": 0,
+      "end": 5.7799997,
+      "text": " Lesen Sie jetzt die Aufgaben 1 und 2. Dazu haben Sie 10 Sekunden Zeit."
+    },
+    {
+      "start": 14.839999,
+      "end": 17.84,
+      "text": " Sie hören eine Durchsage auf dem Flughafen."
+    },
+    {
+      "start": 17.84,
+      "end": 35.12,
+      "text": " Achtung, Achtung! Passagiere des Lufthansa-Fluges LH 539 nach München werden gebeten, nicht am Schalter 53, sondern am Schalter 45 einzuchecken."
+    },
+    {
+      "start": 35.12,
+      "end": 43.399998,
+      "text": " Ich wiederhole, Check-in für die Passagiere nach München, Flugnummer LH 539 am Schalter 45."
+    },
+    {
+      "start": 43.399998,
+      "end": 51.3,
+      "text": " Ebenfalls geben wir die verspätete Ankunft der EasyJet aus London, Flugnummer 215, bekannt."
+    },
+    {
+      "start": 52.059998,
+      "end": 57.739998,
+      "text": " Wegen Nebels wird die Maschine voraussichtlich mit zwei Stunden Verspätung um 19.45 Uhr landen."
+    },
+    {
+      "start": 61.639996,
+      "end": 64.439995,
+      "text": " Sie hören jetzt den Text noch einmal."
+    },
+    {
+      "start": 64.439995,
+      "end": 82.619995,
+      "text": " Achtung, Achtung! Passagiere des Lufthansa-Fluges LH 539 nach München werden gebeten, nicht am Schalter 53, sondern am Schalter 45 einzuchecken."
+    },
+    {
+      "start": 82.619995,
+      "end": 90.899994,
+      "text": " Ich wiederhole, Check-in für die Passagiere nach München, Flugnummer LH 539 am Schalter 45."
+    },
+    {
+      "start": 90.9,
+      "end": 98.8,
+      "text": " Ebenfalls geben wir die verspätete Ankunft der EasyJet aus London, Flugnummer 215 bekannt."
+    },
+    {
+      "start": 99.58,
+      "end": 105.22,
+      "text": " Wegen Nebels wird die Maschine voraussichtlich mit zwei Stunden Verspätung um 19.45 Uhr landen."
+    }
+  ],
+  "duration": 108.42099712
+}

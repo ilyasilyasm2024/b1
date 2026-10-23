@@ -3,13 +3,14 @@ import { translateWord, generateExample, isApiKeyConfigured } from "../services/
 import { useVocabulary } from "../context/VocabularyContext";
 import { useAnswers } from "../context/AnswersContext";
 import { usePermissions } from "../context/Permissions";
+import { useTranslation } from "react-i18next";
 
 const HIGHLIGHT_COLORS = [
-  { name: "Gelb", value: "#fef08a" },
-  { name: "Grün", value: "#bbf7d0" },
-  { name: "Blau", value: "#bfdbfe" },
-  { name: "Rosa", value: "#fbcfe8" },
-  { name: "Orange", value: "#fed7aa" },
+  { key: "yellow", value: "#fef08a" },
+  { key: "green", value: "#bbf7d0" },
+  { key: "blue", value: "#bfdbfe" },
+  { key: "pink", value: "#fbcfe8" },
+  { key: "orange", value: "#fed7aa" },
 ];
 
 const HIGHLIGHTS_STORAGE_KEY = "b1-highlights";
@@ -40,6 +41,7 @@ interface PopupPosition {
 }
 
 export default function TextHighlighter() {
+  const { t } = useTranslation();
   const [showPopup, setShowPopup] = useState(false);
   const [popupPos, setPopupPos] = useState<PopupPosition>({ x: 0, y: 0 });
   const [translation, setTranslation] = useState<string | null>(null);
@@ -131,7 +133,7 @@ export default function TextHighlighter() {
 
   const applyHighlight = (color: string) => {
     if (!hasFeature("textHighlighting")) {
-      alert("Text highlighting requires Silver plan or higher.");
+      alert(t("highlighter.needsSilver"));
       setShowPopup(false);
       return;
     }
@@ -304,7 +306,7 @@ export default function TextHighlighter() {
                 hasFeature("textHighlighting") ? "cursor-pointer hover:scale-110" : "opacity-40 cursor-not-allowed"
               }`}
               style={{ backgroundColor: c.value }}
-              title={hasFeature("textHighlighting") ? c.name : "🔒 Silver plan required"}
+              title={hasFeature("textHighlighting") ? t(`highlighter.colors.${c.key}`) : `🔒 ${t("highlighter.silverRequired")}`}
             />
           ))}
           {/* Read aloud */}
@@ -320,7 +322,7 @@ export default function TextHighlighter() {
               setShowPopup(false);
             }}
             className="w-6 h-6 rounded-full border border-gray-300 cursor-pointer hover:scale-110 transition-transform flex items-center justify-center bg-white"
-            title="Vorlesen"
+            title={t("highlighter.readAloud")}
           >
             <svg className="w-3 h-3 text-blue-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15.536 8.464a5 5 0 010 7.072m2.828-9.9a9 9 0 010 12.728M5.586 15H4a1 1 0 01-1-1v-4a1 1 0 011-1h1.586l4.707-4.707C10.923 3.663 12 4.109 12 5v14c0 .891-1.077 1.337-1.707.707L5.586 15z" />
@@ -343,7 +345,7 @@ export default function TextHighlighter() {
             }}
             disabled={!isApiKeyConfigured() || translating}
             className="w-6 h-6 rounded-full border border-gray-300 cursor-pointer hover:scale-110 transition-transform flex items-center justify-center bg-white disabled:opacity-40"
-            title="Ins Arabische übersetzen"
+            title={t("highlighter.translateArabic")}
           >
             {translating ? (
               <span className="text-[8px] animate-spin">⟳</span>
@@ -355,7 +357,7 @@ export default function TextHighlighter() {
           <button
             onClick={openVocabModal}
             className="w-6 h-6 rounded-full border border-gray-300 cursor-pointer hover:scale-110 transition-transform flex items-center justify-center bg-white"
-            title="Als Vokabel speichern"
+            title={t("highlighter.saveAsVocab")}
           >
             <svg className="w-3 h-3 text-emerald-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
@@ -365,7 +367,7 @@ export default function TextHighlighter() {
           <button
             onClick={removeHighlight}
             className="w-6 h-6 rounded-full border border-gray-300 cursor-pointer hover:scale-110 transition-transform flex items-center justify-center bg-white"
-            title="Markierung entfernen"
+            title={t("highlighter.removeHighlight")}
           >
             <svg className="w-3 h-3 text-red-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
@@ -402,11 +404,11 @@ export default function TextHighlighter() {
         <div className="fixed inset-0 z-[1000] flex items-center justify-center">
           <div className="absolute inset-0 bg-black/40" onClick={() => setShowVocabModal(false)} />
           <div className="relative bg-white rounded-xl shadow-2xl p-5 w-full max-w-sm mx-4">
-            <h3 className="text-sm font-bold text-gray-800 mb-4">Neue Vokabel speichern</h3>
+            <h3 className="text-sm font-bold text-gray-800 mb-4">{t("highlighter.newVocab")}</h3>
 
             {/* Word */}
             <div className="mb-3">
-              <label className="text-[10px] font-medium text-gray-500 mb-1 block">Wort</label>
+              <label className="text-[10px] font-medium text-gray-500 mb-1 block">{t("highlighter.word")}</label>
               <div className="flex items-center gap-2">
                 <input
                   type="text"
@@ -423,7 +425,7 @@ export default function TextHighlighter() {
                     speechSynthesis.speak(utterance);
                   }}
                   className="p-2 hover:bg-gray-100 rounded-lg cursor-pointer"
-                  title="Vorlesen"
+                  title={t("highlighter.readAloud")}
                 >
                   <svg className="w-4 h-4 text-blue-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15.536 8.464a5 5 0 010 7.072m2.828-9.9a9 9 0 010 12.728M5.586 15H4a1 1 0 01-1-1v-4a1 1 0 011-1h1.586l4.707-4.707C10.923 3.663 12 4.109 12 5v14c0 .891-1.077 1.337-1.707.707L5.586 15z" />
@@ -434,13 +436,13 @@ export default function TextHighlighter() {
 
             {/* Translation */}
             <div className="mb-3">
-              <label className="text-[10px] font-medium text-gray-500 mb-1 block">Übersetzung</label>
+              <label className="text-[10px] font-medium text-gray-500 mb-1 block">{t("vocab.translationPlaceholder")}</label>
               <div className="flex items-center gap-2">
                 <input
                   type="text"
                   value={vocabTranslation}
                   onChange={(e) => setVocabTranslation(e.target.value)}
-                  placeholder="Übersetzung eingeben oder AI nutzen"
+                  placeholder={t("highlighter.translationPlaceholder")}
                   maxLength={150}
                   className="flex-1 border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-200"
                 />
@@ -456,7 +458,7 @@ export default function TextHighlighter() {
                   }}
                   disabled={!vocabWord || aiLoading !== null || !isApiKeyConfigured()}
                   className="bg-blue-600 text-white px-3 py-2 rounded-lg text-[10px] font-medium cursor-pointer hover:bg-blue-700 disabled:opacity-40 disabled:cursor-not-allowed"
-                  title="AI Übersetzung (Arabisch)"
+                  title={t("highlighter.aiTranslateArabic")}
                 >
                   {aiLoading === "translate" ? "..." : "AI 🇸🇦"}
                 </button>
@@ -465,13 +467,13 @@ export default function TextHighlighter() {
 
             {/* Example */}
             <div className="mb-4">
-              <label className="text-[10px] font-medium text-gray-500 mb-1 block">Beispielsatz</label>
+              <label className="text-[10px] font-medium text-gray-500 mb-1 block">{t("highlighter.exampleSentence")}</label>
               <div className="flex items-center gap-2">
                 <input
                   type="text"
                   value={vocabExample}
                   onChange={(e) => setVocabExample(e.target.value)}
-                  placeholder="Beispielsatz oder AI generieren"
+                  placeholder={t("highlighter.examplePlaceholder")}
                   maxLength={150}
                   className="flex-1 border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-200"
                 />
@@ -479,7 +481,7 @@ export default function TextHighlighter() {
                   onClick={async () => {
                     if (!vocabWord || !isApiKeyConfigured()) return;
                     if (!hasFeature("contextSentences")) {
-                      alert("AI example sentences require Gold plan or higher.");
+                      alert(t("vocab.exampleNeedsGold"));
                       return;
                     }
                     setAiLoading("example");
@@ -493,7 +495,7 @@ export default function TextHighlighter() {
                   className={`px-3 py-2 rounded-lg text-[10px] font-medium cursor-pointer disabled:opacity-40 disabled:cursor-not-allowed ${
                     hasFeature("contextSentences") ? "bg-purple-600 text-white hover:bg-purple-700" : "bg-gray-300 text-gray-500"
                   }`}
-                  title={hasFeature("contextSentences") ? "Beispiel generieren" : "🔒 Gold plan required"}
+                  title={hasFeature("contextSentences") ? t("vocab.generateExample") : `🔒 ${t("vocab.goldRequired")}`}
                 >
                   {aiLoading === "example" ? "..." : hasFeature("contextSentences") ? "AI ✍️" : "🔒 AI"}
                 </button>
@@ -507,13 +509,13 @@ export default function TextHighlighter() {
                 disabled={!vocabWord || !vocabTranslation}
                 className="flex-1 bg-emerald-600 text-white py-2 rounded-lg text-sm font-medium cursor-pointer hover:bg-emerald-700 disabled:opacity-50 disabled:cursor-not-allowed"
               >
-                Speichern
+                {t("common.save")}
               </button>
               <button
                 onClick={() => setShowVocabModal(false)}
                 className="px-4 py-2 border border-gray-300 rounded-lg text-sm text-gray-600 cursor-pointer hover:bg-gray-50"
               >
-                Abbrechen
+                {t("common.cancel")}
               </button>
             </div>
           </div>

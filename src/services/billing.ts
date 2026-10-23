@@ -3,23 +3,17 @@ import { api } from "./api";
 export type PaidPlan = "silver" | "gold" | "platinum" | "lifetime";
 export type Billing = "monthly" | "yearly";
 
-export interface CardDetails {
-  number: string;
-  expiry: string; // "YYYY-MM"
-  cvv: string;
-}
-
-// Process a card payment directly via the backend (PayPal server-side).
-export async function payWithCard(
+// Creates a Lemon Squeezy hosted checkout session and returns its URL.
+// The caller redirects the browser there; Lemon Squeezy notifies the
+// backend via webhook once payment succeeds, which activates the plan.
+export async function createCheckout(
   plan: PaidPlan,
-  billing: Billing,
-  card: CardDetails
-): Promise<{ plan?: string; error?: string }> {
-  const res = await api.post<{ plan: string; subscriptionExpiresAt: string }>("/billing/pay-card", {
+  billing: Billing
+): Promise<{ url?: string; error?: string }> {
+  const res = await api.post<{ url: string }>("/billing/checkout", {
     plan,
     billing,
-    card,
   });
   if (res.error) return { error: res.error };
-  return { plan: res.data?.plan };
+  return { url: res.data?.url };
 }

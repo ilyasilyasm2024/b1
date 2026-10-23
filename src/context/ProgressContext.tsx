@@ -18,6 +18,7 @@ const MODULE_TOTALS: Record<string, number> = {
   "m13": 67, // Lesen: 6+3+3+7+7+4=30, Hören: 10+5+7+8=30, Schreiben: 3, Sprechen: 4
   "m14": 67, // Lesen: 6+3+3+7+7+4=30, Hören: 10+5+7+8=30, Schreiben: 3, Sprechen: 4
   "m15": 67, // Lesen: 6+3+3+7+7+4=30, Hören: 10+5+7+8=30, Schreiben: 3, Sprechen: 4
+  "nm1": 30, // Lesen only so far: 6+3+3+7+7+4=30
 };
 
 // Map of section IDs to their question counts for calculating progress from stored answers
@@ -231,6 +232,13 @@ const SECTION_QUESTION_COUNTS: Record<string, number> = {
   "m15-hoeren-teil4": 8,
   "m15-schreiben": 3,
   "m15-sprechen": 4,
+  // New Module 1 (rewritten, original content — Lesen only so far)
+  "nm1-lesen-teil1": 6,
+  "nm1-lesen-teil2a": 3,
+  "nm1-lesen-teil2b": 3,
+  "nm1-lesen-teil3": 7,
+  "nm1-lesen-teil4": 7,
+  "nm1-lesen-teil5": 4,
 };
 
 interface ProgressContextType {

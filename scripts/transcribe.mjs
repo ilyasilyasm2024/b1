@@ -10,6 +10,7 @@
 import fs from "fs";
 import path from "path";
 import { fileURLToPath } from "url";
+import { execFileSync } from "child_process";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const ROOT = path.resolve(__dirname, "..");
@@ -36,6 +37,19 @@ const MODEL = "whisper-large-v3";
 const AUDIO_DIRS = [
   path.join(ROOT, "public/horen/module1"),
   path.join(ROOT, "public/horen/module2"),
+  path.join(ROOT, "public/horen/module3"),
+  path.join(ROOT, "public/horen/module4"),
+  path.join(ROOT, "public/horen/module5"),
+  path.join(ROOT, "public/horen/module6"),
+  path.join(ROOT, "public/horen/module7"),
+  path.join(ROOT, "public/horen/module8"),
+  path.join(ROOT, "public/horen/module9"),
+  path.join(ROOT, "public/horen/module10"),
+  path.join(ROOT, "public/horen/module11"),
+  path.join(ROOT, "public/horen/module12"),
+  path.join(ROOT, "public/horen/module13"),
+  path.join(ROOT, "public/horen/module14"),
+  path.join(ROOT, "public/horen/module15"),
 ];
 
 const OUTPUT_DIR = path.join(ROOT, "src/data/transcripts");
@@ -47,7 +61,15 @@ async function transcribeFile(filePath) {
 
   console.log(`🎙️  Transcribing: ${moduleName}/${fileName}`);
 
-  const fileBuffer = fs.readFileSync(filePath);
+  // Large files time out on Groq (HTTP 524), so upload a mono 64 kbps copy instead
+  let fileBuffer = fs.readFileSync(filePath);
+  if (fileBuffer.length > 8 * 1024 * 1024) {
+    fileBuffer = execFileSync(
+      "ffmpeg",
+      ["-nostdin", "-v", "error", "-i", filePath, "-ac", "1", "-ar", "16000", "-b:a", "64k", "-f", "mp3", "pipe:1"],
+      { maxBuffer: 64 * 1024 * 1024 }
+    );
+  }
   const blob = new Blob([fileBuffer], { type: "audio/mpeg" });
 
   const formData = new FormData();
@@ -87,7 +109,8 @@ async function main() {
   const allFiles = [];
   for (const dir of AUDIO_DIRS) {
     if (!fs.existsSync(dir)) continue;
-    const files = fs.readdirSync(dir).filter((f) => f.endsWith(".mp3")).sort();
+    // Skip the full "Modelltest ..." source recordings; only the split parts are used
+    const files = fs.readdirSync(dir).filter((f) => f.endsWith(".mp3") && !f.startsWith("Modelltest")).sort();
     for (const file of files) {
       allFiles.push(path.join(dir, file));
     }

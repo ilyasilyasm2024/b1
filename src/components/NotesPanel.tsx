@@ -4,6 +4,7 @@ import { useAuth } from "../context/AuthContext";
 import { useNotes } from "../context/NotesContext";
 import RichTextNote from "./RichTextNote";
 import ConfirmModal from "./ConfirmModal";
+import { useTranslation } from "react-i18next";
 
 interface NotesPanelProps {
   isOpen: boolean;
@@ -12,6 +13,7 @@ interface NotesPanelProps {
 
 export default function NotesPanel({ isOpen, onClose }: NotesPanelProps) {
   const { user } = useAuth();
+  const { t } = useTranslation();
   const { notes, isLoading, error, addNote, updateNote, saveNote, deleteNote, deleteMany, toggleLink } = useNotes();
   const [confirmDeleteId, setConfirmDeleteId] = useState<string | null>(null);
   const [selectedIds, setSelectedIds] = useState<Set<string>>(new Set());
@@ -87,15 +89,15 @@ export default function NotesPanel({ isOpen, onClose }: NotesPanelProps) {
         {/* Header */}
         <div className="flex items-center justify-between px-5 py-4 border-b border-gray-200">
           <div>
-            <h2 className="text-lg font-bold text-gray-800">Meine Notizen</h2>
+            <h2 className="text-lg font-bold text-gray-800">{t("app.myNotes")}</h2>
             <p className="text-xs text-gray-500">
-              {notes.length} Notiz{notes.length === 1 ? "" : "en"} · Farbnotizen sind frei verschiebbar
+              {t("notes.count", { count: notes.length })} · {t("notes.colorNotesMovable")}
             </p>
           </div>
           <button
             onClick={onClose}
             className="p-2 hover:bg-gray-100 rounded-lg cursor-pointer"
-            title="Schließen"
+            title={t("common.close")}
           >
             <svg className="w-5 h-5 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
@@ -109,14 +111,14 @@ export default function NotesPanel({ isOpen, onClose }: NotesPanelProps) {
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
             </svg>
             <p className="text-sm text-gray-600">
-              Melden Sie sich an, um Ihre Notizen zur Pr&uuml;fung zu speichern.
+              {t("notes.loginToSave")}
             </p>
             <div className="flex gap-2">
               <Link to="/login" onClick={onClose} className="bg-black text-white px-4 py-2 rounded-lg text-sm font-medium hover:bg-gray-800">
-                Anmelden
+                {t("common.signIn")}
               </Link>
               <Link to="/signup" onClick={onClose} className="border border-gray-300 px-4 py-2 rounded-lg text-sm font-medium text-gray-700 hover:bg-gray-50">
-                Registrieren
+                {t("common.signUp")}
               </Link>
             </div>
           </div>
@@ -131,14 +133,14 @@ export default function NotesPanel({ isOpen, onClose }: NotesPanelProps) {
                 <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h7" />
                 </svg>
-                Textnotiz
+                {t("notes.textNote")}
               </button>
               <button
                 onClick={() => addNote("tick")}
                 className="flex-1 border border-gray-300 text-gray-700 px-3 py-2 rounded-lg text-sm font-medium cursor-pointer hover:bg-gray-50 flex items-center justify-center gap-1.5"
               >
                 <span className="w-4 h-4 rounded-sm inline-block" style={{ backgroundColor: "#fca5a5" }} />
-                Farbnotiz
+                {t("notes.colorNote")}
               </button>
             </div>
 
@@ -146,11 +148,11 @@ export default function NotesPanel({ isOpen, onClose }: NotesPanelProps) {
               {error && (
                 <p className="text-xs text-red-600 bg-red-50 border border-red-200 rounded p-2">{error}</p>
               )}
-              {isLoading && <p className="text-sm text-gray-400">Laden...</p>}
+              {isLoading && <p className="text-sm text-gray-400">{t("common.loading")}</p>}
 
               {!isLoading && notes.length === 0 && (
                 <p className="text-sm text-gray-400 text-center mt-8">
-                  Noch keine Notizen. Erstellen Sie Ihre erste Notiz oben.
+                  {t("notes.empty")}
                 </p>
               )}
 
@@ -162,7 +164,7 @@ export default function NotesPanel({ isOpen, onClose }: NotesPanelProps) {
                     className="w-full flex items-center justify-between mb-2 cursor-pointer group"
                   >
                     <h3 className="text-xs font-bold text-gray-400 uppercase tracking-wide group-hover:text-gray-600">
-                      Farbnotizen ({tickNotes.length})
+                      {t("notes.colorNotes", { count: tickNotes.length })}
                     </h3>
                     <svg
                       className={`w-4 h-4 text-gray-400 transition-transform ${tickOpen ? "rotate-180" : ""}`}
@@ -174,7 +176,7 @@ export default function NotesPanel({ isOpen, onClose }: NotesPanelProps) {
                   {tickOpen && (
                   <>
                   <p className="text-[11px] text-gray-400 mb-2">
-                    Diese Notizen schweben über der App. Ziehen Sie sie an eine beliebige Stelle.
+                    {t("notes.colorNotesHint")}
                   </p>
                   <div className="flex flex-wrap gap-2">
                     {tickNotes.map((note) => (
@@ -184,12 +186,12 @@ export default function NotesPanel({ isOpen, onClose }: NotesPanelProps) {
                         style={{ backgroundColor: note.color }}
                       >
                         <span className="truncate max-w-[160px]">
-                          {note.title.trim() || note.content.trim() || "(leer)"}
+                          {note.title.trim() || note.content.trim() || t("notes.emptyNote")}
                         </span>
                         <button
                           onClick={() => setConfirmDeleteId(note._id)}
                           className="text-gray-700/60 hover:text-red-600 cursor-pointer shrink-0"
-                          title="Löschen"
+                          title={t("common.delete")}
                         >
                           <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
@@ -218,7 +220,7 @@ export default function NotesPanel({ isOpen, onClose }: NotesPanelProps) {
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
                       </svg>
                       <h3 className="text-xs font-bold text-gray-400 uppercase tracking-wide group-hover:text-gray-600">
-                        Textnotizen ({textNotes.length})
+                        {t("notes.textNotes", { count: textNotes.length })}
                       </h3>
                     </button>
                     {textOpen && (
@@ -226,7 +228,7 @@ export default function NotesPanel({ isOpen, onClose }: NotesPanelProps) {
                         onClick={toggleSelectAll}
                         className="text-[11px] text-gray-500 hover:text-gray-800 cursor-pointer"
                       >
-                        {allTextSelected ? "Auswahl aufheben" : "Alle auswählen"}
+                        {allTextSelected ? t("notes.deselectAll") : t("notes.selectAll")}
                       </button>
                     )}
                   </div>
@@ -237,7 +239,7 @@ export default function NotesPanel({ isOpen, onClose }: NotesPanelProps) {
                   {selectedIds.size > 0 && (
                     <div className="flex items-center justify-between bg-blue-50 border border-blue-200 rounded-lg px-3 py-2 mb-3">
                       <span className="text-xs text-blue-800 font-medium">
-                        {selectedIds.size} ausgewählt
+                        {t("notes.selected", { count: selectedIds.size })}
                       </span>
                       <button
                         onClick={() => setConfirmBulk(true)}
@@ -246,7 +248,7 @@ export default function NotesPanel({ isOpen, onClose }: NotesPanelProps) {
                         <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
                         </svg>
-                        {selectedIds.size} löschen
+                        {t("notes.deleteSelected", { count: selectedIds.size })}
                       </button>
                     </div>
                   )}
@@ -318,10 +320,9 @@ export default function NotesPanel({ isOpen, onClose }: NotesPanelProps) {
 
       <ConfirmModal
         isOpen={confirmDeleteId !== null}
-        title="Notiz löschen"
-        message="Möchten Sie diese Notiz wirklich löschen?"
-        confirmText="Löschen"
-        cancelText="Abbrechen"
+        title={t("notes.deleteTitle")}
+        message={t("notes.deleteConfirm")}
+        confirmText={t("common.delete")}
         variant="danger"
         onConfirm={confirmDelete}
         onCancel={() => setConfirmDeleteId(null)}
@@ -329,10 +330,9 @@ export default function NotesPanel({ isOpen, onClose }: NotesPanelProps) {
 
       <ConfirmModal
         isOpen={confirmBulk}
-        title="Notizen löschen"
-        message={`Möchten Sie ${selectedIds.size} Notiz${selectedIds.size === 1 ? "" : "en"} wirklich löschen?`}
-        confirmText="Löschen"
-        cancelText="Abbrechen"
+        title={t("notes.deleteManyTitle")}
+        message={t("notes.deleteManyConfirm", { count: selectedIds.size })}
+        confirmText={t("common.delete")}
         variant="danger"
         onConfirm={confirmBulkDelete}
         onCancel={() => setConfirmBulk(false)}

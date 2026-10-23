@@ -1,0 +1,42 @@
+{
+  "file": "module8/m8-t1-introduction.mp3",
+  "text": " Modelltest 8 Teil 1 Sie hören nun fünf kurze Texte. Sie hören jeden Text zweimal. Zu jedem Text lösen Sie zwei Aufgaben. Wählen Sie bei jeder Aufgabe die richtige Lösung. Lesen Sie zuerst das Beispiel. Dazu haben Sie zehn Sekunden Zeit.",
+  "segments": [
+    {
+      "start": 0,
+      "end": 3.3,
+      "text": " Modelltest 8 Teil 1"
+    },
+    {
+      "start": 3.3,
+      "end": 6.62,
+      "text": " Sie hören nun fünf kurze Texte."
+    },
+    {
+      "start": 7.4199996,
+      "end": 9.24,
+      "text": " Sie hören jeden Text zweimal."
+    },
+    {
+      "start": 10.5,
+      "end": 12.94,
+      "text": " Zu jedem Text lösen Sie zwei Aufgaben."
+    },
+    {
+      "start": 14.08,
+      "end": 17.06,
+      "text": " Wählen Sie bei jeder Aufgabe die richtige Lösung."
+    },
+    {
+      "start": 18.939999,
+      "end": 20.66,
+      "text": " Lesen Sie zuerst das Beispiel."
+    },
+    {
+      "start": 21.56,
+      "end": 23.74,
+      "text": " Dazu haben Sie zehn Sekunden Zeit."
+    }
+  ],
+  "duration": 24.325001216
+}

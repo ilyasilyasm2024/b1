@@ -2,12 +2,14 @@ import { useEffect } from "react";
 import { module1LesenTeil1 } from "../../data/module1/lesenTeil1";
 import { useProgress } from "../../context/ProgressContext";
 import { useAnswers } from "../../context/AnswersContext";
+import { useTranslation } from "react-i18next";
 
 type Answer = "richtig" | "falsch" | null;
 
 const SECTION_ID = "m1-lesen-teil1";
 
 export default function LesenTeil1() {
+  const { t } = useTranslation();
   const data = module1LesenTeil1;
   const { updateProgress } = useProgress();
   const { getAnswers, setAnswers, isSubmitted, setSubmitted } = useAnswers();
@@ -113,15 +115,15 @@ export default function LesenTeil1() {
       <div className="mt-6 flex items-center gap-4">
         {!submitted ? (
           <button onClick={handleSubmit} className="bg-black text-white px-5 py-2 rounded-sm text-sm font-bold hover:bg-gray-800 cursor-pointer">
-            Auswerten
+            {t("exercise.check")}
           </button>
         ) : (
           <>
             <div className="border-2 border-black px-4 py-2 text-sm font-bold">
-              Ergebnis: {score} / {data.questions.length}
+              {t("exercise.result")}: {score} / {data.questions.length}
             </div>
             <button onClick={handleReset} className="bg-black text-white px-5 py-2 rounded-sm text-sm font-bold hover:bg-gray-800 cursor-pointer">
-              Nochmal versuchen
+              {t("exercise.tryAgain")}
             </button>
           </>
         )}

@@ -1,6 +1,7 @@
 import { useRef, useState } from "react";
 import { useNotes } from "../context/NotesContext";
 import type { NoteBackend } from "../services/notes";
+import { useTranslation } from "react-i18next";
 
 /**
  * Renders all "tick" (color) notes as floating, draggable sticky notes
@@ -31,6 +32,7 @@ function FloatingNote({
   onChange: (id: string, patch: Partial<NoteBackend>) => void;
   onDelete: (id: string) => void;
 }) {
+  const { t } = useTranslation();
   const dragState = useRef<{ startX: number; startY: number; originX: number; originY: number } | null>(null);
   const [dragging, setDragging] = useState(false);
 
@@ -91,8 +93,8 @@ function FloatingNote({
           <circle cx="5" cy="10" r="1.5" /><circle cx="10" cy="10" r="1.5" /><circle cx="15" cy="10" r="1.5" />
         </svg>
         <div className="flex items-center gap-1">
-          <label className="cursor-pointer flex items-center" title="Farbe ändern">
-            <span className="sr-only">Farbe ändern</span>
+          <label className="cursor-pointer flex items-center" title={t("floatingNote.changeColor")}>
+            <span className="sr-only">{t("floatingNote.changeColor")}</span>
             <input
               type="color"
               value={note.color}
@@ -103,7 +105,7 @@ function FloatingNote({
           <button
             onClick={() => onDelete(note._id)}
             className="text-gray-700/60 hover:text-red-600 cursor-pointer"
-            title="Löschen"
+            title={t("common.delete")}
           >
             <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
@@ -117,7 +119,7 @@ function FloatingNote({
         type="text"
         value={note.title}
         onChange={(e) => onChange(note._id, { title: e.target.value })}
-        placeholder="Titel..."
+        placeholder={t("richNote.titlePlaceholder")}
         className="w-full bg-transparent text-sm font-bold text-gray-800 placeholder-gray-700/40 focus:outline-none px-2 pt-1.5"
       />
 
@@ -125,7 +127,7 @@ function FloatingNote({
       <textarea
         value={note.content}
         onChange={(e) => onChange(note._id, { content: e.target.value })}
-        placeholder="Kurze Notiz..."
+        placeholder={t("floatingNote.placeholder")}
         className="w-full bg-transparent text-sm text-gray-800 placeholder-gray-700/40 resize-none focus:outline-none px-2 pb-2 pt-1 min-h-[70px]"
       />
     </div>

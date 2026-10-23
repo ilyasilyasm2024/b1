@@ -1,0 +1,142 @@
+{
+  "file": "module7/m7-teil3-text.mp3",
+  "text": " Sie sitzen in einem Restaurant und hören, wie sich zwei Eltern und ihr Sohn über den Kauf eines Hauses oder einer Wohnung unterhalten. Ja, und zu trinken hätten wir gerne zwei Cola und für mich bitte ein Bier. Kommt sofort. Sag schon, Papa, wir nehmen das Haus, nicht? Na, so schnell geht das nicht, Lennart. Das müssen wir uns gut überlegen. Der Preis für das Haus und die Wohnung ist ja mehr oder weniger gleich. Wieso? Hat dir der Eigentümer des Hauses ein besseres Angebot gemacht? Na dann, wenn die Wohnung und das Haus also praktisch gleich viel kosten, dann können wir doch das Haus kaufen, nicht? Ach, ich wollte schon immer ein eigenes Haus haben. Mit Garten. Aber das Haus ist viel älter als die Wohnung. Das müssen wir auch berücksichtigen. Da müssen wir bei dem Haus mit mehr Kosten für Reparaturen und so rechnen. Aber Papa, du hast doch gesagt, dass ich zu Weihnachten einen Hund bekomme. Der kann doch nicht in einer Wohnung leben, der braucht doch einen Garten. Es leben viele Hunde in Wohnungen und die sind auch glücklich. Ich weiß nicht. Bei einer Wohnung muss man sich nicht um so vieles kümmern. Und es sind auch immer Nachbarn da, wenn mal etwas ist. Und wenn die Nachbarn nicht nett sind? Wir hatten doch schon so viele Probleme mit Nachbarn. Erinnerst Du Dich nicht an die Frau Krämer, die in der Bank war? die in der Bergstraße unter uns gewohnt hat und sich immer über den Lärm beschwert hat, egal wie leise wir waren? Wenn wir uns jetzt was Eigenes kaufen, möchte ich solche Probleme nicht mehr haben. Du willst also auch unbedingt das Haus. Und Garten? Wer kümmert sich um den Garten? So ein Garten macht viel Arbeit und viel Zeit haben wir beide nicht. Da helfen wir alle mit, nicht, Lennart? Aber klar doch, das macht doch Spaß. Und Liebling, so ein bisschen Gartenarbeit wird dir guttun. Das ist besser als Fitnessstudio. Da bist du an der frischen Luft. Na ja, wenn wir das Haus nehmen, könnten wir uns ein Arbeitszimmer einrichten. Dann hätten wir unsere ganzen Bücher und unser ganzes Zeug nicht immer im Wohnzimmer. Bei der Wohnung wäre das nicht möglich. Na, siehst du? Hm. Aber bevor wir uns endgültig entscheiden, rufe ich Frank an. Vielleicht kann sein Vater sich das Haus mal anschauen. Der ist doch Architekt. Der kann uns sagen, ob das Haus in Ordnung ist. Ah, hier kommt unser Essen. Ach, hab ich einen Hunger.",
+  "segments": [
+    {
+      "start": 0,
+      "end": 7.48,
+      "text": " Sie sitzen in einem Restaurant und hören, wie sich zwei Eltern und ihr Sohn über den Kauf eines Hauses oder einer Wohnung unterhalten."
+    },
+    {
+      "start": 12.599999,
+      "end": 18.5,
+      "text": " Ja, und zu trinken hätten wir gerne zwei Cola und für mich bitte ein Bier."
+    },
+    {
+      "start": 19.48,
+      "end": 20.06,
+      "text": " Kommt sofort."
+    },
+    {
+      "start": 21.58,
+      "end": 23.859999,
+      "text": " Sag schon, Papa, wir nehmen das Haus, nicht?"
+    },
+    {
+      "start": 24.66,
+      "end": 29.24,
+      "text": " Na, so schnell geht das nicht, Lennart. Das müssen wir uns gut überlegen."
+    },
+    {
+      "start": 30,
+      "end": 33.52,
+      "text": " Der Preis für das Haus und die Wohnung ist ja mehr oder weniger gleich."
+    },
+    {
+      "start": 33.62,
+      "end": 37.24,
+      "text": " Wieso? Hat dir der Eigentümer des Hauses ein besseres Angebot gemacht?"
+    },
+    {
+      "start": 37.64,
+      "end": 43.86,
+      "text": " Na dann, wenn die Wohnung und das Haus also praktisch gleich viel kosten, dann können wir doch das Haus kaufen, nicht?"
+    },
+    {
+      "start": 44.5,
+      "end": 49.2,
+      "text": " Ach, ich wollte schon immer ein eigenes Haus haben. Mit Garten."
+    },
+    {
+      "start": 49.88,
+      "end": 54.44,
+      "text": " Aber das Haus ist viel älter als die Wohnung. Das müssen wir auch berücksichtigen."
+    },
+    {
+      "start": 55.02,
+      "end": 58.78,
+      "text": " Da müssen wir bei dem Haus mit mehr Kosten für Reparaturen und so rechnen."
+    },
+    {
+      "start": 58.78,
+      "end": 62.44,
+      "text": " Aber Papa, du hast doch gesagt, dass ich zu Weihnachten einen Hund bekomme."
+    },
+    {
+      "start": 62.44,
+      "end": 66.159996,
+      "text": " Der kann doch nicht in einer Wohnung leben, der braucht doch einen Garten."
+    },
+    {
+      "start": 66.159996,
+      "end": 70.6,
+      "text": " Es leben viele Hunde in Wohnungen und die sind auch glücklich."
+    },
+    {
+      "start": 70.6,
+      "end": 86.3825,
+      "text": " Ich weiß nicht. Bei einer Wohnung muss man sich nicht um so vieles kümmern. Und es sind auch immer Nachbarn da, wenn mal etwas ist. Und wenn die Nachbarn nicht nett sind? Wir hatten doch schon so viele Probleme mit Nachbarn. Erinnerst Du Dich nicht an die Frau Krämer, die in der Bank war?"
+    },
+    {
+      "start": 86.3825,
+      "end": 90.722496,
+      "text": " die in der Bergstraße unter uns gewohnt hat und sich immer über den Lärm beschwert hat,"
+    },
+    {
+      "start": 90.722496,
+      "end": 97.0825,
+      "text": " egal wie leise wir waren? Wenn wir uns jetzt was Eigenes kaufen, möchte ich solche Probleme"
+    },
+    {
+      "start": 97.0825,
+      "end": 101.5625,
+      "text": " nicht mehr haben. Du willst also auch unbedingt das Haus. Und"
+    },
+    {
+      "start": 101.5625,
+      "end": 107.542496,
+      "text": " Garten? Wer kümmert sich um den Garten? So ein Garten macht viel Arbeit und viel Zeit haben wir"
+    },
+    {
+      "start": 107.542496,
+      "end": 113.1225,
+      "text": " beide nicht. Da helfen wir alle mit, nicht, Lennart? Aber klar doch, das macht doch Spaß."
+    },
+    {
+      "start": 113.1225,
+      "end": 121.4225,
+      "text": " Und Liebling, so ein bisschen Gartenarbeit wird dir guttun. Das ist besser als Fitnessstudio. Da"
+    },
+    {
+      "start": 121.4225,
+      "end": 129.6225,
+      "text": " bist du an der frischen Luft. Na ja, wenn wir das Haus nehmen, könnten wir uns ein Arbeitszimmer"
+    },
+    {
+      "start": 129.6225,
+      "end": 134.8425,
+      "text": " einrichten. Dann hätten wir unsere ganzen Bücher und unser ganzes Zeug nicht immer im Wohnzimmer."
+    },
+    {
+      "start": 134.8425,
+      "end": 139.0425,
+      "text": " Bei der Wohnung wäre das nicht möglich. Na, siehst du?"
+    },
+    {
+      "start": 139.0425,
+      "end": 145.64249,
+      "text": " Hm. Aber bevor wir uns endgültig entscheiden, rufe ich Frank an. Vielleicht kann sein Vater"
+    },
+    {
+      "start": 145.64249,
+      "end": 151.2225,
+      "text": " sich das Haus mal anschauen. Der ist doch Architekt. Der kann uns sagen, ob das Haus in Ordnung ist."
+    },
+    {
+      "start": 151.2225,
+      "end": 155.6025,
+      "text": " Ah, hier kommt unser Essen. Ach, hab ich einen Hunger."
+    }
+  ],
+  "duration": 155.60499958399998
+}

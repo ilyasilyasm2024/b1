@@ -2,11 +2,13 @@ import { useEffect } from "react";
 import { module15LesenTeil1 } from "../../data/module15/lesenTeil1";
 import { useProgress } from "../../context/ProgressContext";
 import { useAnswers } from "../../context/AnswersContext";
+import { useTranslation } from "react-i18next";
 
 type Answer = "richtig" | "falsch" | null;
 const SECTION_ID = "m15-lesen-teil1";
 
 export default function M15LesenTeil1() {
+  const { t } = useTranslation();
   const data = module15LesenTeil1;
   const { updateProgress } = useProgress();
   const { getAnswers, setAnswers, isSubmitted, setSubmitted } = useAnswers();
@@ -78,11 +80,11 @@ export default function M15LesenTeil1() {
       </div>
       <div className="mt-6 flex items-center gap-4">
         {!submitted ? (
-          <button onClick={handleSubmit} className="bg-black text-white px-5 py-2 rounded-sm text-sm font-bold hover:bg-gray-800 cursor-pointer">Auswerten</button>
+          <button onClick={handleSubmit} className="bg-black text-white px-5 py-2 rounded-sm text-sm font-bold hover:bg-gray-800 cursor-pointer">{t("exercise.check")}</button>
         ) : (
           <>
-            <div className="border-2 border-black px-4 py-2 text-sm font-bold">Ergebnis: {score} / {data.questions.length}</div>
-            <button onClick={handleReset} className="bg-black text-white px-5 py-2 rounded-sm text-sm font-bold hover:bg-gray-800 cursor-pointer">Nochmal versuchen</button>
+            <div className="border-2 border-black px-4 py-2 text-sm font-bold">{t("exercise.result")}: {score} / {data.questions.length}</div>
+            <button onClick={handleReset} className="bg-black text-white px-5 py-2 rounded-sm text-sm font-bold hover:bg-gray-800 cursor-pointer">{t("exercise.tryAgain")}</button>
           </>
         )}
       </div>
