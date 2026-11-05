@@ -314,6 +314,153 @@
     "changeColor": "Farbe ändern",
     "placeholder": "Kurze Notiz..."
   },
+  "help": {
+    "title": "Hilfe",
+    "subtitle": "Wähle eine Frage – wir zeigen es dir Schritt für Schritt.",
+    "search": "Funktion suchen…",
+    "noResults": "Keine passende Frage.",
+    "needsAccount": "Konto nötig",
+    "signIn": {
+      "title": "👤 Erst anmelden",
+      "text": "Diese Funktion gibt es nur für angemeldete Nutzer. Melde dich hier an oder erstelle ein kostenloses Konto und öffne diese Anleitung dann erneut."
+    },
+    "questions": {
+      "tour": "Was kann ich in dieser App machen?",
+      "modelTest": "Wie übe ich einen Modelltest?",
+      "textNote": "Wie schreibe ich eine Notiz?",
+      "colorNote": "Wie füge ich einen farbigen Klebezettel hinzu?",
+      "vocab": "Wie speichere ich neue Wörter?",
+      "highlight": "Wie markiere ich Text in einer Übung?",
+      "ai": "Wie nutze ich die KI-Übersetzung?",
+      "personalize": "Wie ändere ich Sprache oder Design?"
+    },
+    "answers": {
+      "tour": "Eine kurze Tour durch die wichtigsten Funktionen.",
+      "modelTest": "Test öffnen, Teile beantworten, Fortschritt verfolgen.",
+      "textNote": "Textnotizen, die du formatieren und verknüpfen kannst.",
+      "colorNote": "Kleine Zettel, die über der Seite schweben.",
+      "vocab": "Deine eigene Wortliste mit Übersetzungen und Beispielen.",
+      "highlight": "Text markieren, anhören oder als Wort speichern.",
+      "ai": "Wörter übersetzen und Beispielsätze erzeugen.",
+      "personalize": "Sprache der Oberfläche und Farben."
+    },
+    "guides": {
+      "modelTest": {
+        "open": {
+          "title": "📝 Modelltest öffnen",
+          "text": "Klicke auf die Karte eines Modelltests, um ihn zu öffnen. Der Ring zeigt, wie viel du schon geschafft hast."
+        },
+        "parts": {
+          "title": "Die Teile beantworten",
+          "text": "Jeder Test hat die Prüfungsteile (Lesen, Hören, Schreiben, Sprechen). Antworte und prüfe dann deine Ergebnisse. Deine Antworten werden in deinem Konto gespeichert."
+        },
+        "timer": {
+          "title": "⏱ Unter Prüfungszeit üben",
+          "text": "Starte den Timer, um echte Prüfungsbedingungen zu simulieren."
+        }
+      },
+      "textNote": {
+        "open": {
+          "title": "🗒️ Notizen öffnen",
+          "text": "Klicke auf Notizen, um deine Notizen zu öffnen."
+        },
+        "add": {
+          "title": "Textnotiz erstellen",
+          "text": "Klicke auf „Textnotiz“, um oben in der Liste eine neue Notiz anzulegen."
+        },
+        "write": {
+          "title": "Schreiben und formatieren",
+          "text": "Schreibe in die Notiz und nutze die Leiste für Fett, Listen und Farben. Änderungen werden automatisch gespeichert; der Speichern-Button speichert sofort und zeigt ✓, sobald der Server es bestätigt hat."
+        },
+        "link": {
+          "title": "🔗 Notizen verknüpfen",
+          "text": "Mit dem Link-Button einer Notiz verbindest du sie mit einer anderen Textnotiz und kannst zwischen ihnen springen."
+        }
+      },
+      "colorNote": {
+        "open": {
+          "title": "🟨 Notizen öffnen",
+          "text": "Klicke auf Notizen, um deine Notizen zu öffnen."
+        },
+        "add": {
+          "title": "Farbnotiz erstellen",
+          "text": "Klicke auf „Farbnotiz“, um einen kleinen Klebezettel hinzuzufügen."
+        },
+        "use": {
+          "title": "Überall platzieren",
+          "text": "Die Notiz schwebt über der Seite. Zieh sie an der oberen Leiste an ihren Platz. Beim Speichern dreht sich oben rechts ein kleines Symbol, danach erscheint ein ✓."
+        },
+        "useMobile": {
+          "title": "Durch die Notizen wischen",
+          "text": "Auf dem Handy liegen Farbnotizen auf einer Kartenwand: öffne sie im Notizen-Panel und wische zwischen deinen Notizen."
+        }
+      },
+      "vocab": {
+        "open": {
+          "title": "📚 Vokabeln öffnen",
+          "text": "Klicke auf Vokabeln, um deine Wortliste zu öffnen."
+        },
+        "new": {
+          "title": "Wort hinzufügen",
+          "text": "Klicke auf „+ Neu“, um das Formular für ein neues Wort zu öffnen."
+        },
+        "form": {
+          "title": "Wort ausfüllen",
+          "text": "Gib das deutsche Wort und die Übersetzung ein (oder drücke AI zum Übersetzen). Du kannst auch einen Beispielsatz hinzufügen und dann speichern."
+        },
+        "import": {
+          "title": "📥 Import und Export",
+          "text": "Unten kannst du deine Liste nach Excel exportieren oder Wörter aus einer .xlsx-Datei importieren (Spalten Wort | Übersetzung | Kontext)."
+        },
+        "signIn": {
+          "title": "👤 Zum Speichern anmelden",
+          "text": "Deine Wörter werden in deinem Konto gespeichert – melde dich also zuerst an oder erstelle ein kostenloses Konto."
+        }
+      },
+      "highlight": {
+        "open": {
+          "title": "🖍️ Übung öffnen",
+          "text": "Öffne einen Modelltest und gehe zu einem Lese- oder Hörtext."
+        },
+        "select": {
+          "title": "Text auswählen oder rechtsklicken",
+          "text": "Wähle ein Wort oder einen Satz in der Übung aus (oder klicke mit rechts darauf). Daneben erscheint eine kleine Leiste."
+        },
+        "selectMobile": {
+          "title": "Text auswählen",
+          "text": "Halte ein Wort gedrückt und passe die Auswahl an. Daneben erscheint eine kleine Leiste."
+        },
+        "tools": {
+          "title": "Die Leiste nutzen",
+          "text": "Wähle eine Farbe zum Markieren, lass dir den Text vorlesen, übersetze ihn oder speichere ihn direkt als Vokabel. Markieren braucht den Silver-Plan oder höher."
+        }
+      },
+      "ai": {
+        "open": {
+          "title": "✨ KI-Einstellungen öffnen",
+          "text": "Klicke auf AI. Der Punkt wird grün, sobald dein KI-Schlüssel eingerichtet ist."
+        },
+        "key": {
+          "title": "Kostenlosen Gemini-Schlüssel eintragen",
+          "text": "Folge den Schritten im KI-Fenster, um einen kostenlosen Gemini-Schlüssel zu erstellen, und füge ihn ein. Er wird nur auf diesem Gerät gespeichert."
+        },
+        "use": {
+          "title": "KI bei den Vokabeln nutzen",
+          "text": "Drücke im Vokabel-Formular auf AI, um ein Wort zu übersetzen oder einen Beispielsatz zu erzeugen (Beispielsätze brauchen den Gold-Plan)."
+        }
+      },
+      "personalize": {
+        "language": {
+          "title": "🌍 Sprache ändern",
+          "text": "Wähle hier die Sprache der App."
+        },
+        "theme": {
+          "title": "🎨 Design ändern",
+          "text": "Wähle Farben und einen Hintergrund, die dir gefallen."
+        }
+      }
+    }
+  },
   "highlighter": {
     "aiTranslateArabic": "KI-Übersetzung (Arabisch)",
     "colors": {

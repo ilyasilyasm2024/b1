@@ -21,6 +21,7 @@ import { usePermissions } from "../hooks/usePermissions";
 import useAIConfig from "../hooks/useAIConfig";
 import useIsMobile from "../hooks/ui/useIsMobile";
 import { OPEN_AI_SETTINGS_EVENT } from "../../services/ai";
+import { HELP_ACTION_EVENT, type HelpAction } from "../components/common/help/helpActions";
 import { examModules } from "../../data/examModules";
 
 export default function Home() {
@@ -43,6 +44,25 @@ export default function Home() {
   }>({ open: false });
   const { user } = useAuth();
   const { t } = useTranslation();
+
+  // Help guides open and close panels while they show the user around (see GuidedTour)
+  useEffect(() => {
+    const onAction = (e: Event) => {
+      const action = (e as CustomEvent<HelpAction>).detail;
+      if (action === "closePanels" || action === "openNotes" || action === "openVocab") {
+        setNotesOpen(action === "openNotes");
+        setVocabOpen(action === "openVocab");
+        setChatOpen(false);
+        setAiOpen(false);
+        setStickyBoard({ open: false });
+      }
+      if (action === "openModule1" && user) {
+        setOpenModules((prev) => ({ ...prev, m1: true }));
+      }
+    };
+    window.addEventListener(HELP_ACTION_EVENT, onAction);
+    return () => window.removeEventListener(HELP_ACTION_EVENT, onAction);
+  }, [user]);
   const isMobile = useIsMobile();
   const { getModuleProgress } = useProgress();
   const { plan } = usePermissions();

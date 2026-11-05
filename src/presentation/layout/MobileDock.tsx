@@ -63,6 +63,7 @@ export default function MobileDock({ showNotes, notesOpen, vocabOpen, chatOpen, 
       <DockButton
         label="AI"
         onClick={onAI}
+        tour="ai-btn"
         icon={
           <span className="relative">
             <svg className={iconClass} fill="none" stroke="currentColor" viewBox="0 0 24 24">

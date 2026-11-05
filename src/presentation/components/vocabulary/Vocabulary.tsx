@@ -195,6 +195,7 @@ export default function VocabularyPanel({ isOpen, onClose }: VocabularyPanelProp
             />
             <button
               onClick={handleNewClick}
+              data-tour="vocab-new"
               className="bg-black text-white px-3 py-1.5 rounded-lg text-sm font-medium cursor-pointer hover:bg-gray-800"
             >
               + {t("vocab.new")}
@@ -244,7 +245,7 @@ export default function VocabularyPanel({ isOpen, onClose }: VocabularyPanelProp
 
           {/* Add form (only for logged-in users) */}
           {showForm && user && (
-            <div className="bg-gray-50 rounded-lg p-3 space-y-2">
+            <div className="bg-gray-50 rounded-lg p-3 space-y-2" data-tour="vocab-form">
               <input
                 type="text"
                 value={newWord}

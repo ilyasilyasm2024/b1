@@ -314,6 +314,153 @@
     "changeColor": "Change color",
     "placeholder": "Short note..."
   },
+  "help": {
+    "title": "Help",
+    "subtitle": "Pick a question and we'll show you, step by step.",
+    "search": "Search for a feature…",
+    "noResults": "No matching question.",
+    "needsAccount": "Needs an account",
+    "signIn": {
+      "title": "👤 Sign in first",
+      "text": "This feature is for signed-in users. Sign in or create a free account here, then open this guide again."
+    },
+    "questions": {
+      "tour": "What can I do in this app?",
+      "modelTest": "How do I practise a model test?",
+      "textNote": "How do I write a note?",
+      "colorNote": "How do I add a sticky color note?",
+      "vocab": "How do I save new words?",
+      "highlight": "How do I highlight text in an exercise?",
+      "ai": "How do I use AI translation?",
+      "personalize": "How do I change the language or theme?"
+    },
+    "answers": {
+      "tour": "A short tour of the main features.",
+      "modelTest": "Open a test, answer the parts, track your progress.",
+      "textNote": "Rich text notes that you can format and link.",
+      "colorNote": "Small post-its that float on the page.",
+      "vocab": "Your own word list with translations and examples.",
+      "highlight": "Mark text, listen to it, or save it as a word.",
+      "ai": "Translate words and generate example sentences.",
+      "personalize": "Interface language and colors."
+    },
+    "guides": {
+      "modelTest": {
+        "open": {
+          "title": "📝 Open a model test",
+          "text": "Click a model test card to open it. The ring on the card shows how much you've already done."
+        },
+        "parts": {
+          "title": "Answer the parts",
+          "text": "Each test has the exam parts (Lesen, Hören, Schreiben, Sprechen). Answer, then check your results. Your answers are saved to your account."
+        },
+        "timer": {
+          "title": "⏱ Practise under exam time",
+          "text": "Start the timer to simulate real exam conditions."
+        }
+      },
+      "textNote": {
+        "open": {
+          "title": "🗒️ Open your notes",
+          "text": "Click Notes to open your notes panel."
+        },
+        "add": {
+          "title": "Create a text note",
+          "text": "Click “Text note” to add a new note at the top of the list."
+        },
+        "write": {
+          "title": "Write and format",
+          "text": "Type in the note and use the toolbar for bold, lists and colors. Changes save automatically; the Save button saves right away and shows ✓ once the server confirmed it."
+        },
+        "link": {
+          "title": "🔗 Link related notes",
+          "text": "Use the link button on a note to connect it to another text note, so you can jump between them."
+        }
+      },
+      "colorNote": {
+        "open": {
+          "title": "🟨 Open your notes",
+          "text": "Click Notes to open your notes panel."
+        },
+        "add": {
+          "title": "Create a color note",
+          "text": "Click “Color note” to add a small post-it."
+        },
+        "use": {
+          "title": "Move it anywhere",
+          "text": "The note floats over the page. Drag it by its top bar to place it. While it saves, a small spinner turns in its top-right corner, then a ✓ appears."
+        },
+        "useMobile": {
+          "title": "Swipe through your notes",
+          "text": "On the phone, color notes live on a card board: open it from the notes panel and swipe between your notes."
+        }
+      },
+      "vocab": {
+        "open": {
+          "title": "📚 Open your vocabulary",
+          "text": "Click Vocabulary to open your word list."
+        },
+        "new": {
+          "title": "Add a word",
+          "text": "Click “+ New” to open the form for a new word."
+        },
+        "form": {
+          "title": "Fill in the word",
+          "text": "Type the German word and its translation (or press AI to translate it). You can add an example sentence too, then save."
+        },
+        "import": {
+          "title": "📥 Import and export",
+          "text": "At the bottom you can export your list to Excel or import words from an .xlsx file (columns Wort | Übersetzung | Kontext)."
+        },
+        "signIn": {
+          "title": "👤 Sign in to save words",
+          "text": "Your words are saved to your account, so sign in or create a free account first."
+        }
+      },
+      "highlight": {
+        "open": {
+          "title": "🖍️ Open an exercise",
+          "text": "Open a model test and go to a reading or listening text."
+        },
+        "select": {
+          "title": "Select or right-click text",
+          "text": "Select a word or sentence in the exercise (or right-click it). A small toolbar appears next to it."
+        },
+        "selectMobile": {
+          "title": "Select text",
+          "text": "Press and hold on a word, then adjust the selection. A small toolbar appears next to it."
+        },
+        "tools": {
+          "title": "Use the toolbar",
+          "text": "Pick a color to highlight, listen to the text, translate it, or save it straight to your vocabulary. Highlighting needs the Silver plan or higher."
+        }
+      },
+      "ai": {
+        "open": {
+          "title": "✨ Open the AI settings",
+          "text": "Click AI. The dot turns green once your AI key is set up."
+        },
+        "key": {
+          "title": "Add your free Gemini key",
+          "text": "Follow the steps in the AI window to create a free Gemini key and paste it. It's stored only on this device."
+        },
+        "use": {
+          "title": "Use AI in your vocabulary",
+          "text": "In the vocabulary form, press AI to translate a word or to generate an example sentence (example sentences need the Gold plan)."
+        }
+      },
+      "personalize": {
+        "language": {
+          "title": "🌍 Change the language",
+          "text": "Choose the language of the app here."
+        },
+        "theme": {
+          "title": "🎨 Change the theme",
+          "text": "Pick colors and a background that you like."
+        }
+      }
+    }
+  },
   "highlighter": {
     "aiTranslateArabic": "AI translation (Arabic)",
     "colors": {

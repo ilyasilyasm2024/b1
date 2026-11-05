@@ -23,6 +23,7 @@ export default function LanguageSwitcher() {
         onClick={() => setOpen((v) => !v)}
         className="bg-white border border-gray-200 rounded-lg px-2.5 py-1.5 shadow-sm flex items-center gap-1.5 cursor-pointer hover:bg-gray-50 transition-colors shrink-0"
         title={t("language.choose")}
+        data-tour="language-btn"
         aria-label={t("language.choose")}
         aria-haspopup="listbox"
         aria-expanded={open}

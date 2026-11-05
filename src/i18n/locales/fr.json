@@ -314,6 +314,153 @@
     "changeColor": "Changer la couleur",
     "placeholder": "Note rapide..."
   },
+  "help": {
+    "title": "Aide",
+    "subtitle": "Choisissez une question, on vous montre étape par étape.",
+    "search": "Rechercher une fonctionnalité…",
+    "noResults": "Aucune question correspondante.",
+    "needsAccount": "Compte requis",
+    "signIn": {
+      "title": "👤 Connectez-vous d'abord",
+      "text": "Cette fonctionnalité est réservée aux utilisateurs connectés. Connectez-vous ou créez un compte gratuit ici, puis rouvrez ce guide."
+    },
+    "questions": {
+      "tour": "Que puis-je faire dans cette appli ?",
+      "modelTest": "Comment m'entraîner avec un test modèle ?",
+      "textNote": "Comment écrire une note ?",
+      "colorNote": "Comment ajouter un post-it de couleur ?",
+      "vocab": "Comment enregistrer de nouveaux mots ?",
+      "highlight": "Comment surligner du texte dans un exercice ?",
+      "ai": "Comment utiliser la traduction IA ?",
+      "personalize": "Comment changer la langue ou le thème ?"
+    },
+    "answers": {
+      "tour": "Une courte visite des fonctions principales.",
+      "modelTest": "Ouvrir un test, répondre aux parties, suivre sa progression.",
+      "textNote": "Des notes riches que vous pouvez mettre en forme et relier.",
+      "colorNote": "De petits post-it qui flottent sur la page.",
+      "vocab": "Votre liste de mots avec traductions et exemples.",
+      "highlight": "Marquer du texte, l'écouter ou l'enregistrer comme mot.",
+      "ai": "Traduire des mots et générer des phrases d'exemple.",
+      "personalize": "Langue de l'interface et couleurs."
+    },
+    "guides": {
+      "modelTest": {
+        "open": {
+          "title": "📝 Ouvrir un test modèle",
+          "text": "Cliquez sur la carte d'un test modèle pour l'ouvrir. L'anneau indique ce que vous avez déjà fait."
+        },
+        "parts": {
+          "title": "Répondre aux parties",
+          "text": "Chaque test contient les parties de l'examen (Lesen, Hören, Schreiben, Sprechen). Répondez, puis vérifiez vos résultats. Vos réponses sont enregistrées dans votre compte."
+        },
+        "timer": {
+          "title": "⏱ S'entraîner en temps réel",
+          "text": "Lancez le minuteur pour simuler les conditions de l'examen."
+        }
+      },
+      "textNote": {
+        "open": {
+          "title": "🗒️ Ouvrir vos notes",
+          "text": "Cliquez sur Notes pour ouvrir le panneau des notes."
+        },
+        "add": {
+          "title": "Créer une note texte",
+          "text": "Cliquez sur « Note texte » pour ajouter une note en haut de la liste."
+        },
+        "write": {
+          "title": "Écrire et mettre en forme",
+          "text": "Écrivez dans la note et utilisez la barre d'outils (gras, listes, couleurs). Les changements s'enregistrent automatiquement ; le bouton Enregistrer sauvegarde tout de suite et affiche ✓ une fois confirmé par le serveur."
+        },
+        "link": {
+          "title": "🔗 Relier des notes",
+          "text": "Utilisez le bouton lien d'une note pour la relier à une autre note texte et passer de l'une à l'autre."
+        }
+      },
+      "colorNote": {
+        "open": {
+          "title": "🟨 Ouvrir vos notes",
+          "text": "Cliquez sur Notes pour ouvrir le panneau des notes."
+        },
+        "add": {
+          "title": "Créer une note de couleur",
+          "text": "Cliquez sur « Note de couleur » pour ajouter un petit post-it."
+        },
+        "use": {
+          "title": "Déplacez-la où vous voulez",
+          "text": "La note flotte sur la page. Faites-la glisser par sa barre du haut. Pendant l'enregistrement, une petite icône tourne en haut à droite, puis un ✓ apparaît."
+        },
+        "useMobile": {
+          "title": "Faites défiler vos notes",
+          "text": "Sur téléphone, les notes de couleur sont sur un tableau de cartes : ouvrez-le depuis le panneau des notes et glissez entre vos notes."
+        }
+      },
+      "vocab": {
+        "open": {
+          "title": "📚 Ouvrir votre vocabulaire",
+          "text": "Cliquez sur Vocabulaire pour ouvrir votre liste de mots."
+        },
+        "new": {
+          "title": "Ajouter un mot",
+          "text": "Cliquez sur « + Nouveau » pour ouvrir le formulaire."
+        },
+        "form": {
+          "title": "Remplir le mot",
+          "text": "Tapez le mot allemand et sa traduction (ou appuyez sur AI pour le traduire). Vous pouvez aussi ajouter une phrase d'exemple, puis enregistrer."
+        },
+        "import": {
+          "title": "📥 Importer et exporter",
+          "text": "En bas, vous pouvez exporter votre liste vers Excel ou importer des mots depuis un fichier .xlsx (colonnes Wort | Übersetzung | Kontext)."
+        },
+        "signIn": {
+          "title": "👤 Connectez-vous pour enregistrer",
+          "text": "Vos mots sont enregistrés dans votre compte : connectez-vous ou créez un compte gratuit d'abord."
+        }
+      },
+      "highlight": {
+        "open": {
+          "title": "🖍️ Ouvrir un exercice",
+          "text": "Ouvrez un test modèle et allez sur un texte de lecture ou d'écoute."
+        },
+        "select": {
+          "title": "Sélectionnez ou faites un clic droit",
+          "text": "Sélectionnez un mot ou une phrase dans l'exercice (ou faites un clic droit). Une petite barre d'outils apparaît à côté."
+        },
+        "selectMobile": {
+          "title": "Sélectionnez du texte",
+          "text": "Appuyez longuement sur un mot, puis ajustez la sélection. Une petite barre d'outils apparaît à côté."
+        },
+        "tools": {
+          "title": "Utilisez la barre d'outils",
+          "text": "Choisissez une couleur pour surligner, écoutez le texte, traduisez-le ou enregistrez-le dans votre vocabulaire. Le surlignage nécessite le plan Silver ou plus."
+        }
+      },
+      "ai": {
+        "open": {
+          "title": "✨ Ouvrir les réglages IA",
+          "text": "Cliquez sur AI. Le point devient vert une fois votre clé IA configurée."
+        },
+        "key": {
+          "title": "Ajoutez votre clé Gemini gratuite",
+          "text": "Suivez les étapes dans la fenêtre IA pour créer une clé Gemini gratuite et collez-la. Elle est stockée uniquement sur cet appareil."
+        },
+        "use": {
+          "title": "Utilisez l'IA dans le vocabulaire",
+          "text": "Dans le formulaire de vocabulaire, appuyez sur AI pour traduire un mot ou générer une phrase d'exemple (les phrases d'exemple nécessitent le plan Gold)."
+        }
+      },
+      "personalize": {
+        "language": {
+          "title": "🌍 Changer la langue",
+          "text": "Choisissez ici la langue de l'appli."
+        },
+        "theme": {
+          "title": "🎨 Changer le thème",
+          "text": "Choisissez les couleurs et le fond qui vous plaisent."
+        }
+      }
+    }
+  },
   "highlighter": {
     "aiTranslateArabic": "Traduction par IA (arabe)",
     "colors": {

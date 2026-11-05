@@ -58,6 +58,7 @@ export default function NavBar({ onOpenNotes, onOpenVocab, onOpenAI, aiReady }: 
               onClick={onOpenAI}
               className="bg-white border border-gray-200 rounded-lg px-2.5 py-1.5 shadow-sm flex items-center gap-1.5 cursor-pointer hover:bg-gray-50 transition-colors shrink-0"
               title={t("aiSettings.title")}
+              data-tour="ai-btn"
             >
               <svg className="w-4 h-4 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 3v4M3 5h4M6 17v4m-2-2h4m5-16l2.286 6.857L21 12l-5.714 2.143L13 21l-2.286-6.857L5 12l5.714-2.143L13 3z" /></svg>
               <span className="text-xs font-medium text-gray-700">AI</span>

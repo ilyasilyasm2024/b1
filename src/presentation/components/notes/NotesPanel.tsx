@@ -216,6 +216,7 @@ export default function NotesPanel({ isOpen, onClose, onOpenColorNote }: NotesPa
             <div className="px-5 py-3 border-b border-gray-100 flex gap-2">
               <button
                 onClick={() => addNote("text")}
+                data-tour="note-add-text"
                 disabled={textNotes.length >= NOTE_LIMITS.text}
                 title={textNotes.length >= NOTE_LIMITS.text ? t("apiErrors.MAX_TEXT_NOTES") : undefined}
                 className="flex-1 bg-black text-white px-3 py-2 rounded-lg text-sm font-medium cursor-pointer hover:bg-gray-800 flex items-center justify-center gap-1.5 disabled:opacity-40 disabled:cursor-not-allowed"
@@ -227,6 +228,7 @@ export default function NotesPanel({ isOpen, onClose, onOpenColorNote }: NotesPa
               </button>
               <button
                 onClick={() => addNote("tick")}
+                data-tour="note-add-color"
                 disabled={tickNotes.length >= NOTE_LIMITS.tick}
                 title={tickNotes.length >= NOTE_LIMITS.tick ? t("apiErrors.MAX_COLOR_NOTES") : undefined}
                 className="flex-1 border border-gray-300 text-gray-700 px-3 py-2 rounded-lg text-sm font-medium cursor-pointer hover:bg-gray-50 flex items-center justify-center gap-1.5 disabled:opacity-40 disabled:cursor-not-allowed"

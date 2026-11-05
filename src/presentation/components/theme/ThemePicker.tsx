@@ -30,6 +30,7 @@ export default function ThemePicker({ variant = "toolbar" }: { variant?: "toolba
     <div className={variant === "dock" ? "flex-1 min-w-0 flex" : "relative"}>
       {variant === "dock" ? (
         <DockButton
+          tour="theme-btn"
           label={t("theme.button")}
           active={open}
           onClick={() => setOpen((v) => !v)}
@@ -44,6 +45,7 @@ export default function ThemePicker({ variant = "toolbar" }: { variant?: "toolba
         onClick={() => setOpen((v) => !v)}
         className="bg-white border border-gray-200 rounded-lg px-2.5 py-1.5 shadow-sm flex items-center gap-1.5 cursor-pointer hover:bg-gray-50 transition-colors shrink-0"
         title={t("theme.customize")}
+        data-tour="theme-btn"
         style={{ borderColor: "var(--theme-card-border)" }}
       >
         <svg className="w-4 h-4 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
