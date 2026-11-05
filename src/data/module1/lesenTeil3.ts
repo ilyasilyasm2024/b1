@@ -15,6 +15,7 @@ export interface LesenTeil3Data {
   part: string;
   time: string;
   instruction: string;
+  context: string;
   example: LesenTeil3Situation;
   situations: LesenTeil3Situation[];
   ads: LesenTeil3Ad[];
@@ -26,6 +27,8 @@ export const module1LesenTeil3: LesenTeil3Data = {
   time: "10 Minuten",
   instruction:
     "Lesen Sie die Situationen 13 bis 19 und die Anzeigen a bis j aus verschiedenen deutschsprachigen Medien. Wählen Sie: Welche Anzeige passt zu welcher Situation? Sie können jede Anzeige nur einmal verwenden. Die Anzeige aus dem Beispiel können Sie nicht mehr verwenden. Für eine Situation gibt es keine passende Anzeige. In diesem Fall schreiben Sie 0.",
+  context:
+    "Einige Ihrer Bekannten sind Tierliebhaber. Sie haben bestimmte Wünsche und suchen nach passenden Anzeigen.",
   example: {
     id: 0,
     description:

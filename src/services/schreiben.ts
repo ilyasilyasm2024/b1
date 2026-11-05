@@ -1,21 +1,12 @@
-import { api } from "./api";
+import { schreibenRepository } from "../repositories/schreiben";
 
-export interface SchreibenVersion {
-  _id: string;
-  moduleId: string;
-  aufgabeId: number;
-  text: string;
-  wordCount: number;
-  createdAt: string;
-}
+export type { SchreibenVersion } from "../repositories/schreiben";
 
 export const schreibenService = {
   saveVersion: (moduleId: string, aufgabeId: number, text: string) =>
-    api.post<SchreibenVersion>("/schreiben", { moduleId, aufgabeId, text }),
+    schreibenRepository.saveVersion(moduleId, aufgabeId, text),
 
-  getVersions: (moduleId: string, aufgabeId: number) =>
-    api.get<SchreibenVersion[]>(`/schreiben/${moduleId}/${aufgabeId}`),
+  getVersions: (moduleId: string, aufgabeId: number) => schreibenRepository.getVersions(moduleId, aufgabeId),
 
-  deleteVersion: (id: string) =>
-    api.delete<{ message: string }>(`/schreiben/${id}`),
+  deleteVersion: (id: string) => schreibenRepository.deleteVersion(id),
 };

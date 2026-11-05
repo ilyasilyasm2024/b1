@@ -1,70 +1,34 @@
-import { api } from "./api";
+import { authRepository, type SignupData, type LoginData } from "../repositories/auth";
+import { localStore } from "../repositories/localStore";
 
-export interface SignupData {
-  username: string;
-  email: string;
-  firstName: string;
-  lastName: string;
-  password: string;
-  referralCode?: string;
-}
-
-export interface ReferralValidation {
-  valid: boolean;
-  referralCode?: string;
-  discountPercent?: number;
-  influencerName?: string;
-}
-
-export interface LoginData {
-  identifier: string;
-  password: string;
-}
-
-export interface User {
-  _id: string;
-  username: string;
-  email: string;
-  firstName: string;
-  lastName: string;
-  isConnected: boolean;
-  isVerified: boolean;
-  firstTour: boolean;
-  streak: number;
-  loginDates: string[];
-  imageUrl: string;
-  timeSpentInOurApp: number;
-}
-
-export interface LoginResponse {
-  user: User;
-  token: string;
-}
-
-export interface MessageResponse {
-  message: string;
-}
+const TOKEN_KEY = "token";
+// Local data that belongs to the logged-in user and is dropped on logout.
+const USER_DATA_KEYS = ["b1-answers", "b1-vocabulary", "b1-highlights", "b1-tour-seen"];
 
 export const authService = {
-  signup: (data: SignupData) => api.post<MessageResponse>("/auth/signup", data),
+  getToken: () => localStore.get(TOKEN_KEY),
 
-  login: (data: LoginData) => api.post<LoginResponse>("/auth/login", data),
+  saveToken: (token: string) => localStore.set(TOKEN_KEY, token),
 
-  logout: (userId: string) => api.post<MessageResponse>("/auth/logout", { userId }),
+  clearToken: () => localStore.remove(TOKEN_KEY),
 
-  verifyEmail: (token: string) => api.get<MessageResponse>(`/auth/verify-email?token=${token}`),
+  // The referral code is only sent when the signup page validated one.
+  signup: (data: Omit<SignupData, "referralCode">, referralCode?: string) =>
+    authRepository.signup({ ...data, ...(referralCode ? { referralCode } : {}) }),
 
-  resendVerification: (email: string) =>
-    api.post<MessageResponse>("/auth/resend-verification", { email }),
+  login: (data: LoginData) => authRepository.login(data),
 
-  forgotPassword: (email: string) =>
-    api.post<MessageResponse>("/auth/forgot-password", { email }),
+  async logout(userId?: string) {
+    if (userId) await authRepository.logout(userId);
+    localStore.remove(TOKEN_KEY);
+    USER_DATA_KEYS.forEach(localStore.remove);
+  },
 
-  resetPassword: (token: string, password: string) =>
-    api.post<MessageResponse>("/auth/reset-password", { token, password }),
+  verifyEmail: (token: string) => authRepository.verifyEmail(token),
 
-  getProfile: () => api.get<User>("/users/me"),
+  resendVerification: (email: string) => authRepository.resendVerification(email),
 
-  validateReferral: (code: string) =>
-    api.get<ReferralValidation>(`/affiliate/validate/${encodeURIComponent(code)}`),
+  forgotPassword: (email: string) => authRepository.forgotPassword(email),
+
+  resetPassword: (token: string, password: string) => authRepository.resetPassword(token, password),
 };

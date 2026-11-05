@@ -1,6 +1,6 @@
-import { api } from "./api";
+import { notesRepository, type NoteBackend, type NoteType, type UpdateNoteData } from "../repositories/notes";
 
-export type NoteType = "text" | "tick";
+export type { NoteBackend, NoteType, NoteDir, UpdateNoteData } from "../repositories/notes";
 
 /** Same limits as the backend validation (notes.validation.js); content is HTML for text notes */
 export const NOTE_TITLE_MAX = 200;
@@ -18,62 +18,97 @@ export const TICK_COLORS = [
   "#7dd3fc", "#a5b4fc", "#d8b4fe", "#f9a8d4",
 ];
 
-// Backend model: { _id, userId, type, content, color, createdAt, updatedAt }
-export type NoteDir = "ltr" | "rtl";
-
-export interface NoteBackend {
-  _id: string;
-  userId: string;
-  type: NoteType;
-  title: string;
-  content: string;
-  color: string;
-  dir: NoteDir;
-  collapsed: boolean;
-  pinned: boolean;
-  order: number;
-  links: string[];
-  x: number;
-  y: number;
-  createdAt: string;
-  updatedAt: string;
+function randomColor(): string {
+  return TICK_COLORS[Math.floor(Math.random() * TICK_COLORS.length)];
 }
 
-export interface CreateNoteData {
-  type: NoteType;
-  title?: string;
-  content?: string;
-  color?: string;
-  dir?: NoteDir;
-  collapsed?: boolean;
-  pinned?: boolean;
-  order?: number;
-  links?: string[];
-  x?: number;
-  y?: number;
-}
-
-export interface UpdateNoteData {
-  type?: NoteType;
-  title?: string;
-  content?: string;
-  color?: string;
-  dir?: NoteDir;
-  collapsed?: boolean;
-  pinned?: boolean;
-  order?: number;
-  links?: string[];
-  x?: number;
-  y?: number;
+// Every editable field, sent when a note is saved as a whole.
+function snapshot(n: NoteBackend): UpdateNoteData {
+  return {
+    title: n.title,
+    content: n.content,
+    color: n.color,
+    dir: n.dir,
+    collapsed: n.collapsed,
+    pinned: n.pinned,
+    order: n.order,
+    links: n.links,
+    x: n.x,
+    y: n.y,
+  };
 }
 
 export const notesService = {
-  getAll: () => api.get<NoteBackend[]>("/notes"),
+  getAll: () => notesRepository.getAll(),
 
-  add: (data: CreateNoteData) => api.post<NoteBackend>("/notes", data),
+  isAtLimit: (notes: NoteBackend[], type: NoteType) =>
+    notes.filter((n) => n.type === type).length >= NOTE_LIMITS[type],
 
-  update: (id: string, data: UpdateNoteData) =>
-    api.put<NoteBackend>(`/notes/${id}`, data),
+  // New tick notes get a random color and a slightly randomized spot so they don't stack exactly.
+  create(type: NoteType) {
+    const payload =
+      type === "tick"
+        ? {
+            type,
+            content: "",
+            color: randomColor(),
+            x: Math.round(120 + Math.random() * 200),
+            y: Math.round(140 + Math.random() * 160),
+          }
+        : { type, content: "", color: "#fde68a" };
+    return notesRepository.add(payload);
+  },
 
-  delete: (id: string) => api.delete<{ message: string }>(`/notes/${id}`),
+  save: (note: NoteBackend) => notesRepository.update(note._id, snapshot(note)),
+
+  update: (id: string, patch: UpdateNoteData) => notesRepository.update(id, patch),
+
+  delete: (id: string) => notesRepository.delete(id),
+
+  // Deletes in parallel; returns the ids that failed.
+  async deleteMany(ids: string[]): Promise<Set<string>> {
+    const results = await Promise.all(ids.map((id) => notesRepository.delete(id)));
+    return new Set(ids.filter((_, i) => results[i].error));
+  },
+
+  // New links for both notes after linking/unlinking them, or null if they can't be linked.
+  // Only text notes can be linked (color notes float on the page and can't show links).
+  toggleLink(a: NoteBackend | undefined, b: NoteBackend | undefined): { a: string[]; b: string[] } | null {
+    if (!a || !b || a._id === b._id || a.type !== "text" || b.type !== "text") return null;
+    const linked = (a.links || []).includes(b._id);
+    return {
+      a: linked ? (a.links || []).filter((x) => x !== b._id) : [...(a.links || []), b._id],
+      b: linked ? (b.links || []).filter((x) => x !== a._id) : [...(b.links || []), a._id],
+    };
+  },
+
+  // Swaps a note's order with its neighbour in the same type and pin group (pinned notes stay
+  // above unpinned ones). Returns the two new orders, or null at the edge of the list.
+  move(notes: NoteBackend[], id: string, direction: "up" | "down"): { id: string; order: number }[] | null {
+    const current = notes.find((n) => n._id === id);
+    if (!current) return null;
+
+    const group = notes
+      .filter((n) => n.type === current.type && !!n.pinned === !!current.pinned)
+      .slice()
+      .sort((a, b) => (a.order ?? 0) - (b.order ?? 0) || (a._id < b._id ? -1 : 1));
+
+    const idx = group.findIndex((n) => n._id === id);
+    const swapWith = direction === "up" ? idx - 1 : idx + 1;
+    if (swapWith < 0 || swapWith >= group.length) return null;
+
+    const a = group[idx];
+    const b = group[swapWith];
+    return [
+      { id: a._id, order: b.order ?? 0 },
+      { id: b._id, order: a.order ?? 0 },
+    ];
+  },
+
+  // A note's links without the removed ids, or null when nothing changed.
+  pruneLinks(note: NoteBackend, removed: Set<string>): string[] | null {
+    if (!note.links || note.links.length === 0) return null;
+    const filtered = note.links.filter((l) => !removed.has(l));
+    return filtered.length !== note.links.length ? filtered : null;
+  },
 };

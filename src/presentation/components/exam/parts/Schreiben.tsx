@@ -1,0 +1,368 @@
+/** @format */
+
+import type { SchreibenData } from "../../../../data/examTypes";
+import { useEffect, useState } from "react";
+import { useProgress } from "../../../hooks/useProgress";
+import { useAnswers } from "../../../hooks/useAnswers";
+import { useAuth } from "../../../hooks/useAuth";
+import { usePermissions } from "../../../hooks/usePermissions";
+import { useToast } from "../../common/Toast";
+import {
+  schreibenService,
+  type SchreibenVersion,
+} from "../../../../services/schreiben";
+import { schreibenContext } from "../../../../services/ai";
+import useWritingSuggestions from "../../../hooks/useWritingSuggestions";
+import AISuggestionBar from "../../ai/AISuggestionBar";
+import SuggestionGhost from "../../ai/SuggestionGhost";
+import { useTranslation } from "react-i18next";
+
+interface SchreibenProps {
+  moduleId: string; // "m{n}": section ids and answer keys start with it
+  data: SchreibenData;
+}
+
+export default function Schreiben({ moduleId, data }: SchreibenProps) {
+  const SECTION_ID = `${moduleId}-schreiben`;
+  const { t, i18n } = useTranslation();
+  const { updateProgress } = useProgress();
+  const { getAnswers, getTexts, setTexts, getDone, setDone } = useAnswers();
+  const { user } = useAuth();
+  const { showToast } = useToast();
+  const { canSaveSchreiben } = usePermissions();
+  const [saving, setSaving] = useState<number | null>(null);
+  const [versions, setVersions] = useState<Record<number, SchreibenVersion[]>>(
+    {},
+  );
+  const [showVersions, setShowVersions] = useState<number | null>(null);
+  const ai = useWritingSuggestions();
+
+  // Fall back to getAnswers for modules that stored schreiben texts there before the service layer.
+  const texts = getTexts(SECTION_ID) ?? (getAnswers<string>(SECTION_ID) as string[] | null) ?? Array(data.aufgaben.length).fill("");
+  const done = getDone(SECTION_ID) ?? Array(data.aufgaben.length).fill(false);
+
+  useEffect(() => {
+    const answered = done.filter(Boolean).length;
+    updateProgress(SECTION_ID, answered, data.aufgaben.length);
+  }, [done, data.aufgaben.length, updateProgress, SECTION_ID]);
+
+  const wordCount = (text: string) =>
+    text.trim() === "" ? 0 : text.trim().split(/\s+/).length;
+
+  // Ask the AI for the next words of a task's text (after a pause in typing by default)
+  const requestSuggestion = (index: number, text: string, delay?: number) => {
+    const aufgabe = data.aufgaben[index];
+    ai.request(
+      index,
+      schreibenContext(aufgabe),
+      text,
+      aufgabe.wordCount,
+      delay,
+    );
+  };
+
+  const handleChange = (index: number, value: string) => {
+    const newTexts = [...texts];
+    newTexts[index] = value;
+    setTexts(SECTION_ID, newTexts);
+    requestSuggestion(index, value);
+  };
+
+  const acceptSuggestion = (index: number) => {
+    const suggestion = ai.suggestionFor(index);
+    if (!suggestion) return;
+    const newTexts = [...texts];
+    const cleanSuggestion = suggestion.replace(/\\n/g, "\n");
+    const currentEnd = texts[index].slice(-1);
+    const separator =
+      currentEnd === "\n" || cleanSuggestion.startsWith("\n") ? "" : " ";
+    newTexts[index] = texts[index] + separator + cleanSuggestion;
+    setTexts(SECTION_ID, newTexts);
+    requestSuggestion(index, newTexts[index], 1000);
+  };
+
+  const toggleDone = (index: number) => {
+    if (
+      !done[index] &&
+      wordCount(texts[index]) < data.aufgaben[index].wordCount
+    )
+      return;
+    const newDone = [...done];
+    newDone[index] = !newDone[index];
+    setDone(SECTION_ID, newDone);
+  };
+
+  const handleSaveVersion = async (index: number) => {
+    if (!user) {
+      showToast(t("exercise.signInToSaveVersions"), "error");
+      return;
+    }
+    const currentVersions = versions[index]?.length || 0;
+    if (!canSaveSchreiben(currentVersions)) {
+      showToast(t("exercise.saveLimitReached"), "error");
+      return;
+    }
+    const text = texts[index];
+    if (!text.trim()) return;
+    const wc = wordCount(text);
+    const minWords = data.aufgaben[index].wordCount;
+    const maxWords = data.aufgaben[index].wordCount * 3;
+    if (wc < minWords) {
+      showToast(t("exercise.minWords", { count: minWords }), "error");
+      return;
+    }
+    if (wc > maxWords) {
+      showToast(t("exercise.maxWords", { count: maxWords }), "error");
+      return;
+    }
+    setSaving(index);
+    const res = await schreibenService.saveVersion(moduleId, index + 1, text);
+    if (res.data) {
+      showToast(`${t("exercise.versionSaved")} ✓`, "success");
+      setVersions((prev) => ({
+        ...prev,
+        [index]: [res.data!, ...(prev[index] || [])],
+      }));
+    } else {
+      showToast(res.error || t("vocab.saveFailed"), "error");
+    }
+    setSaving(null);
+  };
+
+  const loadVersions = async (index: number) => {
+    if (!user) return;
+    if (showVersions === index) {
+      setShowVersions(null);
+      return;
+    }
+    const res = await schreibenService.getVersions(moduleId, index + 1);
+    if (res.data) {
+      setVersions((prev) => ({ ...prev, [index]: res.data! }));
+    }
+    setShowVersions(index);
+  };
+
+  const deleteVersion = async (index: number, versionId: string) => {
+    const res = await schreibenService.deleteVersion(versionId);
+    if (res.data) {
+      setVersions((prev) => ({
+        ...prev,
+        [index]: (prev[index] || []).filter((v) => v._id !== versionId),
+      }));
+      showToast(t("apiMessages.VERSION_DELETED"), "success");
+    } else {
+      showToast(res.error || t("vocab.deleteFailed"), "error");
+    }
+  };
+
+  const loadVersion = (index: number, text: string) => {
+    handleChange(index, text);
+    showToast(t("exercise.versionLoaded"), "info");
+  };
+
+  return (
+    <div className="max-w-4xl mx-auto p-6">
+      <div className="space-y-8">
+        {data.aufgaben.map((aufgabe, index) => (
+          <div
+            key={aufgabe.id}
+            className={`border rounded-lg p-6 bg-white transition-colors ${
+              done[index]
+                ? "border-emerald-300 bg-emerald-50/30"
+                : "border-gray-200"
+            }`}
+          >
+            <div className="flex items-center justify-between mb-4">
+              <div className="flex items-center gap-2">
+                <h3 className="text-lg font-bold">{aufgabe.title}</h3>
+                {done[index] && (
+                  <span className="text-emerald-600 text-sm font-medium">
+                    ✓ {t("exercise.done")}
+                  </span>
+                )}
+              </div>
+              <span className="text-sm text-gray-500">
+                Arbeitszeit: {aufgabe.time}
+              </span>
+            </div>
+
+            <p className="text-gray-700 mb-4">{aufgabe.instruction}</p>
+
+            {aufgabe.points.length > 0 && (
+              <ul className="list-disc ml-6 mb-4 space-y-1">
+                {aufgabe.points.map((point, i) => (
+                  <li key={i} className="text-sm text-gray-700">
+                    {point}
+                  </li>
+                ))}
+              </ul>
+            )}
+
+            {aufgabe.hints && (
+              <div className="bg-gray-50 rounded p-3 mb-4">
+                {aufgabe.hints.map((hint, i) => (
+                  <p key={i} className="text-xs text-gray-600 italic">
+                    {hint}
+                  </p>
+                ))}
+              </div>
+            )}
+
+            <div className="relative">
+              <textarea
+                value={texts[index]}
+                onChange={(e) => handleChange(index, e.target.value)}
+                onKeyDown={(e) => {
+                  if (e.key === "Tab" && ai.suggestionFor(index)) {
+                    e.preventDefault();
+                    acceptSuggestion(index);
+                  }
+                }}
+                maxLength={1000}
+                className="w-full border border-gray-300 rounded-lg p-4 min-h-[150px] text-sm resize-y focus:outline-none focus:ring-2 focus:ring-blue-300"
+                placeholder={t("exercise.writePlaceholderCount", {
+                  count: aufgabe.wordCount,
+                })}
+              />
+              {ai.suggestionFor(index) && (
+                <div className="absolute top-0 left-0 right-0 p-4 pointer-events-none min-h-[150px] text-sm whitespace-pre-wrap break-words">
+                  <span className="invisible">{texts[index]}</span>
+                  <SuggestionGhost text={ai.suggestionFor(index)} />
+                  <span
+                    className="pointer-events-auto ml-1 bg-gray-200 border border-gray-300 text-[8px] text-gray-500 px-1 py-0.5 rounded font-mono cursor-pointer"
+                    onClick={() => acceptSuggestion(index)}
+                  >
+                    Tab
+                  </span>
+                </div>
+              )}
+            </div>
+
+            <AISuggestionBar
+              ai={ai}
+              fieldKey={index}
+              onSuggestNow={() => requestSuggestion(index, texts[index], 0)}
+              onAccept={() => acceptSuggestion(index)}
+            />
+
+            <div className="flex items-center justify-between mt-3">
+              <span
+                className={`text-xs ${
+                  wordCount(texts[index]) >= aufgabe.wordCount
+                    ? "text-green-600"
+                    : "text-gray-500"
+                }`}
+              >
+                {t("exercise.wordsLabel")}: {wordCount(texts[index])} /{" "}
+                {aufgabe.wordCount}
+              </span>
+
+              <div className="flex items-center gap-2">
+                <button
+                  onClick={() => handleSaveVersion(index)}
+                  disabled={
+                    saving === index ||
+                    !texts[index].trim() ||
+                    !user ||
+                    wordCount(texts[index]) < aufgabe.wordCount ||
+                    wordCount(texts[index]) > aufgabe.wordCount * 3
+                  }
+                  className="px-3 py-1.5 rounded-lg text-xs font-medium cursor-pointer transition-colors disabled:opacity-40 disabled:cursor-not-allowed bg-blue-600 text-white hover:bg-blue-700"
+                >
+                  {saving === index ? "..." : `💾 ${t("exercise.saveVersion")}`}
+                </button>
+
+                {user && (
+                  <button
+                    onClick={() => loadVersions(index)}
+                    className={`px-3 py-1.5 rounded-lg text-xs font-medium cursor-pointer transition-colors border ${
+                      showVersions === index
+                        ? "bg-gray-100 border-gray-300 text-gray-700"
+                        : "border-gray-200 text-gray-600 hover:bg-gray-50"
+                    }`}
+                  >
+                    📋 {t("exercise.versions")}
+                  </button>
+                )}
+
+                <button
+                  onClick={() => toggleDone(index)}
+                  disabled={
+                    !done[index] && wordCount(texts[index]) < aufgabe.wordCount
+                  }
+                  className={`px-4 py-1.5 rounded-lg text-xs font-medium cursor-pointer transition-colors disabled:opacity-40 disabled:cursor-not-allowed ${
+                    done[index]
+                      ? "bg-emerald-100 text-emerald-700 hover:bg-emerald-200"
+                      : "bg-gray-900 text-white hover:bg-gray-800"
+                  }`}
+                >
+                  {done[index]
+                    ? `✓ ${t("exercise.done")}`
+                    : t("exercise.markDone")}
+                </button>
+              </div>
+            </div>
+
+            {/* Versions panel */}
+            {showVersions === index && (
+              <div className="mt-4 border-t border-gray-200 pt-4">
+                <h4 className="text-xs font-bold text-gray-600 mb-3">
+                  {t("exercise.savedVersions", {
+                    count: versions[index]?.length || 0,
+                  })}
+                </h4>
+                {!versions[index] || versions[index].length === 0 ? (
+                  <p className="text-xs text-gray-400">
+                    {t("exercise.noVersions")}
+                  </p>
+                ) : (
+                  <div className="space-y-2 max-h-60 overflow-y-auto">
+                    {versions[index].map((v) => (
+                      <div
+                        key={v._id}
+                        className="border border-gray-200 rounded-lg p-3 bg-gray-50"
+                      >
+                        <div className="flex items-center justify-between mb-1">
+                          <span className="text-[10px] text-gray-500">
+                            {new Date(v.createdAt).toLocaleDateString(
+                              i18n.language,
+                              {
+                                day: "2-digit",
+                                month: "2-digit",
+                                year: "numeric",
+                                hour: "2-digit",
+                                minute: "2-digit",
+                              },
+                            )}{" "}
+                            · {t("exercise.wordsCount", { count: v.wordCount })}
+                          </span>
+                          <div className="flex gap-1">
+                            <button
+                              onClick={() => loadVersion(index, v.text)}
+                              className="text-[10px] text-blue-600 hover:underline cursor-pointer"
+                            >
+                              {t("exercise.load")}
+                            </button>
+                            <button
+                              onClick={() => deleteVersion(index, v._id)}
+                              className="text-[10px] text-red-500 hover:underline cursor-pointer"
+                            >
+                              {t("common.delete")}
+                            </button>
+                          </div>
+                        </div>
+                        <p className="text-[11px] text-gray-700 line-clamp-3">
+                          {v.text}
+                        </p>
+                      </div>
+                    ))}
+                  </div>
+                )}
+              </div>
+            )}
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+}

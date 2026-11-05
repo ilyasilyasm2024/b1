@@ -1,38 +1,39 @@
-import { api } from "./api";
+import type { ApiResponse } from "../repositories/api";
+import { vocabularyRepository, type VocabBackend } from "../repositories/vocabulary";
 
-// Backend model: { _id, userId, deutsch, arabic, beispiel, viewed, isLearned, repeatNumber }
-export interface VocabBackend {
-  _id: string;
-  userId: string;
-  deutsch: string;
-  arabic: string;
-  beispiel: string;
-  viewed: number;
-  isLearned: boolean;
-  repeatNumber: number;
-  createdAt: string;
-  updatedAt: string;
+export interface VocabItem {
+  id: string;
+  word: string;
+  translation: string;
+  context?: string;
+  addedAt: number;
 }
 
-export interface CreateVocabData {
-  deutsch: string;
-  arabic: string;
-  beispiel?: string;
-}
-
-export interface UpdateVocabData {
-  deutsch?: string;
-  arabic?: string;
-  beispiel?: string;
-  isLearned?: boolean;
+function toItem(v: VocabBackend): VocabItem {
+  return {
+    id: v._id,
+    word: v.deutsch,
+    translation: v.arabic,
+    context: v.beispiel || undefined,
+    addedAt: new Date(v.createdAt).getTime(),
+  };
 }
 
 export const vocabularyService = {
-  getAll: () => api.get<VocabBackend[]>("/vocabulary"),
+  // Newest first.
+  async getAll(): Promise<ApiResponse<VocabItem[]>> {
+    const res = await vocabularyRepository.getAll();
+    return { ...res, data: res.data?.map(toItem).sort((a, b) => b.addedAt - a.addedAt) };
+  },
 
-  add: (data: CreateVocabData) => api.post<VocabBackend>("/vocabulary", data),
+  async add(word: string, translation: string, context?: string): Promise<ApiResponse<VocabItem>> {
+    const res = await vocabularyRepository.add({
+      deutsch: word.trim(),
+      arabic: translation.trim(),
+      beispiel: context?.trim() || "",
+    });
+    return { ...res, data: res.data && toItem(res.data) };
+  },
 
-  update: (id: string, data: UpdateVocabData) => api.put<VocabBackend>(`/vocabulary/${id}`, data),
-
-  delete: (id: string) => api.delete<{ message: string }>(`/vocabulary/${id}`),
+  remove: (id: string) => vocabularyRepository.delete(id),
 };
